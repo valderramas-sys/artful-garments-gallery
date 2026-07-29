@@ -81,7 +81,7 @@ export function QuickView({
                 loading="lazy"
                 width={1024}
                 height={1280}
-                className="aspect-4/5 w-full rounded-2xl bg-surface object-cover sm:sticky sm:top-0"
+                className="max-h-[42svh] w-full rounded-2xl bg-surface object-cover sm:top-0 sm:max-h-none sm:aspect-4/5 sm:sticky"
               />
 
               <div className="flex min-w-0 flex-col">
