@@ -14,6 +14,7 @@ export function QuickView({
 }) {
   const { add, close: closeCart } = useCart();
   const { format } = useCurrency();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const isOpen = Boolean(product);
   const [size, setSize] = useState<string | undefined>(undefined);
