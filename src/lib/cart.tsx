@@ -8,7 +8,7 @@ import {
 } from "react";
 import type { Product } from "./products";
 
-export type CartLine = { product: Product; quantity: number };
+export type CartLine = { key: string; product: Product; quantity: number; size?: string };
 
 type CartContextValue = {
   lines: CartLine[];
@@ -17,41 +17,42 @@ type CartContextValue = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  add: (product: Product) => void;
-  setQuantity: (id: string, quantity: number) => void;
-  remove: (id: string) => void;
+  add: (product: Product, quantity?: number, size?: string) => void;
+  setQuantity: (key: string, quantity: number) => void;
+  remove: (key: string) => void;
   clear: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+const lineKey = (id: string, size?: string) => (size ? `${id}::${size}` : id);
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const add = useCallback((product: Product) => {
+  const add = useCallback((product: Product, quantity = 1, size?: string) => {
+    const key = lineKey(product.id, size);
     setLines((prev) => {
-      const existing = prev.find((l) => l.product.id === product.id);
+      const existing = prev.find((l) => l.key === key);
       if (existing) {
-        return prev.map((l) =>
-          l.product.id === product.id ? { ...l, quantity: l.quantity + 1 } : l,
-        );
+        return prev.map((l) => (l.key === key ? { ...l, quantity: l.quantity + quantity } : l));
       }
-      return [...prev, { product, quantity: 1 }];
+      return [...prev, { key, product, quantity, size }];
     });
     setIsOpen(true);
   }, []);
 
-  const setQuantity = useCallback((id: string, quantity: number) => {
+  const setQuantity = useCallback((key: string, quantity: number) => {
     setLines((prev) =>
       quantity <= 0
-        ? prev.filter((l) => l.product.id !== id)
-        : prev.map((l) => (l.product.id === id ? { ...l, quantity } : l)),
+        ? prev.filter((l) => l.key !== key)
+        : prev.map((l) => (l.key === key ? { ...l, quantity } : l)),
     );
   }, []);
 
-  const remove = useCallback((id: string) => {
-    setLines((prev) => prev.filter((l) => l.product.id !== id));
+  const remove = useCallback((key: string) => {
+    setLines((prev) => prev.filter((l) => l.key !== key));
   }, []);
 
   const value = useMemo<CartContextValue>(() => {

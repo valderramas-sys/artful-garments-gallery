@@ -156,6 +156,11 @@
   font-family: "Rhytmo Display";
 }
 
+@utility font-num {
+  font-family: "Rhytmo Numeric";
+  font-feature-settings: "tnum" 1;
+}
+
 @utility label-xs {
   font-size: 0.6875rem;
   font-weight: 600;
