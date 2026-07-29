@@ -43,8 +43,8 @@ export function QuickView({
 
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];
-  const stock = variant?.quantityAvailable ?? null;
-  const maxQty = Math.max(1, Math.min(stock ?? 10, 10));
+  const stock: number | null = null;
+  const maxQty = 10;
   const image = product ? productImage(product) : null;
 
   const addToCart = async () => {

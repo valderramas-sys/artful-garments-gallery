@@ -41,7 +41,6 @@ export const PRODUCT_FIELDS = `
         title
         price { amount currencyCode }
         availableForSale
-        quantityAvailable
         selectedOptions { name value }
       }
     }
@@ -88,7 +87,11 @@ export async function storefrontApiRequest(query: string, variables: Record<stri
   };
 
   if (data.errors?.length) {
-    throw new Error(`Error calling Shopify: ${data.errors.map((e) => e.message).join(", ")}`);
+    const message = `Error calling Shopify: ${data.errors.map((e) => e.message).join(", ")}`;
+    // Partial errors (e.g. a field the storefront token can't read) still return
+    // usable data — warn instead of failing the whole page.
+    if (!data.data) throw new Error(message);
+    console.warn(message);
   }
 
   return data;
