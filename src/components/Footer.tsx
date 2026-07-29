@@ -64,7 +64,7 @@ export function Footer() {
           <section>
             <h3 className="label-xs text-[10px] text-muted-foreground">{t("footer.payments")}</h3>
             <ul className="mt-2.5 flex flex-wrap gap-1.5">
-              {PAYMENTS.map(({ name, label }) => (
+              {(payments ?? []).map(({ name, label }) => (
                 <li key={name}>
                   <span
                     title={name}
@@ -76,6 +76,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+
             <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
               São Paulo, Brasil
             </p>
@@ -109,8 +110,8 @@ export function Footer() {
           <p className="font-num text-[10px] tracking-[0.12em] text-muted-foreground">
             {t("footer.rights")}
           </p>
-          <p className="label-xs text-[10px] text-muted-foreground">Independent streetwear</p>
         </div>
+
       </div>
     </footer>
   );
