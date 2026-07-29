@@ -72,9 +72,9 @@ const DICT = {
     "footer.payments": "Payment methods",
     "footer.shipping": "Shipping",
     "footer.brazil": "Brazil",
-    "footer.brazil.copy": "Free above R$1.500. 2–6 business days, tracked.",
+    "footer.brazil.copy": "Shipping costs are calculated automatically through the Correios integration during checkout. Estimated delivery time is between 2 and 15 business days depending on the destination state.",
     "footer.world": "Worldwide",
-    "footer.world.copy": "Express 5–12 business days. Duties calculated at checkout.",
+    "footer.world.copy": "International orders are shipped using Shopify's international shipping system. Estimated delivery time is between 20 and 40 business days depending on the destination country and customs processing.",
     "footer.brand": "Brand",
     "footer.brand.copy":
       "RHYTMO headquarters and inventory are located in São Paulo, Brazil. Every order ships from our studio.",
@@ -128,9 +128,9 @@ const DICT = {
     "footer.payments": "Formas de pagamento",
     "footer.shipping": "Envio",
     "footer.brazil": "Brasil",
-    "footer.brazil.copy": "Grátis acima de R$1.500. 2–6 dias úteis, com rastreio.",
+    "footer.brazil.copy": "O frete é calculado automaticamente pela integração com os Correios durante o checkout. O prazo estimado de entrega é de 2 a 15 dias úteis, conforme o estado de destino.",
     "footer.world": "Internacional",
-    "footer.world.copy": "Expresso 5–12 dias úteis. Taxas calculadas no checkout.",
+    "footer.world.copy": "Pedidos internacionais são enviados pelo sistema de envio internacional da Shopify. O prazo estimado é de 20 a 40 dias úteis, conforme o país de destino e o processamento aduaneiro.",
     "footer.brand": "Marca",
     "footer.brand.copy":
       "A sede e o estoque da RHYTMO ficam em São Paulo, Brasil. Todo pedido sai do nosso estúdio.",
@@ -184,9 +184,9 @@ const DICT = {
     "footer.payments": "Zahlungsarten",
     "footer.shipping": "Versand",
     "footer.brazil": "Brasilien",
-    "footer.brazil.copy": "Gratis ab R$1.500. 2–6 Werktage, mit Sendungsverfolgung.",
+    "footer.brazil.copy": "Die Versandkosten werden während des Checkouts automatisch über die Correios-Integration berechnet. Die geschätzte Lieferzeit beträgt 2 bis 15 Werktage je nach Zielbundesstaat.",
     "footer.world": "Weltweit",
-    "footer.world.copy": "Express 5–12 Werktage. Zölle werden an der Kasse berechnet.",
+    "footer.world.copy": "Internationale Bestellungen werden über das internationale Versandsystem von Shopify verschickt. Die geschätzte Lieferzeit beträgt 20 bis 40 Werktage je nach Zielland und Zollabfertigung.",
     "footer.brand": "Marke",
     "footer.brand.copy":
       "Hauptsitz und Lager von RHYTMO befinden sich in São Paulo, Brasilien. Jede Bestellung verlässt unser Studio.",
@@ -239,9 +239,9 @@ const DICT = {
     "footer.payments": "결제 수단",
     "footer.shipping": "배송",
     "footer.brazil": "브라질",
-    "footer.brazil.copy": "R$1.500 이상 무료. 2–6 영업일, 배송 추적 제공.",
+    "footer.brazil.copy": "배송비는 결제 시 Correios 연동을 통해 자동으로 계산됩니다. 예상 배송 기간은 도착 주에 따라 2~15 영업일입니다.",
     "footer.world": "해외 배송",
-    "footer.world.copy": "특급 5–12 영업일. 관세는 결제 시 계산됩니다.",
+    "footer.world.copy": "해외 주문은 Shopify의 국제 배송 시스템으로 발송됩니다. 예상 배송 기간은 도착 국가와 통관 처리에 따라 20~40 영업일입니다.",
     "footer.brand": "브랜드",
     "footer.brand.copy":
       "RHYTMO의 본사와 재고는 브라질 상파울루에 있습니다. 모든 주문은 스튜디오에서 발송됩니다.",
@@ -262,7 +262,7 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<LanguageCode>("en");
+  const [lang, setLang] = useState<LanguageCode>("pt");
 
   useEffect(() => {
     document.documentElement.lang = HTML_LANG[lang];
