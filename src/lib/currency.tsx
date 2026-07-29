@@ -9,17 +9,21 @@ import {
 } from "react";
 import { getExchangeRates } from "./rates.functions";
 
-export const CURRENCIES = ["BRL", "USD", "EUR"] as const;
+export const CURRENCIES = ["BRL", "USD", "EUR", "KRW"] as const;
 export type CurrencyCode = (typeof CURRENCIES)[number];
 
 const LOCALES: Record<CurrencyCode, string> = {
   BRL: "pt-BR",
   USD: "en-US",
   EUR: "de-DE",
+  KRW: "ko-KR",
 };
 
+/** Currencies without minor units. */
+const ZERO_DECIMAL: CurrencyCode[] = ["KRW"];
+
 /** Fallback rates (1 BRL -> X) used only until live rates resolve. */
-const FALLBACK: Record<CurrencyCode, number> = { BRL: 1, USD: 0.18, EUR: 0.17 };
+const FALLBACK: Record<CurrencyCode, number> = { BRL: 1, USD: 0.18, EUR: 0.17, KRW: 250 };
 
 type CurrencyContextValue = {
   currency: CurrencyCode;
@@ -47,6 +51,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
           BRL: 1,
           USD: data.USD ?? FALLBACK.USD,
           EUR: data.EUR ?? FALLBACK.EUR,
+          KRW: data.KRW ?? FALLBACK.KRW,
         });
         setLive(true);
       } catch {
@@ -64,13 +69,15 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   const convert = useCallback((brl: number) => brl * (rates[currency] ?? 1), [rates, currency]);
 
   const format = useCallback(
-    (brl: number) =>
-      new Intl.NumberFormat(LOCALES[currency], {
+    (brl: number) => {
+      const digits = ZERO_DECIMAL.includes(currency) ? 0 : 2;
+      return new Intl.NumberFormat(LOCALES[currency], {
         style: "currency",
         currency,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(brl * (rates[currency] ?? 1)),
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      }).format(brl * (rates[currency] ?? 1));
+    },
     [rates, currency],
   );
 
