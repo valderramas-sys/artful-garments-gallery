@@ -67,7 +67,7 @@ const DICT = {
     "checkout.apply": "Apply",
     "checkout.discountapplied": "Discount applied",
     "checkout.discountinvalid": "Code not applicable",
-    "checkout.securenote": "Shipping, taxes and discounts are confirmed in the secure Shopify checkout."
+    "checkout.securenote": "Shipping, taxes and discounts are confirmed in the secure Shopify checkout.",
     "checkout.free": "Free",
     "checkout.tax": "Estimated tax",
     "checkout.total": "Total",
@@ -131,7 +131,7 @@ const DICT = {
     "checkout.apply": "Aplicar",
     "checkout.discountapplied": "Cupom aplicado",
     "checkout.discountinvalid": "Cupom não aplicável",
-    "checkout.securenote": "Frete, impostos e descontos são confirmados no checkout seguro da Shopify."
+    "checkout.securenote": "Frete, impostos e descontos são confirmados no checkout seguro da Shopify.",
     "checkout.free": "Grátis",
     "checkout.tax": "Impostos estimados",
     "checkout.total": "Total",
@@ -195,7 +195,7 @@ const DICT = {
     "checkout.apply": "Anwenden",
     "checkout.discountapplied": "Rabatt angewendet",
     "checkout.discountinvalid": "Code nicht anwendbar",
-    "checkout.securenote": "Versand, Steuern und Rabatte werden im sicheren Shopify-Checkout bestätigt."
+    "checkout.securenote": "Versand, Steuern und Rabatte werden im sicheren Shopify-Checkout bestätigt.",
     "checkout.free": "Kostenlos",
     "checkout.tax": "Geschätzte Steuer",
     "checkout.total": "Gesamt",
@@ -259,7 +259,7 @@ const DICT = {
     "checkout.apply": "적용",
     "checkout.discountapplied": "할인이 적용되었습니다",
     "checkout.discountinvalid": "사용할 수 없는 코드입니다",
-    "checkout.securenote": "배송비, 세금, 할인은 Shopify 보안 결제에서 확정됩니다."
+    "checkout.securenote": "배송비, 세금, 할인은 Shopify 보안 결제에서 확정됩니다.",
     "checkout.free": "무료",
     "checkout.tax": "예상 세금",
     "checkout.total": "합계",
