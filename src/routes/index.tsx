@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import backdrop from "@/assets/liam_10.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -24,6 +24,12 @@ export const Route = createFileRoute("/")({
 function Landing() {
   const navigate = useNavigate();
   const [leaving, setLeaving] = useState(false);
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setEntered(true));
+    return () => window.cancelAnimationFrame(id);
+  }, []);
 
   const enter = () => {
     setLeaving(true);
@@ -33,7 +39,8 @@ function Landing() {
   return (
     <main
       data-leaving={leaving}
-      className="relative h-[100svh] w-full overflow-hidden bg-background opacity-100 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
+      data-entered={entered}
+      className="relative h-[100svh] w-full overflow-hidden bg-background opacity-0 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[entered=true]:opacity-100 data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
     >
       <h1 className="sr-only">RHYTMO</h1>
       <img
@@ -46,7 +53,7 @@ function Landing() {
         <button
           type="button"
           onClick={enter}
-          className="font-giga rounded-full border border-white/40 bg-white/15 px-12 py-5 text-sm font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md sm:px-16 sm:text-base transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
+          className="font-num rounded-full border border-white/40 bg-white/15 px-12 py-5 text-sm tracking-[0.18em] text-white uppercase backdrop-blur-md sm:px-16 sm:text-base transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
         >
           R H Y T M O
         </button>
