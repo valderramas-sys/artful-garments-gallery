@@ -40,15 +40,15 @@ function Landing() {
         src={backdrop.url}
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full object-contain"
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
       <div className="absolute inset-0 grid place-items-center">
         <button
           type="button"
           onClick={enter}
-          className="rounded-full border border-white/40 bg-white/15 px-14 py-5 text-[0.6875rem] font-semibold tracking-[0.32em] text-white uppercase backdrop-blur-md transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
+          className="font-giga rounded-full border border-white/40 bg-white/15 px-12 py-5 text-sm font-semibold tracking-[0.18em] text-white uppercase backdrop-blur-md sm:px-16 sm:text-base transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
         >
-          Shop
+          R H Y T M O
         </button>
       </div>
     </main>
