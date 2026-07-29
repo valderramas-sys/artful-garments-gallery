@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart";
+import { CurrencyProvider } from "../lib/currency";
 import { Header } from "../components/Header";
 import { CartDrawer } from "../components/CartDrawer";
 
@@ -116,12 +117,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        {!isLanding && <Header />}
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        {!isLanding && <CartDrawer />}
-      </CartProvider>
+      <CurrencyProvider>
+        <CartProvider>
+          {!isLanding && <Header />}
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          {!isLanding && <CartDrawer />}
+        </CartProvider>
+      </CurrencyProvider>
     </QueryClientProvider>
   );
 }

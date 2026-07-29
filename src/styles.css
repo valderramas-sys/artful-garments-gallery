@@ -20,6 +20,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Rhytmo Numeric";
+  src: url("/__l5e/assets-v1/e5ac5f10-f247-46dc-94b7-045631014401/Coolvetica_Rg.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /*
  * RHYTMO — design system
@@ -146,6 +154,11 @@
 
 @utility font-giga {
   font-family: "Rhytmo Display";
+}
+
+@utility font-num {
+  font-family: "Rhytmo Numeric";
+  font-feature-settings: "tnum" 1;
 }
 
 @utility label-xs {
