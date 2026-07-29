@@ -16,10 +16,8 @@ export function LanguageSelector({ className = "" }: { className?: string }) {
           title={name}
           onClick={() => setLang(code)}
           aria-pressed={lang === code}
-          className={`rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-[0.1em] transition-all duration-250 ease-[var(--ease-out-soft)] ${
-            lang === code
-              ? "bg-pink text-primary-foreground"
-              : "text-muted-foreground hover:text-pink"
+          className={`rounded-full px-2 py-1 text-[10px] leading-none font-semibold tracking-[0.08em] transition-all duration-250 ease-[var(--ease-out-soft)] ${
+            lang === code ? "glass-btn-primary" : "text-muted-foreground hover:text-pink"
           }`}
         >
           {label}

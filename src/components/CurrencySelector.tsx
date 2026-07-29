@@ -8,7 +8,7 @@ export function CurrencySelector({ className = "" }: { className?: string }) {
       role="group"
       aria-label="Currency"
       title={live ? "Live exchange rates" : "Loading live exchange rates…"}
-      className={`glass-soft flex items-center gap-0.5 rounded-full p-0.5 ${className}`}
+      className={`glass-soft flex w-fit shrink-0 items-center gap-0.5 rounded-full p-0.5 ${className}`}
     >
       {CURRENCIES.map((code) => (
         <button
@@ -16,9 +16,9 @@ export function CurrencySelector({ className = "" }: { className?: string }) {
           type="button"
           onClick={() => setCurrency(code)}
           aria-pressed={currency === code}
-          className={`font-num rounded-full px-2 py-1 text-[11px] tracking-[0.08em] transition-all duration-250 ease-[var(--ease-out-soft)] sm:px-2.5 sm:tracking-[0.1em] ${
+          className={`font-num rounded-full px-1.5 py-1 text-[10px] leading-none tracking-[0.06em] transition-all duration-250 ease-[var(--ease-out-soft)] sm:px-2.5 sm:text-[11px] sm:tracking-[0.1em] ${
             currency === code
-              ? "bg-pink text-primary-foreground"
+              ? "glass-btn-primary"
               : "text-muted-foreground hover:text-pink"
           }`}
         >
