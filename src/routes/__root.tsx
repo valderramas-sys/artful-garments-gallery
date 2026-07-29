@@ -18,6 +18,7 @@ import { Header } from "../components/Header";
 import { CartDrawer } from "../components/CartDrawer";
 import { Footer } from "../components/Footer";
 import { I18nProvider } from "../lib/i18n";
+import { useCartSync } from "../hooks/useCartSync";
 
 function NotFoundComponent() {
   return (
@@ -116,6 +117,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLanding = pathname === "/";
+  useCartSync();
 
   return (
     <QueryClientProvider client={queryClient}>
