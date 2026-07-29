@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import backdrop from "@/assets/windows_xp_31.jpg.asset.json";
+import backdrop from "@/assets/liam_10.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,14 +33,14 @@ function Landing() {
   return (
     <main
       data-leaving={leaving}
-      className="relative h-[100svh] w-full overflow-hidden opacity-100 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
+      className="relative h-[100svh] w-full overflow-hidden bg-background opacity-100 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
     >
       <h1 className="sr-only">RHYTMO</h1>
       <img
         src={backdrop.url}
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-contain"
       />
       <div className="absolute inset-0 grid place-items-center">
         <button
