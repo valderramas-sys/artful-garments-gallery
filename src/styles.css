@@ -23,8 +23,8 @@
 
 /*
  * RHYTMO — design system
- * Palette is restricted to the brand swatches: greens, blues, pinks, and
- * cool near-whites/greys. No absolute black is ever used.
+ * Palette restricted to the provided cool neutrals:
+ * #f8fafc, #d9eafd, #bcccdc, #9aa6b2 (+ derived deep slate for text/CTAs).
  */
 
 @theme inline {
@@ -63,42 +63,42 @@
   --color-pink-mist: var(--pink-mist);
 
   --font-sans: "Rhytmo Body";
-  --font-display: "Rhytmo Display";
+  --font-display: "Rhytmo Body";
 }
 
 :root {
   --radius: 0.25rem;
 
-  /* neutrals — warm near-whites, never pure black */
-  --background: oklch(0.995 0.001 340);
-  --foreground: oklch(0.3 0.02 345);
-  --surface: oklch(0.972 0.005 345);
-  --surface-2: oklch(0.94 0.012 345);
+  /* neutrals from the palette */
+  --background: oklch(0.986 0.003 250);
+  --foreground: oklch(0.34 0.025 248);
+  --surface: oklch(0.955 0.012 248);
+  --surface-2: oklch(0.905 0.024 245);
 
-  --card: oklch(0.982 0.003 345);
+  --card: oklch(0.975 0.006 248);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.995 0.001 340);
+  --popover: oklch(0.986 0.003 250);
   --popover-foreground: var(--foreground);
 
-  /* brand pinks — the only accent family */
-  --pink-deep: oklch(0.42 0.155 355);
-  --pink: oklch(0.58 0.215 353);
-  --pink-mid: oklch(0.67 0.175 353);
-  --pink-soft: oklch(0.78 0.115 354);
-  --pink-mist: oklch(0.94 0.035 355);
+  /* accent family (interactive) — derived from #9aa6b2 / #bcccdc / #d9eafd */
+  --pink-deep: oklch(0.43 0.045 248);
+  --pink: oklch(0.55 0.045 248);
+  --pink-mid: oklch(0.70 0.023 245);
+  --pink-soft: oklch(0.83 0.028 240);
+  --pink-mist: oklch(0.925 0.028 245);
 
   --primary: var(--pink);
-  --primary-foreground: oklch(0.995 0.001 340);
+  --primary-foreground: oklch(0.986 0.003 250);
   --secondary: var(--surface);
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
-  --muted-foreground: oklch(0.58 0.015 345);
+  --muted-foreground: oklch(0.62 0.022 246);
   --accent: var(--pink);
-  --accent-foreground: oklch(0.995 0.001 340);
+  --accent-foreground: oklch(0.986 0.003 250);
   --destructive: var(--pink-deep);
-  --destructive-foreground: oklch(0.995 0.001 340);
-  --border: oklch(0.92 0.008 345);
-  --input: oklch(0.92 0.008 345);
+  --destructive-foreground: oklch(0.986 0.003 250);
+  --border: oklch(0.905 0.018 246);
+  --input: oklch(0.905 0.018 246);
   --ring: var(--pink-mid);
 
   --gradient-sheen: linear-gradient(
@@ -108,7 +108,6 @@
   );
   --shadow-soft: 0 24px 60px -40px color-mix(in oklab, var(--pink-deep) 30%, transparent);
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-
 }
 
 @layer base {
@@ -132,17 +131,21 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--pink-soft) 55%, transparent);
+    background: color-mix(in oklab, var(--pink-soft) 65%, transparent);
     color: var(--foreground);
   }
 }
 
 @utility display {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 0.86;
   text-transform: uppercase;
+}
+
+@utility font-giga {
+  font-family: "Rhytmo Display";
 }
 
 @utility label-xs {
