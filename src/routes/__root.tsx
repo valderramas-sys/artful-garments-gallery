@@ -16,6 +16,8 @@ import { CartProvider } from "../lib/cart";
 import { CurrencyProvider } from "../lib/currency";
 import { Header } from "../components/Header";
 import { CartDrawer } from "../components/CartDrawer";
+import { Footer } from "../components/Footer";
+import { I18nProvider } from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
