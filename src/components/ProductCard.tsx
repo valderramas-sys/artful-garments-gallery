@@ -43,12 +43,13 @@ export function ProductCard({
         )}
       </button>
 
-      <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3">
+      <div className="mt-5 flex flex-col gap-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-3">
         <h2 className="text-sm leading-snug font-bold tracking-tight">{node.title}</h2>
         <p className="font-num shrink-0 text-sm text-muted-foreground">
           {formatFrom(Number(price.amount), price.currencyCode)}
         </p>
       </div>
+
 
       <button
         type="button"
