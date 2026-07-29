@@ -40,7 +40,7 @@ export function Header() {
             aria-label="RHYTMO — home"
             className="text-foreground transition-colors duration-250 hover:text-pink"
           >
-            <Logo className="h-6 w-[148px] sm:h-7 sm:w-[176px]" />
+            <Logo className="h-8 w-[190px] sm:h-9 sm:w-[224px]" />
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <CurrencySelector />

@@ -114,3 +114,58 @@ export const firstAvailableVariant = (product: ShopifyProduct) =>
   product.node.variants.edges.find((v) => v.node.availableForSale)?.node ??
   product.node.variants.edges[0]?.node ??
   null;
+
+export const PAYMENT_SETTINGS_QUERY = `
+  query PaymentSettings {
+    shop {
+      paymentSettings {
+        acceptedCardBrands
+        supportedDigitalWallets
+      }
+    }
+  }
+`;
+
+export type PaymentSettings = {
+  acceptedCardBrands: string[];
+  supportedDigitalWallets: string[];
+};
+
+const PAYMENT_LABELS: Record<string, string> = {
+  VISA: "VISA",
+  MASTERCARD: "MC",
+  AMERICAN_EXPRESS: "AMEX",
+  DINERS_CLUB: "DINERS",
+  DISCOVER: "DISCOVER",
+  JCB: "JCB",
+  ELO: "ELO",
+  UNIONPAY: "UNIONPAY",
+  APPLE_PAY: "APPLE PAY",
+  GOOGLE_PAY: "GOOGLE PAY",
+  SHOPIFY_PAY: "SHOP PAY",
+  ANDROID_PAY: "GOOGLE PAY",
+  FACEBOOK_PAY: "META PAY",
+};
+
+const prettify = (value: string) =>
+  value
+    .split("_")
+    .map((part) => part.charAt(0) + part.slice(1).toLowerCase())
+    .join(" ")
+    .toUpperCase();
+
+/** Payment methods currently enabled in the connected Shopify store. */
+export async function fetchPaymentMethods(): Promise<Array<{ name: string; label: string }>> {
+  const data = await storefrontApiRequest(PAYMENT_SETTINGS_QUERY);
+  const settings = (data?.data as { shop?: { paymentSettings?: PaymentSettings } } | undefined)
+    ?.shop?.paymentSettings;
+  if (!settings) return [];
+  const codes = [
+    ...(settings.acceptedCardBrands ?? []),
+    ...(settings.supportedDigitalWallets ?? []),
+  ];
+  const seen = new Set<string>();
+  return codes
+    .filter((code) => (seen.has(code) ? false : (seen.add(code), true)))
+    .map((code) => ({ name: prettify(code), label: PAYMENT_LABELS[code] ?? prettify(code) }));
+}

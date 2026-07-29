@@ -1,15 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { LanguageSelector } from "./LanguageSelector";
 import { useI18n } from "@/lib/i18n";
-
-const PAYMENTS = [
-  { name: "Visa", label: "VISA" },
-  { name: "Mastercard", label: "MC" },
-  { name: "American Express", label: "AMEX" },
-  { name: "Pix", label: "PIX" },
-  { name: "Apple Pay", label: "PAY" },
-  { name: "PayPal", label: "PP" },
-];
+import { fetchPaymentMethods } from "@/lib/shopify";
 
 const SOCIALS = [
   { name: "Instagram", href: "https://instagram.com" },
@@ -18,6 +11,12 @@ const SOCIALS = [
 
 export function Footer() {
   const { t } = useI18n();
+  const { data: payments } = useQuery({
+    queryKey: ["shopify", "payment-methods"],
+    queryFn: fetchPaymentMethods,
+    staleTime: 1000 * 60 * 30,
+  });
+
 
   return (
     <footer className="px-4 pb-5 sm:px-8 sm:pb-8">
@@ -64,19 +63,27 @@ export function Footer() {
 
           <section>
             <h3 className="label-xs text-[10px] text-muted-foreground">{t("footer.payments")}</h3>
-            <ul className="mt-2.5 flex flex-wrap gap-1.5">
-              {PAYMENTS.map(({ name, label }) => (
-                <li key={name}>
-                  <span
-                    title={name}
-                    aria-label={name}
-                    className="glass-soft font-num grid h-7 min-w-[2.75rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.08em] text-foreground"
-                  >
-                    {label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {payments && payments.length > 0 ? (
+              <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                {payments.map(({ name, label }) => (
+                  <li key={name}>
+                    <span
+                      title={name}
+                      aria-label={name}
+                      className="glass-soft font-num grid h-7 min-w-[2.75rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.08em] text-foreground"
+                    >
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2.5 text-[11px] leading-relaxed text-muted-foreground">
+                Secure checkout by Shopify
+              </p>
+            )}
+
+
             <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
               São Paulo, Brasil
             </p>
@@ -110,8 +117,8 @@ export function Footer() {
           <p className="font-num text-[10px] tracking-[0.12em] text-muted-foreground">
             {t("footer.rights")}
           </p>
-          <p className="label-xs text-[10px] text-muted-foreground">Independent streetwear</p>
         </div>
+
       </div>
     </footer>
   );
