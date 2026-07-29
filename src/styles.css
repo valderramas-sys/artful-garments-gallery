@@ -45,9 +45,52 @@
 }
 
 /* Korean locale uses the supplied HSJandari face across the whole interface. */
-html[lang="ko"] body {
-  font-family: "Rhytmo KR", "Rhytmo Body", sans-serif;
+html[lang="ko"] body,
+html[lang="ko"] button,
+html[lang="ko"] input,
+html[lang="ko"] select,
+html[lang="ko"] textarea,
+html[lang="ko"] .font-display {
+  font-family: "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
 }
+
+/* Korean glyphs sit smaller on the em square: scale up slightly and relax
+   the vertical rhythm so nothing clips, overlaps or overflows. */
+html[lang="ko"] body {
+  font-size: 1.08em;
+  line-height: 1.65;
+  letter-spacing: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-kerning: normal;
+}
+
+html[lang="ko"] h1,
+html[lang="ko"] h2,
+html[lang="ko"] h3,
+html[lang="ko"] h4 {
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+/* Uppercase micro-labels are latin-spaced; Korean needs far less tracking. */
+html[lang="ko"] .label-xs {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+html[lang="ko"] .display,
+html[lang="ko"] .font-giga,
+html[lang="ko"] .font-hero {
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+}
+
 
 
 
