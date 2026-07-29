@@ -111,7 +111,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--green-bright) 55%, transparent);
+    background: color-mix(in oklab, var(--pink-soft) 55%, transparent);
     color: var(--foreground);
   }
 }
@@ -134,7 +134,7 @@
   background: color-mix(in oklab, var(--background) 62%, transparent);
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid color-mix(in oklab, var(--blue-mist) 60%, transparent);
+  border: 1px solid color-mix(in oklab, var(--pink-mist) 60%, transparent);
 }
 
 @utility reveal {
