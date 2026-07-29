@@ -60,6 +60,32 @@ function Landing() {
           R H Y T M O
         </button>
       </div>
+
+      {/* Subtle corner watermarks — homepage only */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-6 left-6 sm:top-8 sm:left-8 lg:top-10 lg:left-10 max-w-[40vw] text-left text-[10px] sm:text-[11px] leading-[1.5] tracking-[0.08em] text-white/[0.09]"
+      >
+        © 2026 RHYTMO.
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-10 lg:right-10 max-w-[40vw] text-right text-[10px] sm:text-[11px] leading-[1.5] tracking-[0.08em] text-white/[0.09]"
+      >
+        Based in São Paulo, Brazil.
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-6 left-6 sm:bottom-8 sm:left-8 lg:bottom-10 lg:left-10 max-w-[40vw] text-left text-[10px] sm:text-[11px] leading-[1.5] tracking-[0.08em] text-white/[0.09]"
+      >
+        Website designed by @valderramasvi
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-6 right-6 sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-10 max-w-[40vw] text-right text-[10px] sm:text-[11px] leading-[1.5] tracking-[0.08em] text-white/[0.09]"
+      >
+        © 2026 RHYTMO.
+      </div>
     </main>
   );
 }
