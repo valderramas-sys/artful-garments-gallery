@@ -83,9 +83,21 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     [rates, currency],
   );
 
+  const formatFrom = useCallback(
+    (amount: number, fromCurrency: string) => {
+      const from = (CURRENCIES as readonly string[]).includes(fromCurrency)
+        ? (fromCurrency as CurrencyCode)
+        : null;
+      // Convert into BRL first when the source currency is known, then into the selected one.
+      const brl = from ? amount / (rates[from] ?? 1) : amount;
+      return format(brl);
+    },
+    [rates, format],
+  );
+
   const value = useMemo<CurrencyContextValue>(
-    () => ({ currency, setCurrency, rates, live, convert, format }),
-    [currency, rates, live, convert, format],
+    () => ({ currency, setCurrency, rates, live, convert, format, formatFrom }),
+    [currency, rates, live, convert, format, formatFrom],
   );
 
   return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;
