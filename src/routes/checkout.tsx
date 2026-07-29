@@ -9,7 +9,7 @@ export const Route = createFileRoute("/checkout")({
       { title: "Checkout — RHYTMO" },
       {
         name: "description",
-        content: "Complete your RHYTMO order. Secure, minimal checkout for Vol. 01 Atmosphere.",
+        content: "Complete your RHYTMO order. Secure, minimal checkout.",
       },
       { property: "og:title", content: "Checkout — RHYTMO" },
       { property: "og:description", content: "Complete your RHYTMO order." },
@@ -36,8 +36,8 @@ function Checkout() {
         <p className="mt-6 max-w-[46ch] text-sm text-muted-foreground">
           Thank you. A confirmation is on its way. Each piece is packed by hand in the studio.
         </p>
-        <Link to="/" className="label-xs mt-10 w-fit text-pink hover:text-pink">
-          Back to collection
+        <Link to="/shop" className="label-xs mt-10 w-fit text-pink transition-opacity duration-250 hover:opacity-70">
+          Back to shop
         </Link>
       </main>
     );
@@ -47,7 +47,7 @@ function Checkout() {
     <main className="mx-auto max-w-[1600px] px-5 pt-32 pb-24 sm:px-8">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border pb-6">
         <h1 className="display text-[12vw] leading-[0.84] sm:text-[6vw]">Checkout</h1>
-        <Link to="/" className="label-xs pb-2 text-muted-foreground hover:text-pink">
+        <Link to="/shop" className="label-xs pb-2 text-muted-foreground transition-colors duration-250 hover:text-pink">
           Back
         </Link>
       </div>
