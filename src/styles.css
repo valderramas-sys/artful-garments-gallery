@@ -28,6 +28,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Rhytmo Hero";
+  src: url("/__l5e/assets-v1/b43188ad-d50d-4036-b5ee-8a9246d4f4d8/GoodLookingFont.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 
 /*
  * RHYTMO — design system
