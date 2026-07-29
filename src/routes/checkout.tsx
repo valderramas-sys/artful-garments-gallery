@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
+import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
 
@@ -30,6 +31,7 @@ const SHIPPING_FLAT = 39.9;
 const TAX_RATE = 0.05;
 
 function Checkout() {
+  const { t } = useI18n();
   const { lines, subtotal, clear } = useCart();
   const { format } = useCurrency();
   const [placed, setPlaced] = useState(false);
@@ -45,13 +47,13 @@ function Checkout() {
           Order<span className="text-pink">.</span>
         </h1>
         <p className="mt-6 max-w-[46ch] text-sm text-muted-foreground">
-          Thank you. A confirmation is on its way. Each piece is packed by hand in the studio.
+          {t("checkout.thanks")}
         </p>
         <Link
           to="/shop"
           className="label-xs mt-10 w-fit text-pink transition-opacity duration-250 hover:opacity-70"
         >
-          Back to shop
+          {t("checkout.backshop")}
         </Link>
       </main>
     );
@@ -60,7 +62,7 @@ function Checkout() {
   return (
     <main className="mx-auto max-w-[1600px] px-5 pt-32 pb-24 sm:px-8">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border pb-6">
-        <h1 className="display text-[12vw] leading-[0.84] sm:text-[6vw]">Checkout</h1>
+        <h1 className="display text-[12vw] leading-[0.84] sm:text-[6vw]">{t("checkout.title")}</h1>
         <div className="flex items-center gap-4 pb-2">
           <CurrencySelector />
           <Link
@@ -84,15 +86,15 @@ function Checkout() {
           <label className="label-xs text-muted-foreground" htmlFor="email">
             Contact
           </label>
-          <input id="email" type="email" required placeholder="Email" className={fieldClass} />
+          <input id="email" type="email" required placeholder={t("checkout.email")} className={fieldClass} />
           <label className="label-xs mt-6 text-muted-foreground" htmlFor="name">
             Shipping
           </label>
-          <input id="name" required placeholder="Full name" className={fieldClass} />
-          <input required placeholder="Address" className={fieldClass} />
+          <input id="name" required placeholder={t("checkout.name")} className={fieldClass} />
+          <input required placeholder={t("checkout.address")} className={fieldClass} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <input required placeholder="City" className={fieldClass} />
-            <input required placeholder="Postal code" className={`font-num ${fieldClass}`} />
+            <input required placeholder={t("checkout.city")} className={fieldClass} />
+            <input required placeholder={t("checkout.postal")} className={`font-num ${fieldClass}`} />
           </div>
           <label className="label-xs mt-6 text-muted-foreground" htmlFor="card">
             Payment
@@ -100,7 +102,7 @@ function Checkout() {
           <input
             id="card"
             required
-            placeholder="Card number"
+            placeholder={t("checkout.card")}
             className={`font-num ${fieldClass}`}
           />
           <div className="grid grid-cols-2 gap-4">
@@ -112,14 +114,14 @@ function Checkout() {
             disabled={lines.length === 0}
             className="label-xs mt-8 rounded-full bg-pink py-5 text-primary-foreground transition-colors duration-250 hover:bg-pink-deep disabled:bg-surface-2 disabled:text-muted-foreground"
           >
-            Place order — <span className="font-num">{format(total)}</span>
+            {t("checkout.place")} — <span className="font-num">{format(total)}</span>
           </button>
         </form>
 
         <aside className="h-fit rounded-3xl bg-surface/70 p-6 sm:p-8">
-          <h2 className="label-xs text-muted-foreground">Summary</h2>
+          <h2 className="label-xs text-muted-foreground">{t("checkout.summary")}</h2>
           {lines.length === 0 ? (
-            <p className="mt-8 text-sm text-muted-foreground">Your cart is empty.</p>
+            <p className="mt-8 text-sm text-muted-foreground">{t("cart.empty")}</p>
           ) : (
             <ul className="mt-8 divide-y divide-border">
               {lines.map(({ key, product, quantity, size }) => (
@@ -152,19 +154,19 @@ function Checkout() {
 
           <dl className="mt-8 space-y-3 border-t border-border pt-6 text-sm">
             <div className="flex items-center justify-between">
-              <dt className="label-xs text-muted-foreground">Subtotal</dt>
+              <dt className="label-xs text-muted-foreground">{t("cart.subtotal")}</dt>
               <dd className="font-num">{format(subtotal)}</dd>
             </div>
             <div className="flex items-center justify-between">
-              <dt className="label-xs text-muted-foreground">Shipping</dt>
+              <dt className="label-xs text-muted-foreground">{t("checkout.shipping")}</dt>
               <dd className="font-num">{shipping === 0 ? "Free" : format(shipping)}</dd>
             </div>
             <div className="flex items-center justify-between">
-              <dt className="label-xs text-muted-foreground">Estimated tax</dt>
+              <dt className="label-xs text-muted-foreground">{t("checkout.tax")}</dt>
               <dd className="font-num">{format(tax)}</dd>
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
-              <dt className="label-xs text-muted-foreground">Total</dt>
+              <dt className="label-xs text-muted-foreground">{t("checkout.total")}</dt>
               <dd className="font-num text-lg">{format(total)}</dd>
             </div>
           </dl>

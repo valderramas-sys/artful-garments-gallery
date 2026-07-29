@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import backdrop from "@/assets/liam_10.jpg.asset.json";
+import backdrop from "@/assets/hero.gif.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,13 +47,15 @@ function Landing() {
         src={backdrop.url}
         alt=""
         aria-hidden
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
       <div className="absolute inset-0 grid place-items-center">
         <button
           type="button"
           onClick={enter}
-          className="font-num rounded-full border border-white/40 bg-white/15 px-12 py-5 text-sm tracking-[0.18em] text-white uppercase backdrop-blur-md sm:px-16 sm:text-base transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
+          className="font-hero aero-glass glass-sheen rounded-full px-12 py-5 text-base tracking-[0.18em] text-foreground uppercase sm:px-16 sm:text-lg transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:scale-[0.99]"
         >
           R H Y T M O
         </button>

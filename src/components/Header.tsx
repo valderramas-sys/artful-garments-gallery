@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { Logo } from "./Logo";
 import { CurrencySelector } from "./CurrencySelector";
+import { useI18n } from "@/lib/i18n";
 
 export function Header() {
   const { count, open } = useCart();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [leaving, setLeaving] = useState(false);
@@ -30,7 +32,7 @@ export function Header() {
           leaving ? "opacity-100" : "opacity-0"
         }`}
       />
-      <header className="fixed inset-x-0 top-0 z-50 bg-background/70 backdrop-blur-xl">
+      <header className="glass-bar fixed inset-x-0 top-0 z-50">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-6 py-5 sm:px-10 lg:px-16">
           <Link
             to="/"
@@ -40,14 +42,15 @@ export function Header() {
           >
             <Logo className="h-6 w-[148px] sm:h-7 sm:w-[176px]" />
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <CurrencySelector />
             <button
               type="button"
               onClick={open}
-              aria-label={`Open cart, ${count} items`}
-              className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink-mist/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
+              aria-label={`${t("cart.open")}, ${count}`}
+              className="glass-soft relative inline-flex h-9 w-9 items-center justify-center rounded-full text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.04] hover:text-pink-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
             >
+
               <svg
                 viewBox="0 0 24 24"
                 fill="none"

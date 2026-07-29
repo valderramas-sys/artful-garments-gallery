@@ -16,6 +16,8 @@ import { CartProvider } from "../lib/cart";
 import { CurrencyProvider } from "../lib/currency";
 import { Header } from "../components/Header";
 import { CartDrawer } from "../components/CartDrawer";
+import { Footer } from "../components/Footer";
+import { I18nProvider } from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -117,14 +119,18 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CurrencyProvider>
-        <CartProvider>
-          {!isLanding && <Header />}
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          {!isLanding && <CartDrawer />}
-        </CartProvider>
-      </CurrencyProvider>
+      <I18nProvider>
+        <CurrencyProvider>
+          <CartProvider>
+            {!isLanding && <Header />}
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            {!isLanding && <Footer />}
+            {!isLanding && <CartDrawer />}
+          </CartProvider>
+        </CurrencyProvider>
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
+

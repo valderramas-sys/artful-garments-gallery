@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
+import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { CurrencySelector } from "./CurrencySelector";
 
 export function CartDrawer() {
+  const { t } = useI18n();
   const { isOpen, close, lines, subtotal, setQuantity, remove } = useCart();
   const { format } = useCurrency();
 
@@ -19,19 +21,19 @@ export function CartDrawer() {
       <div
         onClick={close}
         aria-hidden
-        className={`fixed inset-0 z-60 bg-foreground/10 backdrop-blur-[2px] transition-opacity duration-250 ${
+        className={`fixed inset-0 z-60 bg-foreground/15 backdrop-blur-[6px] transition-opacity duration-250 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
       <aside
-        aria-label="Cart"
+        aria-label={t("nav.cart")}
         aria-hidden={!isOpen}
-        className={`fixed top-0 right-0 z-70 flex h-full w-full max-w-[420px] flex-col border-l border-border bg-background/85 backdrop-blur-2xl transition-transform duration-[350ms] ease-[var(--ease-out-soft)] sm:rounded-l-3xl ${
+        className={`fixed top-0 right-0 z-70 aero-glass flex h-full w-full max-w-[420px] flex-col transition-transform duration-[350ms] ease-[var(--ease-out-soft)] sm:rounded-l-3xl ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between gap-3 px-6 py-6">
-          <h2 className="label-xs">Cart</h2>
+          <h2 className="label-xs">{t("nav.cart")}</h2>
           <div className="flex items-center gap-3">
             <CurrencySelector />
             <button
@@ -46,7 +48,7 @@ export function CartDrawer() {
 
         <div className="flex-1 overflow-y-auto px-6">
           {lines.length === 0 ? (
-            <p className="py-16 text-sm text-muted-foreground">Your cart is empty.</p>
+            <p className="py-16 text-sm text-muted-foreground">{t("cart.empty")}</p>
           ) : (
             <ul className="divide-y divide-border">
               {lines.map(({ key, product, quantity, size }) => (
@@ -94,7 +96,7 @@ export function CartDrawer() {
                         onClick={() => remove(key)}
                         className="label-xs text-muted-foreground transition-colors duration-250 hover:text-pink"
                       >
-                        Remove
+                        {t("cart.remove")}
                       </button>
                     </div>
                   </div>
@@ -106,7 +108,7 @@ export function CartDrawer() {
 
         <div className="border-t border-border px-6 py-6">
           <div className="flex items-center justify-between">
-            <span className="label-xs text-muted-foreground">Subtotal</span>
+            <span className="label-xs text-muted-foreground">{t("cart.subtotal")}</span>
             <span className="font-num text-lg">{format(subtotal)}</span>
           </div>
           <Link
@@ -119,7 +121,7 @@ export function CartDrawer() {
                 : "bg-pink text-primary-foreground hover:bg-pink-deep"
             }`}
           >
-            Checkout
+            {t("nav.checkout")}
           </Link>
         </div>
       </aside>

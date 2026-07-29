@@ -1,4 +1,5 @@
 import { useCart } from "@/lib/cart";
+import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import type { Product } from "@/lib/products";
 
@@ -9,6 +10,7 @@ export function ProductCard({
   product: Product;
   onQuickView: (product: Product) => void;
 }) {
+  const { t } = useI18n();
   const { add } = useCart();
   const { format } = useCurrency();
 
@@ -43,7 +45,7 @@ export function ProductCard({
         onClick={() => add(product)}
         className="label-xs mt-3 w-full rounded-full border border-pink-mist bg-pink-mist/50 py-2.5 text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink active:scale-[0.99]"
       >
-        Add to cart
+        {t("product.add")}
       </button>
     </article>
   );

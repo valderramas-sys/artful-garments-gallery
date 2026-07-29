@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
+import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import type { Product } from "@/lib/products";
 
@@ -13,6 +14,7 @@ export function QuickView({
 }) {
   const { add, close: closeCart } = useCart();
   const { format } = useCurrency();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const isOpen = Boolean(product);
   const [size, setSize] = useState<string | undefined>(undefined);
@@ -43,7 +45,7 @@ export function QuickView({
       <div
         onClick={onClose}
         aria-hidden
-        className="absolute inset-0 bg-foreground/15 backdrop-blur-[3px]"
+        className="absolute inset-0 bg-foreground/20 backdrop-blur-[8px]"
       />
 
       <div
@@ -65,7 +67,7 @@ export function QuickView({
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close"
+                aria-label={t("cart.close")}
                 className="grid h-9 w-9 place-items-center rounded-full bg-surface/70 text-muted-foreground transition-colors duration-250 hover:text-pink"
               >
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
@@ -96,15 +98,15 @@ export function QuickView({
                 >
                   {product.stock > 0 ? (
                     <>
-                      In stock — <span className="font-num">{product.stock}</span> left
+                      {t("product.instock")} — <span className="font-num">{product.stock}</span> {t("product.left")}
                     </>
                   ) : (
-                    "Sold out"
+                    t("product.soldout")
                   )}
                 </p>
 
                 <fieldset className="mt-6">
-                  <legend className="label-xs text-muted-foreground">Size</legend>
+                  <legend className="label-xs text-muted-foreground">{t("cart.size")}</legend>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {product.sizes.map((s) => (
                       <button
@@ -125,11 +127,11 @@ export function QuickView({
                 </fieldset>
 
                 <div className="mt-6">
-                  <span className="label-xs text-muted-foreground">Quantity</span>
+                  <span className="label-xs text-muted-foreground">{t("product.quantity")}</span>
                   <div className="mt-3 flex w-fit items-center gap-1 rounded-2xl bg-surface/70 p-1">
                     <button
                       type="button"
-                      aria-label="Decrease quantity"
+                      aria-label={`- ${t("product.quantity")}`}
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                       className="grid h-11 w-11 place-items-center rounded-xl text-pink transition-colors duration-250 hover:bg-pink-mist/60"
                     >
@@ -138,7 +140,7 @@ export function QuickView({
                     <span className="font-num w-8 text-center text-sm">{quantity}</span>
                     <button
                       type="button"
-                      aria-label="Increase quantity"
+                      aria-label={`+ ${t("product.quantity")}`}
                       onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
                       className="grid h-11 w-11 place-items-center rounded-xl text-pink transition-colors duration-250 hover:bg-pink-mist/60"
                     >
@@ -155,22 +157,22 @@ export function QuickView({
                     </div>
                   ))}
                   <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">Material</dt>
+                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.material")}</dt>
                     <dd className="text-right">{product.composition}</dd>
                   </div>
                   <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">Care</dt>
+                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.care")}</dt>
                     <dd className="text-right">{product.care.join(" · ")}</dd>
                   </div>
                   <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">Shipping</dt>
+                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.shipping")}</dt>
                     <dd className="text-right">{product.shipping}</dd>
                   </div>
                 </dl>
               </div>
             </div>
 
-            <div className="aero-glass sticky bottom-0 z-10 grid gap-3 border-t border-border px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:px-8">
+            <div className="glass-bar sticky bottom-0 z-10 grid gap-3 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:px-8">
               <button
                 type="button"
                 onClick={() => {
@@ -179,7 +181,7 @@ export function QuickView({
                 }}
                 className="label-xs min-h-12 rounded-full border border-pink-mist bg-pink-mist/50 text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink hover:text-primary-foreground active:scale-[0.99]"
               >
-                Add to cart
+                {t("product.add")}
               </button>
               <button
                 type="button"
@@ -191,7 +193,7 @@ export function QuickView({
                 }}
                 className="label-xs min-h-12 rounded-full bg-pink text-primary-foreground transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink-deep active:scale-[0.99]"
               >
-                Buy now
+                {t("product.buy")}
               </button>
             </div>
           </>
