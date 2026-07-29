@@ -1,15 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { LanguageSelector } from "./LanguageSelector";
 import { useI18n } from "@/lib/i18n";
-
-const PAYMENTS = [
-  { name: "Visa", label: "VISA" },
-  { name: "Mastercard", label: "MC" },
-  { name: "American Express", label: "AMEX" },
-  { name: "Pix", label: "PIX" },
-  { name: "Apple Pay", label: "PAY" },
-  { name: "PayPal", label: "PP" },
-];
+import { fetchPaymentMethods } from "@/lib/shopify";
 
 const SOCIALS = [
   { name: "Instagram", href: "https://instagram.com" },
@@ -18,6 +11,12 @@ const SOCIALS = [
 
 export function Footer() {
   const { t } = useI18n();
+  const { data: payments } = useQuery({
+    queryKey: ["shopify", "payment-methods"],
+    queryFn: fetchPaymentMethods,
+    staleTime: 1000 * 60 * 30,
+  });
+
 
   return (
     <footer className="px-4 pb-5 sm:px-8 sm:pb-8">
