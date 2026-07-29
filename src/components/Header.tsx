@@ -33,23 +33,24 @@ export function Header() {
         }`}
       />
       <header className="glass-bar fixed inset-x-0 top-0 z-50">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-6 py-5 sm:px-10 lg:px-16">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3.5 sm:gap-6 sm:px-10 sm:py-5 lg:px-16">
           <Link
             to="/"
             onClick={goHome}
             aria-label="RHYTMO — home"
-            className="text-foreground transition-colors duration-250 hover:text-pink"
+            className="flex min-w-0 shrink items-center text-foreground transition-colors duration-250 hover:text-pink"
           >
-            <Logo className="h-8 w-[190px] sm:h-9 sm:w-[224px]" />
+            <Logo className="h-6 w-[128px] shrink-0 sm:h-9 sm:w-[224px]" />
           </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
             <CurrencySelector />
             <button
               type="button"
               onClick={open}
               aria-label={`${t("cart.open")}, ${count}`}
-              className="glass-soft relative inline-flex h-9 w-9 items-center justify-center rounded-full text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:scale-[1.04] hover:text-pink-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
+              className="glass-btn relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
             >
+
 
               <svg
                 viewBox="0 0 24 24"
