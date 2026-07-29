@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { getExchangeRates } from "./rates.functions";
 
 export const CURRENCIES = ["BRL", "USD", "EUR"] as const;
 export type CurrencyCode = (typeof CURRENCIES)[number];
@@ -40,14 +41,12 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     const load = async () => {
       try {
-        const res = await fetch("https://api.frankfurter.app/latest?base=BRL&symbols=USD,EUR");
-        if (!res.ok) return;
-        const data = (await res.json()) as { rates?: Record<string, number> };
-        if (cancelled || !data.rates) return;
+        const data = await getExchangeRates();
+        if (cancelled) return;
         setRates({
           BRL: 1,
-          USD: data.rates.USD ?? FALLBACK.USD,
-          EUR: data.rates.EUR ?? FALLBACK.EUR,
+          USD: data.USD ?? FALLBACK.USD,
+          EUR: data.EUR ?? FALLBACK.EUR,
         });
         setLive(true);
       } catch {
