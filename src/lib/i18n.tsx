@@ -265,10 +265,122 @@ const DICT = {
 
 export type TranslationKey = keyof (typeof DICT)["en"];
 
+/* ---- Localised product content ------------------------------------ */
+
+export type ProductContent = {
+  overview: string;
+  specs: string[];
+  care: string[];
+  shipping: string;
+};
+
+export const PRODUCT_CONTENT: Record<LanguageCode, ProductContent> = {
+  en: {
+    overview:
+      "A collaborative beanie designed with stylist Paradela. Built with a relaxed silhouette, premium sweatshirt fabric and high-definition full-print sublimation.",
+    specs: [
+      "Collaboration: RHYTMO × Stylist @paradela",
+      "Full-print sublimation",
+      "50% Cotton, 49% Polyester, 1% Elastane",
+      "Relaxed fit",
+      "Soft-touch fabric",
+      "Reinforced stitching",
+      "Four-way stretch",
+      "Unisex",
+      "Made in Brazil",
+    ],
+    care: ["Cold wash", "Do not bleach", "Air dry", "Do not iron directly on the print"],
+    shipping:
+      "Brazil: 2–15 business days via Correios. Worldwide: 20–40 business days. Shipping and taxes are calculated at secure Shopify checkout.",
+  },
+  pt: {
+    overview:
+      "Gorro em colaboração com o stylist Paradela. Modelagem relaxada, malha moletom premium e estampa sublimada full-print em alta definição.",
+    specs: [
+      "Colaboração: RHYTMO × Stylist @paradela",
+      "Estampa sublimada full-print",
+      "50% Algodão, 49% Poliéster, 1% Elastano",
+      "Modelagem relaxada",
+      "Tecido com toque macio",
+      "Costura reforçada",
+      "Elasticidade em quatro direções",
+      "Unissex",
+      "Feito no Brasil",
+    ],
+    care: [
+      "Lavar a frio",
+      "Não usar alvejante",
+      "Secar à sombra",
+      "Não passar ferro diretamente sobre a estampa",
+    ],
+    shipping:
+      "Brasil: 2 a 15 dias úteis pelos Correios. Internacional: 20 a 40 dias úteis. Frete e impostos são calculados no checkout seguro da Shopify.",
+  },
+  de: {
+    overview:
+      "Eine Beanie in Zusammenarbeit mit Stylist Paradela. Entspannte Silhouette, hochwertiger Sweatstoff und hochauflösender Full-Print-Sublimationsdruck.",
+    specs: [
+      "Kollaboration: RHYTMO × Stylist @paradela",
+      "Full-Print-Sublimationsdruck",
+      "50% Baumwolle, 49% Polyester, 1% Elasthan",
+      "Entspannte Passform",
+      "Weich anfühlender Stoff",
+      "Verstärkte Nähte",
+      "Vierfach dehnbar",
+      "Unisex",
+      "Hergestellt in Brasilien",
+    ],
+    care: [
+      "Kalt waschen",
+      "Nicht bleichen",
+      "An der Luft trocknen",
+      "Nicht direkt auf dem Druck bügeln",
+    ],
+    shipping:
+      "Brasilien: 2–15 Werktage mit Correios. Weltweit: 20–40 Werktage. Versand und Steuern werden im sicheren Shopify-Checkout berechnet.",
+  },
+  ko: {
+    overview:
+      "스타일리스트 Paradela와 협업한 비니입니다. 여유로운 실루엣, 프리미엄 기모 원단, 고해상도 풀프린트 승화 전사로 완성했습니다.",
+    specs: [
+      "협업: RHYTMO × 스타일리스트 @paradela",
+      "풀프린트 승화 전사",
+      "면 50%, 폴리에스터 49%, 엘라스테인 1%",
+      "릴랙스 핏",
+      "부드러운 촉감의 원단",
+      "보강 스티치",
+      "4방향 신축성",
+      "유니섹스",
+      "브라질 제작",
+    ],
+    care: ["찬물 세탁", "표백 금지", "자연 건조", "프린트 위 직접 다림질 금지"],
+    shipping:
+      "브라질: Correios 배송으로 2~15 영업일. 해외: 20~40 영업일. 배송비와 세금은 Shopify 보안 결제에서 계산됩니다.",
+  },
+};
+
+const TITLE_WORDS: Record<LanguageCode, Record<string, string>> = {
+  en: {},
+  pt: { Beanie: "Gorro" },
+  de: { Beanie: "Mütze" },
+  ko: { Beanie: "비니", Paradela: "파라델라" },
+};
+
+/** Localises Shopify product titles while keeping model numbers intact. */
+export function localizeTitle(title: string, lang: LanguageCode) {
+  const words = TITLE_WORDS[lang];
+  return Object.entries(words).reduce(
+    (out, [from, to]) => out.replace(new RegExp(`\\b${from}\\b`, "g"), to),
+    title,
+  );
+}
+
 type I18nContextValue = {
   lang: LanguageCode;
   setLang: (l: LanguageCode) => void;
   t: (key: TranslationKey) => string;
+  product: ProductContent;
+  localize: (title: string) => string;
 };
 
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -282,7 +394,16 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = useCallback((key: TranslationKey) => DICT[lang][key] ?? DICT.en[key], [lang]);
 
-  const value = useMemo<I18nContextValue>(() => ({ lang, setLang, t }), [lang, t]);
+  const value = useMemo<I18nContextValue>(
+    () => ({
+      lang,
+      setLang,
+      t,
+      product: PRODUCT_CONTENT[lang],
+      localize: (title: string) => localizeTitle(title, lang),
+    }),
+    [lang, t],
+  );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
