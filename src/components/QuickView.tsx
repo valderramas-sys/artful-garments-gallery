@@ -1,31 +1,39 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { useCart } from "@/lib/cart";
+import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
-import type { Product } from "@/lib/products";
+import { useCart } from "@/lib/cart";
+import { useCartStore } from "@/stores/cartStore";
+import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/shopify";
 
 export function QuickView({
   product,
   onClose,
 }: {
-  product: Product | null;
+  product: ShopifyProduct | null;
   onClose: () => void;
 }) {
-  const { add, close: closeCart } = useCart();
-  const { format } = useCurrency();
   const { t } = useI18n();
-  const navigate = useNavigate();
+  const { formatFrom } = useCurrency();
+  const { open } = useCart();
+  const addItem = useCartStore((s) => s.addItem);
+  const checkoutUrl = useCartStore((s) => s.checkoutUrl);
+  const loading = useCartStore((s) => s.loading);
+
   const isOpen = Boolean(product);
-  const [size, setSize] = useState<string | undefined>(undefined);
+  const variants = useMemo(
+    () => product?.node.variants.edges.map((e) => e.node) ?? [],
+    [product],
+  );
+  const [variantId, setVariantId] = useState<string | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (product) {
-      setSize(product.sizes[0]);
+      const first = variants.find((v) => v.availableForSale) ?? variants[0];
+      setVariantId(first?.id);
       setQuantity(1);
     }
-  }, [product]);
+  }, [product, variants]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -33,7 +41,26 @@ export function QuickView({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const maxQty = product ? Math.max(1, Math.min(product.stock, 10)) : 1;
+  const variant: ShopifyVariant | undefined =
+    variants.find((v) => v.id === variantId) ?? variants[0];
+  const stock = variant?.quantityAvailable ?? null;
+  const maxQty = Math.max(1, Math.min(stock ?? 10, 10));
+  const image = product ? productImage(product) : null;
+
+  const addToCart = async () => {
+    if (!product || !variant) return;
+    await addItem({
+      variantId: variant.id,
+      productId: product.node.id,
+      handle: product.node.handle,
+      title: product.node.title,
+      variantTitle: variant.title,
+      image,
+      price: Number(variant.price.amount),
+      currencyCode: variant.price.currencyCode,
+      quantity,
+    });
+  };
 
   return (
     <div
@@ -51,7 +78,7 @@ export function QuickView({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={product?.name ?? "Product"}
+        aria-label={product?.node.title ?? "Product"}
         className={`aero-glass relative z-10 flex max-h-[92svh] w-full max-w-[980px] flex-col overflow-hidden rounded-t-3xl transition-all duration-300 ease-[var(--ease-out-soft)] sm:max-h-[88svh] sm:rounded-3xl ${
           isOpen
             ? "translate-y-0 scale-100 opacity-100"
@@ -61,70 +88,100 @@ export function QuickView({
         {product && (
           <>
             <div className="flex items-center justify-between gap-4 px-5 pt-4 pb-3 sm:px-8 sm:pt-6">
-              <span className="font-num text-xs tracking-[0.18em] text-muted-foreground">
-                {product.index}
-              </span>
+              <span className="label-xs text-muted-foreground">{t("product.quickview")}</span>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label={t("cart.close")}
                 className="grid h-9 w-9 place-items-center rounded-full bg-surface/70 text-muted-foreground transition-colors duration-250 hover:text-pink"
               >
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  aria-hidden
+                >
                   <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
 
             <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto overscroll-contain px-5 pb-6 sm:grid-cols-2 sm:gap-10 sm:px-8 sm:pb-8">
-              <img
-                src={product.image}
-                alt={product.name}
-                loading="lazy"
-                width={1024}
-                height={1280}
-                className="max-h-[42svh] w-full rounded-2xl bg-surface object-cover sm:top-0 sm:max-h-none sm:aspect-4/5 sm:sticky"
-              />
+              {image ? (
+                <img
+                  src={image}
+                  alt={product.node.title}
+                  loading="lazy"
+                  className="max-h-[42svh] w-full rounded-2xl bg-surface object-cover sm:top-0 sm:max-h-none sm:aspect-4/5 sm:sticky"
+                />
+              ) : (
+                <div className="max-h-[42svh] w-full rounded-2xl bg-surface-2 sm:aspect-4/5" />
+              )}
 
               <div className="flex min-w-0 flex-col">
-                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{product.name}</h2>
-                <p className="font-num mt-2 text-xl sm:text-2xl">{format(product.price)}</p>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  {product.description}
+                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  {product.node.title}
+                </h2>
+                <p className="font-num mt-2 text-xl sm:text-2xl">
+                  {variant
+                    ? formatFrom(Number(variant.price.amount), variant.price.currencyCode)
+                    : formatFrom(
+                        Number(product.node.priceRange.minVariantPrice.amount),
+                        product.node.priceRange.minVariantPrice.currencyCode,
+                      )}
                 </p>
+                {product.node.description && (
+                  <p className="mt-4 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
+                    {product.node.description}
+                  </p>
+                )}
 
                 <p
-                  className={`label-xs mt-5 ${product.stock <= 5 ? "text-pink-deep" : "text-muted-foreground"}`}
+                  className={`label-xs mt-5 ${
+                    variant?.availableForSale ? "text-muted-foreground" : "text-pink-deep"
+                  }`}
                 >
-                  {product.stock > 0 ? (
-                    <>
-                      {t("product.instock")} — <span className="font-num">{product.stock}</span> {t("product.left")}
-                    </>
+                  {variant?.availableForSale ? (
+                    stock !== null ? (
+                      <>
+                        {t("product.instock")} — <span className="font-num">{stock}</span>{" "}
+                        {t("product.left")}
+                      </>
+                    ) : (
+                      t("product.instock")
+                    )
                   ) : (
                     t("product.soldout")
                   )}
                 </p>
 
-                <fieldset className="mt-6">
-                  <legend className="label-xs text-muted-foreground">{t("cart.size")}</legend>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {product.sizes.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setSize(s)}
-                        aria-pressed={size === s}
-                        className={`font-num min-h-11 min-w-11 rounded-2xl border px-4 text-sm transition-all duration-250 ease-[var(--ease-out-soft)] ${
-                          size === s
-                            ? "border-pink bg-pink text-primary-foreground"
-                            : "border-border bg-surface/60 text-foreground hover:border-pink hover:text-pink"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </fieldset>
+                {variants.length > 1 && (
+                  <fieldset className="mt-6">
+                    <legend className="label-xs text-muted-foreground">
+                      {product.node.options[0]?.name ?? t("cart.size")}
+                    </legend>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {variants.map((v) => (
+                        <button
+                          key={v.id}
+                          type="button"
+                          onClick={() => setVariantId(v.id)}
+                          aria-pressed={variant?.id === v.id}
+                          disabled={!v.availableForSale}
+                          className={`font-num min-h-11 min-w-11 rounded-2xl border px-4 text-sm transition-all duration-250 ease-[var(--ease-out-soft)] disabled:opacity-40 ${
+                            variant?.id === v.id
+                              ? "border-pink bg-pink text-primary-foreground"
+                              : "border-border bg-surface/60 text-foreground hover:border-pink hover:text-pink"
+                          }`}
+                        >
+                          {v.title}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+                )}
 
                 <div className="mt-6">
                   <span className="label-xs text-muted-foreground">{t("product.quantity")}</span>
@@ -149,49 +206,44 @@ export function QuickView({
                   </div>
                 </div>
 
-                <dl className="mt-8 divide-y divide-border border-t border-border text-sm">
-                  {product.specs.map((spec) => (
-                    <div key={spec.label} className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                      <dt className="label-xs pt-0.5 text-muted-foreground">{spec.label}</dt>
-                      <dd className="text-right">{spec.value}</dd>
-                    </div>
-                  ))}
-                  <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.material")}</dt>
-                    <dd className="text-right">{product.composition}</dd>
-                  </div>
-                  <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.care")}</dt>
-                    <dd className="text-right">{product.care.join(" · ")}</dd>
-                  </div>
-                  <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3">
-                    <dt className="label-xs pt-0.5 text-muted-foreground">{t("product.shipping")}</dt>
-                    <dd className="text-right">{product.shipping}</dd>
-                  </div>
-                </dl>
+                {variant && variant.selectedOptions.length > 0 && (
+                  <dl className="mt-8 divide-y divide-border border-t border-border text-sm">
+                    {variant.selectedOptions.map((opt) => (
+                      <div
+                        key={opt.name}
+                        className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-3"
+                      >
+                        <dt className="label-xs pt-0.5 text-muted-foreground">{opt.name}</dt>
+                        <dd className="text-right">{opt.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
               </div>
             </div>
 
             <div className="glass-bar sticky bottom-0 z-10 grid gap-3 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:px-8">
               <button
                 type="button"
-                onClick={() => {
-                  add(product, quantity, size);
+                disabled={!variant?.availableForSale || loading}
+                onClick={async () => {
+                  await addToCart();
                   onClose();
+                  open();
                 }}
-                className="label-xs min-h-12 rounded-full border border-pink-mist bg-pink-mist/50 text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink hover:text-primary-foreground active:scale-[0.99]"
+                className="label-xs rounded-full border border-pink-mist bg-pink-mist/50 py-4 text-pink transition-colors duration-250 hover:bg-pink hover:text-primary-foreground disabled:opacity-50"
               >
                 {t("product.add")}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  add(product, quantity, size);
-                  onClose();
-                  closeCart();
-                  navigate({ to: "/checkout" });
+                disabled={!variant?.availableForSale || loading}
+                onClick={async () => {
+                  await addToCart();
+                  const url = useCartStore.getState().checkoutUrl ?? checkoutUrl;
+                  if (url) window.location.href = url;
                 }}
-                className="label-xs min-h-12 rounded-full bg-pink text-primary-foreground transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink-deep active:scale-[0.99]"
+                className="label-xs rounded-full bg-pink py-4 text-primary-foreground transition-colors duration-250 hover:bg-pink-deep disabled:opacity-50"
               >
                 {t("product.buy")}
               </button>
