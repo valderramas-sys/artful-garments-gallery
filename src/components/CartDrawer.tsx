@@ -46,7 +46,7 @@ export function CartDrawer() {
             <button
               type="button"
               onClick={close}
-              className="label-xs text-pink transition-opacity duration-250 hover:opacity-70"
+              className="glass-btn label-xs rounded-full px-3 py-1.5"
             >
               {t("cart.close")}
             </button>
@@ -72,7 +72,7 @@ export function CartDrawer() {
                   )}
                   <div className="min-w-0">
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
-                      <h3 className="truncate text-sm font-bold tracking-tight">{line.title}</h3>
+                      <h3 className="text-sm leading-snug font-bold tracking-tight">{line.title}</h3>
                       <p className="font-num text-sm">
                         {formatFrom(line.price * line.quantity, line.currencyCode)}
                       </p>
@@ -81,7 +81,7 @@ export function CartDrawer() {
                       <p className="label-xs mt-1 text-muted-foreground">{line.variantTitle}</p>
                     )}
                     <div className="mt-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3 rounded-full bg-surface px-3 py-1.5">
+                      <div className="glass-soft flex items-center gap-3 rounded-full px-3 py-1.5">
                         <button
                           type="button"
                           aria-label={`Decrease ${line.title}`}
@@ -103,7 +103,7 @@ export function CartDrawer() {
                       <button
                         type="button"
                         onClick={() => removeItem(line.lineId)}
-                        className="label-xs text-muted-foreground transition-colors duration-250 hover:text-pink"
+                        className="glass-btn label-xs rounded-full px-3 py-1.5"
                       >
                         {t("cart.remove")}
                       </button>
@@ -127,7 +127,7 @@ export function CartDrawer() {
             className={`label-xs mt-5 flex w-full items-center justify-center rounded-full py-4 transition-all duration-250 ease-[var(--ease-out-soft)] ${
               lines.length === 0
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "bg-pink text-primary-foreground hover:bg-pink-deep"
+                : "glass-btn-primary"
             }`}
           >
             {t("nav.checkout")}
