@@ -11,7 +11,7 @@ export function QuickView({
   product: Product | null;
   onClose: () => void;
 }) {
-  const { add } = useCart();
+  const { add, close: closeCart } = useCart();
   const { format } = useCurrency();
   const navigate = useNavigate();
   const isOpen = Boolean(product);
@@ -186,6 +186,7 @@ export function QuickView({
                 onClick={() => {
                   add(product, quantity, size);
                   onClose();
+                  closeCart();
                   navigate({ to: "/checkout" });
                 }}
                 className="label-xs min-h-12 rounded-full bg-pink text-primary-foreground transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink-deep active:scale-[0.99]"
