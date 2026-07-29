@@ -19,7 +19,10 @@ type CartState = {
   cartId: string | null;
   checkoutUrl: string | null;
   lines: CartLine[];
+  cost: CartCost | null;
+  discountCodes: Array<{ code: string; applicable: boolean }>;
   loading: boolean;
+  applyDiscount: (code: string) => Promise<void>;
   addItem: (line: Omit<CartLine, "lineId">) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   removeItem: (lineId: string) => Promise<void>;
@@ -30,6 +33,13 @@ type CartState = {
 const CART_FIELDS = `
   id
   checkoutUrl
+  totalQuantity
+  discountCodes { code applicable }
+  cost {
+    subtotalAmount { amount currencyCode }
+    totalAmount { amount currencyCode }
+    totalTaxAmount { amount currencyCode }
+  }
   lines(first: 100) {
     edges {
       node {
@@ -49,9 +59,18 @@ const CART_FIELDS = `
   }
 `;
 
+export type CartCost = {
+  subtotalAmount: { amount: string; currencyCode: string };
+  totalAmount: { amount: string; currencyCode: string };
+  totalTaxAmount: { amount: string; currencyCode: string } | null;
+};
+
 type RemoteCart = {
   id: string;
   checkoutUrl: string;
+  totalQuantity: number;
+  discountCodes: Array<{ code: string; applicable: boolean }>;
+  cost: CartCost;
   lines: {
     edges: Array<{
       node: {
@@ -83,13 +102,47 @@ const mapLines = (cart: RemoteCart): CartLine[] =>
     quantity: node.quantity,
   }));
 
+const fromCart = (cart: RemoteCart) => ({
+  cartId: cart.id,
+  checkoutUrl: cart.checkoutUrl,
+  lines: mapLines(cart),
+  cost: cart.cost ?? null,
+  discountCodes: cart.discountCodes ?? [],
+});
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cartId: null,
       checkoutUrl: null,
       lines: [],
+      cost: null,
+      discountCodes: [],
       loading: false,
+
+      applyDiscount: async (code) => {
+        const { cartId } = get();
+        if (!cartId) return;
+        set({ loading: true });
+        try {
+          const res = await storefrontApiRequest(
+            `mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+              cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+                cart { ${CART_FIELDS} }
+                userErrors { message }
+              }
+            }`,
+            { cartId, discountCodes: code ? [code] : [] },
+          );
+          const cart = (res?.data as { cartDiscountCodesUpdate?: { cart?: RemoteCart } })
+            ?.cartDiscountCodesUpdate?.cart;
+          if (cart) set(fromCart(cart));
+        } catch (error) {
+          console.error("Shopify applyDiscount failed", error);
+        } finally {
+          set({ loading: false });
+        }
+      },
 
       addItem: async (line) => {
         set({ loading: true });
@@ -106,7 +159,7 @@ export const useCartStore = create<CartState>()(
               { input: { lines: [{ merchandiseId: line.variantId, quantity: line.quantity }] } },
             );
             const cart = (res?.data as { cartCreate?: { cart?: RemoteCart } })?.cartCreate?.cart;
-            if (cart) set({ cartId: cart.id, checkoutUrl: cart.checkoutUrl, lines: mapLines(cart) });
+            if (cart) set(fromCart(cart));
           } else {
             const res = await storefrontApiRequest(
               `mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -118,7 +171,7 @@ export const useCartStore = create<CartState>()(
               { cartId, lines: [{ merchandiseId: line.variantId, quantity: line.quantity }] },
             );
             const cart = (res?.data as { cartLinesAdd?: { cart?: RemoteCart } })?.cartLinesAdd?.cart;
-            if (cart) set({ checkoutUrl: cart.checkoutUrl, lines: mapLines(cart) });
+            if (cart) set(fromCart(cart));
           }
         } catch (error) {
           console.error("Shopify addItem failed", error);
@@ -144,7 +197,7 @@ export const useCartStore = create<CartState>()(
           );
           const cart = (res?.data as { cartLinesUpdate?: { cart?: RemoteCart } })?.cartLinesUpdate
             ?.cart;
-          if (cart) set({ checkoutUrl: cart.checkoutUrl, lines: mapLines(cart) });
+          if (cart) set(fromCart(cart));
         } catch (error) {
           console.error("Shopify updateQuantity failed", error);
         } finally {
@@ -168,7 +221,7 @@ export const useCartStore = create<CartState>()(
           );
           const cart = (res?.data as { cartLinesRemove?: { cart?: RemoteCart } })?.cartLinesRemove
             ?.cart;
-          if (cart) set({ checkoutUrl: cart.checkoutUrl, lines: mapLines(cart) });
+          if (cart) set(fromCart(cart));
         } catch (error) {
           console.error("Shopify removeItem failed", error);
         } finally {
@@ -186,16 +239,17 @@ export const useCartStore = create<CartState>()(
           );
           const cart = (res?.data as { cart?: RemoteCart | null })?.cart;
           if (!cart) {
-            set({ cartId: null, checkoutUrl: null, lines: [] });
+            set({ cartId: null, checkoutUrl: null, lines: [], cost: null, discountCodes: [] });
             return;
           }
-          set({ checkoutUrl: cart.checkoutUrl, lines: mapLines(cart) });
+          set(fromCart(cart));
         } catch (error) {
           console.error("Shopify syncCart failed", error);
         }
       },
 
-      clear: () => set({ cartId: null, checkoutUrl: null, lines: [] }),
+      clear: () =>
+        set({ cartId: null, checkoutUrl: null, lines: [], cost: null, discountCodes: [] }),
     }),
     { name: "rhytmo-cart" },
   ),
