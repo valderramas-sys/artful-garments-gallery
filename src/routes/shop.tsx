@@ -36,12 +36,12 @@ function Shop() {
   const products = data ?? [];
 
   return (
-    <main className="animate-fade-in mx-auto max-w-[1600px] px-6 pt-28 pb-32 sm:px-10 lg:px-16">
+    <main className="animate-fade-in mx-auto w-full max-w-[1500px] px-6 pt-28 pb-32 sm:px-10 lg:px-16">
       <h1 className="sr-only">RHYTMO products</h1>
 
       {isLoading && (
-        <div className="grid grid-cols-2 gap-x-6 gap-y-14 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-10 xl:grid-cols-5">
-          {Array.from({ length: 5 }).map((_, i) => (
+        <div className="mx-auto grid grid-cols-2 justify-center gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-10 lg:gap-y-16">
+          {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="animate-pulse">
               <div className="aspect-4/5 w-full rounded-3xl bg-surface" />
               <div className="mt-4 h-3 w-2/3 rounded-full bg-surface" />
@@ -57,12 +57,13 @@ function Shop() {
       )}
 
       {products.length > 0 && (
-        <div className="grid grid-cols-2 gap-x-6 gap-y-14 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-10 xl:grid-cols-5">
+        <div className="mx-auto grid grid-cols-2 justify-center gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-10 lg:gap-y-16">
           {products.map((product) => (
             <ProductCard key={product.node.id} product={product} onQuickView={setActive} />
           ))}
         </div>
       )}
+
 
       <QuickView product={active} onClose={() => setActive(null)} />
     </main>
