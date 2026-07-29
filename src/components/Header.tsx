@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { Logo } from "./Logo";
 import { CurrencySelector } from "./CurrencySelector";
+import { useI18n } from "@/lib/i18n";
 
 export function Header() {
   const { count, open } = useCart();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [leaving, setLeaving] = useState(false);
