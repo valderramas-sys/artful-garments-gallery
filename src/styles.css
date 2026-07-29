@@ -39,14 +39,12 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-green: var(--green);
-  --color-green-bright: var(--green-bright);
-  --color-green-deep: var(--green-deep);
-  --color-blue: var(--blue);
-  --color-blue-soft: var(--blue-soft);
-  --color-blue-mist: var(--blue-mist);
   --color-pink: var(--pink);
+  --color-pink-deep: var(--pink-deep);
+  --color-pink-mid: var(--pink-mid);
   --color-pink-soft: var(--pink-soft);
+  --color-pink-mist: var(--pink-mist);
+
   --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
