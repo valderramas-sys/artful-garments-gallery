@@ -7,7 +7,7 @@ import { cartSubtotal, useCartStore } from "@/stores/cartStore";
 import { CurrencySelector } from "./CurrencySelector";
 
 export function CartDrawer() {
-  const { t } = useI18n();
+  const { t, localize } = useI18n();
   const { isOpen, close } = useCart();
   const { formatFrom } = useCurrency();
   const lines = useCartStore((s) => s.lines);
@@ -72,7 +72,7 @@ export function CartDrawer() {
                   )}
                   <div className="min-w-0">
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
-                      <h3 className="text-sm leading-snug font-bold tracking-tight">{line.title}</h3>
+                      <h3 className="text-sm leading-snug font-bold tracking-tight">{localize(line.title)}</h3>
                       <p className="font-num text-sm">
                         {formatFrom(line.price * line.quantity, line.currencyCode)}
                       </p>

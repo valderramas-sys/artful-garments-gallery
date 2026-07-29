@@ -36,8 +36,9 @@ function Shop() {
   const products = data ?? [];
 
   return (
-    <main className="animate-fade-in mx-auto w-full max-w-[1500px] px-6 pt-28 pb-32 sm:px-10 lg:px-16">
+    <main className="shop-gradient animate-fade-in min-h-svh w-full px-6 pt-28 pb-32 sm:px-10 lg:px-16">
       <h1 className="sr-only">RHYTMO products</h1>
+      <div className="mx-auto w-full max-w-[1500px]">
 
       {isLoading && (
         <div className="mx-auto grid grid-cols-2 justify-center gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-10 lg:gap-y-16">
@@ -64,6 +65,8 @@ function Shop() {
         </div>
       )}
 
+
+      </div>
 
       <QuickView product={active} onClose={() => setActive(null)} />
     </main>

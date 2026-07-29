@@ -47,13 +47,13 @@ export function Footer() {
             <dl className="mt-2.5 space-y-2.5">
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.brazil")}</dt>
-                <dd className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+                <dd className="mt-1 text-[9px] leading-[1.6] text-muted-foreground">
                   {t("footer.brazil.copy")}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.world")}</dt>
-                <dd className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+                <dd className="mt-1 text-[9px] leading-[1.6] text-muted-foreground">
                   {t("footer.world.copy")}
                 </dd>
               </div>

@@ -7,23 +7,6 @@ import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/sh
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
-const OVERVIEW =
-  "A collaborative beanie designed with stylist Paradela. Built with a relaxed silhouette, premium fabric blend, and high-definition full-print sublimation.";
-
-const SPECS = [
-  "Collaboration: RHYTMO × Stylist @paradela",
-  "Full-print sublimation",
-  "50% Cotton, 49% Polyester, 1% Elastane",
-  "Relaxed fit",
-  "Soft-touch fabric",
-  "Reinforced stitching",
-  "Four-way stretch",
-  "Unisex",
-  "Made in Brazil",
-];
-
-const CARE = ["Cold wash", "Do not bleach", "Air dry", "Do not iron directly on the print"];
-
 function ParadelaLink() {
   return (
     <a
@@ -44,7 +27,7 @@ export function QuickView({
   product: ShopifyProduct | null;
   onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, product: content, localize } = useI18n();
   const { formatFrom } = useCurrency();
   const { open } = useCart();
   const addItem = useCartStore((s) => s.addItem);
@@ -118,8 +101,7 @@ export function QuickView({
       >
         {product && (
           <>
-            <div className="flex items-center justify-between gap-4 px-5 pt-4 pb-3 sm:px-10 sm:pt-6">
-              <span className="label-xs text-muted-foreground">{t("product.quickview")}</span>
+            <div className="flex items-center justify-end gap-4 px-5 pt-4 pb-3 sm:px-10 sm:pt-6">
               <button
                 type="button"
                 onClick={onClose}
@@ -156,7 +138,7 @@ export function QuickView({
               <div className="flex min-w-0 flex-col">
                 <p className="label-xs text-muted-foreground">RHYTMO × Paradela</p>
                 <h2 className="mt-2 text-2xl leading-tight font-bold tracking-tight sm:text-[2rem]">
-                  {product.node.title}
+                  {localize(product.node.title)}
                 </h2>
                 <p className="font-num mt-2 text-xl sm:text-2xl">
                   {variant
@@ -228,13 +210,13 @@ export function QuickView({
 
                 <section className="mt-7 border-t border-border pt-6">
                   <h3 className="label-xs text-muted-foreground">{t("product.overview")}</h3>
-                  <p className="mt-3 text-sm leading-relaxed">{OVERVIEW}</p>
+                  <p className="mt-3 text-sm leading-relaxed">{content.overview}</p>
                 </section>
 
                 <section className="mt-7 border-t border-border pt-6">
                   <h3 className="label-xs text-muted-foreground">{t("product.specs")}</h3>
                   <ul className="mt-3 space-y-2 text-sm leading-relaxed">
-                    {SPECS.map((spec) => (
+                    {content.specs.map((spec) => (
                       <li key={spec} className="grid grid-cols-[10px_minmax(0,1fr)] gap-3">
                         <span aria-hidden className="text-pink">
                           •
@@ -242,7 +224,8 @@ export function QuickView({
                         <span>
                           {spec.includes("@paradela") ? (
                             <>
-                              Collaboration: RHYTMO × Stylist <ParadelaLink />
+                              {spec.split("@paradela")[0]}
+                              <ParadelaLink />
                             </>
                           ) : (
                             spec
@@ -256,7 +239,7 @@ export function QuickView({
                 <section className="mt-7 border-t border-border pt-6">
                   <h3 className="label-xs text-muted-foreground">{t("product.care")}</h3>
                   <ul className="mt-3 space-y-2 text-sm leading-relaxed">
-                    {CARE.map((item) => (
+                    {content.care.map((item) => (
                       <li key={item} className="grid grid-cols-[10px_minmax(0,1fr)] gap-3">
                         <span aria-hidden className="text-pink">
                           •
@@ -265,6 +248,13 @@ export function QuickView({
                       </li>
                     ))}
                   </ul>
+                </section>
+
+                <section className="mt-7 border-t border-border pt-6">
+                  <h3 className="label-xs text-muted-foreground">{t("product.shipping")}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {content.shipping}
+                  </p>
                 </section>
               </div>
             </div>

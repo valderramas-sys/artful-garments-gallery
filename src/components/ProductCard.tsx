@@ -11,7 +11,7 @@ export function ProductCard({
   product: ShopifyProduct;
   onQuickView: (product: ShopifyProduct) => void;
 }) {
-  const { t } = useI18n();
+  const { t, localize } = useI18n();
   const { formatFrom } = useCurrency();
   const { open } = useCart();
   const addItem = useCartStore((s) => s.addItem);
@@ -27,7 +27,7 @@ export function ProductCard({
       <button
         type="button"
         onClick={() => onQuickView(product)}
-        aria-label={`${t("product.quickview")} — ${node.title}`}
+        aria-label={localize(node.title)}
         className="block w-full rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink"
       >
         {image ? (
@@ -44,7 +44,7 @@ export function ProductCard({
       </button>
 
       <div className="mt-5 flex flex-col gap-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-3">
-        <h2 className="text-sm leading-snug font-bold tracking-tight">{node.title}</h2>
+        <h2 className="text-sm leading-snug font-bold tracking-tight">{localize(node.title)}</h2>
         <p className="font-num shrink-0 text-sm text-muted-foreground">
           {formatFrom(Number(price.amount), price.currencyCode)}
         </p>
