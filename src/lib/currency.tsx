@@ -32,6 +32,8 @@ type CurrencyContextValue = {
   live: boolean;
   convert: (brl: number) => number;
   format: (brl: number) => string;
+  /** Format an amount expressed in an arbitrary source currency (e.g. the Shopify store currency). */
+  formatFrom: (amount: number, fromCurrency: string) => string;
 };
 
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
