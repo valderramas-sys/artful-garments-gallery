@@ -1,49 +1,42 @@
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
 import { Logo } from "./Logo";
 
 export function Header() {
   const { count, open } = useCart();
-  const [solid, setSolid] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-250 ${
-        solid
-          ? "aero-glass border-b border-border/70"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <div className="mx-auto grid max-w-[1600px] grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-4 sm:px-8">
-        <Link to="/" aria-label="Rhytmo home" className="text-foreground">
-          <Logo className="h-4 w-20 sm:w-24" />
+    <header className="fixed inset-x-0 top-0 z-50 bg-background/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 sm:px-10 lg:px-16">
+        <Link
+          to="/shop"
+          aria-label="RHYTMO"
+          className="text-foreground transition-colors duration-250 hover:text-pink"
+        >
+          <Logo className="h-3.5 w-[86px]" />
         </Link>
-        <span className="label-xs hidden justify-self-center text-muted-foreground sm:block">
-          Vol. 01 — Atmosphere
-        </span>
         <button
           type="button"
           onClick={open}
-          className="label-xs group inline-flex items-center gap-2 text-foreground transition-colors duration-250 hover:text-blue"
+          aria-label={`Open cart, ${count} items`}
+          className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink-mist/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
         >
-          Cart
-          <span
-            className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] transition-colors duration-250 ${
-              count > 0
-                ? "bg-green text-primary-foreground"
-                : "bg-surface-2 text-muted-foreground"
-            }`}
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            className="h-5 w-5"
+            aria-hidden
           >
-            {count}
-          </span>
+            <path d="M6 8h12l-1 12H7L6 8Z" strokeLinejoin="round" />
+            <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
+          </svg>
+          {count > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-pink px-1 text-[10px] font-semibold text-primary-foreground">
+              {count}
+            </span>
+          )}
         </button>
       </div>
     </header>
