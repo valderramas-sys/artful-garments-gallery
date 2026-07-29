@@ -4,6 +4,23 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "Rhytmo Body";
+  src: url("/__l5e/assets-v1/71bb5449-7479-44ae-9f0e-8fa655e0bfe5/Medium.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rhytmo Display";
+  src: url("/__l5e/assets-v1/04f98bd5-0f0f-443d-b899-425ffd4dffad/Giga.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 /*
  * RHYTMO — design system
  * Palette is restricted to the brand swatches: greens, blues, pinks, and
@@ -45,7 +62,8 @@
   --color-pink-soft: var(--pink-soft);
   --color-pink-mist: var(--pink-mist);
 
-  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Rhytmo Body";
+  --font-display: "Rhytmo Display";
 }
 
 :root {
@@ -103,11 +121,14 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
   }
 
   ::selection {
@@ -117,6 +138,7 @@
 }
 
 @utility display {
+  font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 0.86;
