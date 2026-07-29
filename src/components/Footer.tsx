@@ -63,19 +63,26 @@ export function Footer() {
 
           <section>
             <h3 className="label-xs text-[10px] text-muted-foreground">{t("footer.payments")}</h3>
-            <ul className="mt-2.5 flex flex-wrap gap-1.5">
-              {(payments ?? []).map(({ name, label }) => (
-                <li key={name}>
-                  <span
-                    title={name}
-                    aria-label={name}
-                    className="glass-soft font-num grid h-7 min-w-[2.75rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.08em] text-foreground"
-                  >
-                    {label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {payments && payments.length > 0 ? (
+              <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                {payments.map(({ name, label }) => (
+                  <li key={name}>
+                    <span
+                      title={name}
+                      aria-label={name}
+                      className="glass-soft font-num grid h-7 min-w-[2.75rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.08em] text-foreground"
+                    >
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2.5 text-[11px] leading-relaxed text-muted-foreground">
+                Secure checkout by Shopify
+              </p>
+            )}
+
 
             <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
               São Paulo, Brasil
