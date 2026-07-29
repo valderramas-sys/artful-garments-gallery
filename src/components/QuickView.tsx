@@ -43,7 +43,7 @@ export function QuickView({
       <div
         onClick={onClose}
         aria-hidden
-        className="absolute inset-0 bg-foreground/15 backdrop-blur-[3px]"
+        className="absolute inset-0 bg-foreground/20 backdrop-blur-[8px]"
       />
 
       <div
@@ -170,7 +170,7 @@ export function QuickView({
               </div>
             </div>
 
-            <div className="aero-glass sticky bottom-0 z-10 grid gap-3 border-t border-border px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:px-8">
+            <div className="glass-bar sticky bottom-0 z-10 grid gap-3 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:px-8">
               <button
                 type="button"
                 onClick={() => {

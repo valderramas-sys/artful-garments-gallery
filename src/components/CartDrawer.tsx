@@ -19,14 +19,14 @@ export function CartDrawer() {
       <div
         onClick={close}
         aria-hidden
-        className={`fixed inset-0 z-60 bg-foreground/10 backdrop-blur-[2px] transition-opacity duration-250 ${
+        className={`fixed inset-0 z-60 bg-foreground/15 backdrop-blur-[6px] transition-opacity duration-250 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
       <aside
         aria-label="Cart"
         aria-hidden={!isOpen}
-        className={`fixed top-0 right-0 z-70 flex h-full w-full max-w-[420px] flex-col border-l border-border bg-background/85 backdrop-blur-2xl transition-transform duration-[350ms] ease-[var(--ease-out-soft)] sm:rounded-l-3xl ${
+        className={`fixed top-0 right-0 z-70 aero-glass flex h-full w-full max-w-[420px] flex-col transition-transform duration-[350ms] ease-[var(--ease-out-soft)] sm:rounded-l-3xl ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
