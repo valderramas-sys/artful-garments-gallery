@@ -40,7 +40,7 @@ function Checkout() {
           <CurrencySelector />
           <Link
             to="/shop"
-            className="label-xs text-muted-foreground transition-colors duration-250 hover:text-pink"
+            className="glass-btn label-xs rounded-full px-4 py-2"
           >
             {t("checkout.back")}
           </Link>
@@ -71,12 +71,12 @@ function Checkout() {
                     <div className="aspect-4/5 w-full rounded-2xl bg-surface-2" />
                   )}
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold tracking-tight">{line.title}</p>
+                    <p className="text-sm leading-snug font-bold tracking-tight">{line.title}</p>
                     {line.variantTitle && line.variantTitle !== "Default Title" && (
                       <p className="label-xs mt-1 text-muted-foreground">{line.variantTitle}</p>
                     )}
                     <div className="mt-4 flex items-center gap-4">
-                      <div className="flex items-center gap-3 rounded-full bg-surface px-3 py-1.5">
+                      <div className="glass-soft flex items-center gap-3 rounded-full px-3 py-1.5">
                         <button
                           type="button"
                           aria-label={`- ${line.title}`}
@@ -98,7 +98,7 @@ function Checkout() {
                       <button
                         type="button"
                         onClick={() => removeItem(line.lineId)}
-                        className="label-xs text-muted-foreground transition-colors duration-250 hover:text-pink"
+                        className="glass-btn label-xs rounded-full px-3 py-1.5"
                       >
                         {t("cart.remove")}
                       </button>
@@ -143,7 +143,7 @@ function Checkout() {
             className={`label-xs mt-8 flex w-full items-center justify-center rounded-full py-5 transition-colors duration-250 ${
               lines.length === 0 || !checkoutUrl
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "bg-pink text-primary-foreground hover:bg-pink-deep"
+                : "glass-btn-primary"
             }`}
           >
             {t("checkout.place")}
@@ -151,7 +151,7 @@ function Checkout() {
 
           <Link
             to="/shop"
-            className="label-xs mt-4 block text-center text-muted-foreground transition-colors duration-250 hover:text-pink"
+            className="glass-btn label-xs mt-4 flex w-full items-center justify-center rounded-full py-3"
           >
             {t("checkout.backshop")}
           </Link>

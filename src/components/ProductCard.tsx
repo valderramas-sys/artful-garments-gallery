@@ -23,12 +23,12 @@ export function ProductCard({
   const price = node.priceRange.minVariantPrice;
 
   return (
-    <article className="group rounded-3xl">
+    <article className="group card-float rounded-3xl">
       <button
         type="button"
         onClick={() => onQuickView(product)}
-        aria-label={`${t("product.quickview")} ${node.title}`}
-        className="block w-full overflow-hidden rounded-3xl bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
+        aria-label={`${t("product.quickview")} — ${node.title}`}
+        className="block w-full rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink"
       >
         {image ? (
           <img
@@ -36,19 +36,20 @@ export function ProductCard({
             alt={node.images.edges[0]?.node.altText ?? node.title}
             loading="lazy"
             decoding="async"
-            className="aspect-4/5 w-full rounded-3xl object-cover transition-transform duration-[600ms] ease-[var(--ease-out-soft)] group-hover:scale-[1.025]"
+            className="aspect-4/5 w-full rounded-3xl bg-surface object-cover"
           />
         ) : (
-          <div className="aspect-4/5 w-full rounded-3xl bg-surface-2" />
+          <div className="card-float-media aspect-4/5 w-full rounded-3xl bg-surface-2" />
         )}
       </button>
 
-      <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3">
-        <h2 className="truncate text-sm font-bold tracking-tight">{node.title}</h2>
+      <div className="mt-5 flex flex-col gap-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-3">
+        <h2 className="text-sm leading-snug font-bold tracking-tight">{node.title}</h2>
         <p className="font-num shrink-0 text-sm text-muted-foreground">
           {formatFrom(Number(price.amount), price.currencyCode)}
         </p>
       </div>
+
 
       <button
         type="button"
@@ -68,7 +69,7 @@ export function ProductCard({
           });
           open();
         }}
-        className="label-xs mt-3 w-full rounded-full border border-pink-mist bg-pink-mist/50 py-2.5 text-pink transition-all duration-250 ease-[var(--ease-out-soft)] hover:bg-pink hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink active:scale-[0.99] disabled:opacity-50"
+        className="glass-btn label-xs mt-3 w-full rounded-full px-3 py-3 leading-tight break-words whitespace-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink disabled:opacity-50"
       >
         {variant?.availableForSale ? t("product.add") : t("product.soldout")}
       </button>
