@@ -191,6 +191,12 @@ html[lang="ko"] .font-hero {
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    /* Lighter, more editorial scale for latin locales. */
+    font-size: 93.75%;
+  }
+
+  html[lang="ko"] {
+    font-size: 100%;
   }
 
   h1, h2, h3, h4, .font-display {
@@ -448,4 +454,14 @@ html[lang="ko"] .font-hero {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Shop page only: understated gray-to-light gradient behind the product grid. */
+.shop-gradient {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-surface-2) 92%, var(--color-foreground) 8%),
+    var(--color-surface),
+    var(--color-background)
+  );
 }
