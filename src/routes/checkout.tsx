@@ -6,13 +6,13 @@ import { formatPrice } from "@/lib/products";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Checkout — Rhytmo" },
+      { title: "Checkout — RHYTMO" },
       {
         name: "description",
-        content: "Complete your Rhytmo order. Secure, minimal checkout for Vol. 01 Atmosphere.",
+        content: "Complete your RHYTMO order. Secure, minimal checkout.",
       },
-      { property: "og:title", content: "Checkout — Rhytmo" },
-      { property: "og:description", content: "Complete your Rhytmo order." },
+      { property: "og:title", content: "Checkout — RHYTMO" },
+      { property: "og:description", content: "Complete your RHYTMO order." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 const fieldClass =
-  "w-full rounded-sm border border-border bg-surface/60 px-5 py-4 text-base outline-none transition-colors duration-250 placeholder:text-muted-foreground focus:border-blue focus:bg-background";
+  "w-full rounded-sm border border-border bg-surface/60 px-5 py-4 text-base outline-none transition-colors duration-250 placeholder:text-muted-foreground focus:border-pink focus:bg-background";
 
 function Checkout() {
   const { lines, subtotal, clear } = useCart();
@@ -31,13 +31,13 @@ function Checkout() {
     return (
       <main className="mx-auto flex min-h-[80svh] max-w-[1600px] flex-col justify-center px-5 pt-32 pb-24 sm:px-8">
         <h1 className="display text-[12vw] leading-[0.84] sm:text-[6vw]">
-          Order<span className="text-green">.</span>
+          Order<span className="text-pink">.</span>
         </h1>
         <p className="mt-6 max-w-[46ch] text-sm text-muted-foreground">
           Thank you. A confirmation is on its way. Each piece is packed by hand in the studio.
         </p>
-        <Link to="/" className="label-xs mt-10 w-fit text-blue hover:text-green">
-          Back to collection
+        <Link to="/shop" className="label-xs mt-10 w-fit text-pink transition-opacity duration-250 hover:opacity-70">
+          Back to shop
         </Link>
       </main>
     );
@@ -47,7 +47,7 @@ function Checkout() {
     <main className="mx-auto max-w-[1600px] px-5 pt-32 pb-24 sm:px-8">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border pb-6">
         <h1 className="display text-[12vw] leading-[0.84] sm:text-[6vw]">Checkout</h1>
-        <Link to="/" className="label-xs pb-2 text-muted-foreground hover:text-blue">
+        <Link to="/shop" className="label-xs pb-2 text-muted-foreground transition-colors duration-250 hover:text-pink">
           Back
         </Link>
       </div>
@@ -85,7 +85,7 @@ function Checkout() {
           <button
             type="submit"
             disabled={lines.length === 0}
-            className="label-xs mt-8 rounded-full bg-green py-5 text-primary-foreground transition-colors duration-250 hover:bg-green-deep disabled:bg-surface-2 disabled:text-muted-foreground"
+            className="label-xs mt-8 rounded-full bg-pink py-5 text-primary-foreground transition-colors duration-250 hover:bg-pink-deep disabled:bg-surface-2 disabled:text-muted-foreground"
           >
             Place order — {formatPrice(subtotal)}
           </button>
@@ -111,7 +111,7 @@ function Checkout() {
                     <p className="truncate text-sm font-bold tracking-tight">{product.name}</p>
                     <p className="mt-1 text-xs text-muted-foreground">Qty {quantity}</p>
                   </div>
-                  <p className="text-sm font-bold text-blue">
+                  <p className="text-sm font-bold text-pink">
                     {formatPrice(product.price * quantity)}
                   </p>
                 </li>

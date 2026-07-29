@@ -24,16 +24,16 @@ export function CartDrawer() {
       <aside
         aria-label="Cart"
         aria-hidden={!isOpen}
-        className={`fixed top-0 right-0 z-70 flex h-full w-full max-w-[440px] flex-col bg-background transition-transform duration-[350ms] ease-[var(--ease-out-soft)] ${
+        className={`fixed top-0 right-0 z-70 flex h-full w-full max-w-[420px] flex-col border-l border-border bg-background/85 backdrop-blur-2xl transition-transform duration-[350ms] ease-[var(--ease-out-soft)] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-6 py-5">
+        <div className="flex items-center justify-between px-6 py-6">
           <h2 className="label-xs">Cart</h2>
           <button
             type="button"
             onClick={close}
-            className="label-xs text-muted-foreground transition-colors duration-250 hover:text-blue"
+            className="label-xs text-pink transition-opacity duration-250 hover:opacity-70"
           >
             Close
           </button>
@@ -45,7 +45,7 @@ export function CartDrawer() {
           ) : (
             <ul className="divide-y divide-border">
               {lines.map(({ product, quantity }) => (
-                <li key={product.id} className="grid grid-cols-[72px_minmax(0,1fr)] gap-4 py-6">
+                <li key={product.id} className="grid grid-cols-[64px_minmax(0,1fr)] gap-4 py-6">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -57,7 +57,7 @@ export function CartDrawer() {
                   <div className="min-w-0">
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
                       <h3 className="truncate text-sm font-bold tracking-tight">{product.name}</h3>
-                      <p className="text-sm font-bold text-blue">
+                      <p className="text-sm font-semibold">
                         {formatPrice(product.price * quantity)}
                       </p>
                     </div>
@@ -67,7 +67,7 @@ export function CartDrawer() {
                           type="button"
                           aria-label={`Decrease ${product.name}`}
                           onClick={() => setQuantity(product.id, quantity - 1)}
-                          className="text-sm text-muted-foreground transition-colors duration-250 hover:text-green"
+                          className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
                         >
                           −
                         </button>
@@ -76,7 +76,7 @@ export function CartDrawer() {
                           type="button"
                           aria-label={`Increase ${product.name}`}
                           onClick={() => setQuantity(product.id, quantity + 1)}
-                          className="text-sm text-muted-foreground transition-colors duration-250 hover:text-green"
+                          className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
                         >
                           +
                         </button>
@@ -105,10 +105,10 @@ export function CartDrawer() {
             to="/checkout"
             onClick={close}
             aria-disabled={lines.length === 0}
-            className={`label-xs mt-5 flex w-full items-center justify-center rounded-full py-4 transition-colors duration-250 ${
+            className={`label-xs mt-5 flex w-full items-center justify-center rounded-full py-4 transition-all duration-250 ease-[var(--ease-out-soft)] ${
               lines.length === 0
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "bg-green text-primary-foreground hover:bg-green-deep"
+                : "bg-pink text-primary-foreground hover:bg-pink-deep"
             }`}
           >
             Checkout

@@ -39,73 +39,58 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-green: var(--green);
-  --color-green-bright: var(--green-bright);
-  --color-green-deep: var(--green-deep);
-  --color-blue: var(--blue);
-  --color-blue-soft: var(--blue-soft);
-  --color-blue-mist: var(--blue-mist);
   --color-pink: var(--pink);
+  --color-pink-deep: var(--pink-deep);
+  --color-pink-mid: var(--pink-mid);
   --color-pink-soft: var(--pink-soft);
+  --color-pink-mist: var(--pink-mist);
+
   --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 :root {
   --radius: 0.25rem;
 
-  /* neutrals — cool near-whites, never pure black */
-  --background: oklch(0.993 0.002 250);
-  --foreground: oklch(0.32 0.035 255);
-  --surface: oklch(0.965 0.007 240);
-  --surface-2: oklch(0.925 0.014 235);
+  /* neutrals — warm near-whites, never pure black */
+  --background: oklch(0.995 0.001 340);
+  --foreground: oklch(0.3 0.02 345);
+  --surface: oklch(0.972 0.005 345);
+  --surface-2: oklch(0.94 0.012 345);
 
-  --card: oklch(0.978 0.004 245);
+  --card: oklch(0.982 0.003 345);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.993 0.002 250);
+  --popover: oklch(0.995 0.001 340);
   --popover-foreground: var(--foreground);
 
-  /* brand greens */
-  --green: oklch(0.6 0.176 133);
-  --green-bright: oklch(0.85 0.2 121);
-  --green-deep: oklch(0.46 0.13 137);
+  /* brand pinks — the only accent family */
+  --pink-deep: oklch(0.42 0.155 355);
+  --pink: oklch(0.58 0.215 353);
+  --pink-mid: oklch(0.67 0.175 353);
+  --pink-soft: oklch(0.78 0.115 354);
+  --pink-mist: oklch(0.94 0.035 355);
 
-  /* brand blues */
-  --blue: oklch(0.38 0.19 272);
-  --blue-soft: oklch(0.58 0.16 272);
-  --blue-mist: oklch(0.9 0.05 273);
-
-  /* brand pinks */
-  --pink: oklch(0.6 0.24 358);
-  --pink-soft: oklch(0.83 0.09 356);
-
-  --primary: var(--green);
-  --primary-foreground: oklch(0.993 0.002 250);
+  --primary: var(--pink);
+  --primary-foreground: oklch(0.995 0.001 340);
   --secondary: var(--surface);
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
-  --muted-foreground: oklch(0.58 0.02 250);
-  --accent: var(--blue);
-  --accent-foreground: oklch(0.993 0.002 250);
-  --destructive: var(--pink);
-  --destructive-foreground: oklch(0.993 0.002 250);
-  --border: oklch(0.9 0.01 240);
-  --input: oklch(0.9 0.01 240);
-  --ring: var(--blue-soft);
+  --muted-foreground: oklch(0.58 0.015 345);
+  --accent: var(--pink);
+  --accent-foreground: oklch(0.995 0.001 340);
+  --destructive: var(--pink-deep);
+  --destructive-foreground: oklch(0.995 0.001 340);
+  --border: oklch(0.92 0.008 345);
+  --input: oklch(0.92 0.008 345);
+  --ring: var(--pink-mid);
 
-  --gradient-aero: linear-gradient(
-    160deg,
-    oklch(0.99 0.01 200) 0%,
-    oklch(0.95 0.04 200) 35%,
-    oklch(0.93 0.06 160) 70%,
-    oklch(0.97 0.02 250) 100%
-  );
   --gradient-sheen: linear-gradient(
     120deg,
-    color-mix(in oklab, var(--green-bright) 18%, transparent),
-    color-mix(in oklab, var(--blue-mist) 45%, transparent)
+    color-mix(in oklab, var(--pink-mist) 60%, transparent),
+    color-mix(in oklab, var(--pink-soft) 22%, transparent)
   );
-  --shadow-soft: 0 24px 60px -40px color-mix(in oklab, var(--blue) 40%, transparent);
+  --shadow-soft: 0 24px 60px -40px color-mix(in oklab, var(--pink-deep) 30%, transparent);
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
 }
 
 @layer base {
@@ -126,7 +111,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--green-bright) 55%, transparent);
+    background: color-mix(in oklab, var(--pink-soft) 55%, transparent);
     color: var(--foreground);
   }
 }
@@ -149,7 +134,7 @@
   background: color-mix(in oklab, var(--background) 62%, transparent);
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid color-mix(in oklab, var(--blue-mist) 60%, transparent);
+  border: 1px solid color-mix(in oklab, var(--pink-mist) 60%, transparent);
 }
 
 @utility reveal {
