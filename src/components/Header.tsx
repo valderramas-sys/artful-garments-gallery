@@ -33,14 +33,14 @@ export function Header() {
         }`}
       />
       <header className="glass-bar fixed inset-x-0 top-0 z-50">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3.5 sm:gap-6 sm:px-10 sm:py-5 lg:px-16">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-3 py-3.5 sm:gap-6 sm:px-5 sm:py-5 lg:px-8">
           <Link
             to="/"
             onClick={goHome}
             aria-label="RHYTMO — home"
             className="flex min-w-0 shrink items-center text-foreground transition-colors duration-250 hover:text-pink"
           >
-            <Logo className="h-6 w-[128px] shrink-0 sm:h-9 sm:w-[224px]" />
+            <Logo className="h-7 w-[150px] shrink-0 sm:h-11 sm:w-[268px]" />
           </Link>
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
             <CurrencySelector />
