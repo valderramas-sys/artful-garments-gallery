@@ -36,6 +36,19 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Rhytmo KR";
+  src: url("/__l5e/assets-v1/83e47f72-f5dd-49e3-b6da-dfc0a0842ba6/HSJandari-Regular.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Korean locale uses the supplied HSJandari face across the whole interface. */
+html[lang="ko"] body {
+  font-family: "Rhytmo KR", "Rhytmo Body", sans-serif;
+}
+
 
 
 /*
@@ -170,7 +183,7 @@
 }
 
 @utility font-num {
-  font-family: "Rhytmo Numeric";
+  font-family: "Rhytmo KR", "Rhytmo Numeric";
   font-feature-settings: "tnum" 1;
 }
 
