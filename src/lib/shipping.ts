@@ -78,6 +78,20 @@ export async function estimateShipping(params: {
 }): Promise<ShippingOption[]> {
   const { variantId, quantity, countryCode, postalCode } = params;
 
+  let { province, city } = params;
+  // Brazilian carrier rates need the state/city; ViaCEP resolves them from the CEP.
+  if (countryCode === "BR" && !province) {
+    try {
+      const digits = postalCode.replace(/\D/g, "");
+      const lookup = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
+      const address = (await lookup.json()) as { uf?: string; localidade?: string };
+      province = address.uf ?? undefined;
+      city = address.localidade ?? undefined;
+    } catch {
+      /* fall back to zip-only estimate */
+    }
+  }
+
   const created = await storefrontApiRequest(CART_CREATE, {
     input: {
       lines: [{ merchandiseId: variantId, quantity }],
@@ -89,8 +103,8 @@ export async function estimateShipping(params: {
             deliveryAddress: {
               country: findDestination(countryCode).name,
               zip: postalCode,
-              ...(params.province ? { province: params.province } : {}),
-              ...(params.city ? { city: params.city } : {}),
+              ...(province ? { province } : {}),
+              ...(city ? { city } : {}),
             },
           },
         ],
