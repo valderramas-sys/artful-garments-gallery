@@ -60,6 +60,21 @@ function Landing() {
           R H Y T M O
         </button>
       </div>
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 select-none text-[9px] leading-none tracking-[0.14em] text-foreground uppercase opacity-[0.08] sm:text-[10px]"
+      >
+        <span className="absolute top-20 left-6 sm:top-24 sm:left-10 lg:left-14">
+          © 2026 RHYTMO.
+        </span>
+        <span className="absolute right-6 bottom-8 sm:right-10 sm:bottom-10 lg:right-14">
+          Based in São Paulo, Brazil.
+        </span>
+        <span className="absolute bottom-8 left-6 sm:bottom-10 sm:left-10 lg:left-14">
+          Website designed by @valderramasvi
+        </span>
+      </div>
     </main>
   );
 }
