@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { CUSTOMER_LINKS } from "@/lib/commerce";
+
 import { useQuery } from "@tanstack/react-query";
 import { LanguageSelector } from "./LanguageSelector";
 import { useI18n } from "@/lib/i18n";
@@ -44,36 +44,6 @@ export function Footer() {
                 <Link to="/checkout" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.checkout")}
                 </Link>
-              </li>
-              <li>
-                <a
-                  href={CUSTOMER_LINKS.login}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="transition-colors duration-250 hover:text-pink"
-                >
-                  {t("account.login")}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={CUSTOMER_LINKS.orders}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="transition-colors duration-250 hover:text-pink"
-                >
-                  {t("account.orders")}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={CUSTOMER_LINKS.tracking}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="transition-colors duration-250 hover:text-pink"
-                >
-                  {t("account.tracking")}
-                </a>
               </li>
             </ul>
           </section>

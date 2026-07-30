@@ -4,7 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { cartSubtotal, useCartStore } from "@/stores/cartStore";
-import { buildCheckoutUrl, CUSTOMER_LINKS } from "@/lib/commerce";
+import { buildCheckoutUrl } from "@/lib/commerce";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -212,14 +212,6 @@ function Checkout() {
             {t("checkout.place")}
           </a>
 
-          <a
-            href={CUSTOMER_LINKS.orders}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="glass-btn label-xs mt-3 flex w-full items-center justify-center rounded-full py-3"
-          >
-            {t("account.orders")}
-          </a>
 
           <Link
             to="/shop"
