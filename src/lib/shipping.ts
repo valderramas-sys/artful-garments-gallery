@@ -16,24 +16,29 @@ export type ShippingOption = {
   total: [number, number];
 };
 
-const ESTIMATE_QUERY = `
+const CART_CREATE = `
   mutation EstimateShipping($input: CartInput!) {
     cartCreate(input: $input) {
-      cart {
-        id
-        deliveryGroups(first: 5, withCarrierRates: true) {
-          nodes {
-            deliveryOptions {
-              handle
-              title
-              code
-              description
-              estimatedCost { amount currencyCode }
-            }
+      cart { id }
+      userErrors { message }
+    }
+  }
+`;
+
+const DELIVERY_GROUPS = `
+  query DeliveryGroups($id: ID!) {
+    cart(id: $id) {
+      deliveryGroups(first: 5) {
+        nodes {
+          deliveryOptions {
+            handle
+            title
+            code
+            description
+            estimatedCost { amount currencyCode }
           }
         }
       }
-      userErrors { message }
     }
   }
 `;
@@ -73,15 +78,16 @@ export async function estimateShipping(params: {
 }): Promise<ShippingOption[]> {
   const { variantId, quantity, countryCode, postalCode } = params;
 
-  const res = await storefrontApiRequest(ESTIMATE_QUERY, {
+  const created = await storefrontApiRequest(CART_CREATE, {
     input: {
       lines: [{ merchandiseId: variantId, quantity }],
       buyerIdentity: {
         countryCode,
         deliveryAddressPreferences: [
           {
+            // MailingAddressInput takes the country *name*, not the ISO code.
             deliveryAddress: {
-              countryCode,
+              country: findDestination(countryCode).name,
               zip: postalCode,
               ...(params.province ? { province: params.province } : {}),
               ...(params.city ? { city: params.city } : {}),
@@ -92,16 +98,19 @@ export async function estimateShipping(params: {
     },
   });
 
+  const cartId = (
+    created?.data as { cartCreate?: { cart?: { id?: string } } } | undefined
+  )?.cartCreate?.cart?.id;
+  if (!cartId) return [];
+
+  const res = await storefrontApiRequest(DELIVERY_GROUPS, { id: cartId });
+
   const groups =
     (
       res?.data as
-        | {
-            cartCreate?: {
-              cart?: { deliveryGroups?: { nodes?: Array<{ deliveryOptions?: RawOption[] }> } };
-            };
-          }
+        | { cart?: { deliveryGroups?: { nodes?: Array<{ deliveryOptions?: RawOption[] }> } } }
         | undefined
-    )?.cartCreate?.cart?.deliveryGroups?.nodes ?? [];
+    )?.cart?.deliveryGroups?.nodes ?? [];
 
   const destination = findDestination(countryCode);
   const dispatch = DISPATCH_DAYS[destination.region];
