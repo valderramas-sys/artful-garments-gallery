@@ -43,6 +43,12 @@ export function Header() {
             <Logo className="h-7 w-[150px] shrink-0 sm:h-11 sm:w-[268px]" />
           </Link>
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+            <Link
+              to="/info"
+              className="glass-btn label-xs inline-flex shrink-0 items-center rounded-full px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
+            >
+              {t("nav.info")}
+            </Link>
             <CurrencySelector />
             <button
               type="button"

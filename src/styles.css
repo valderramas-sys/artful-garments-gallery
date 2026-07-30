@@ -37,6 +37,14 @@
 }
 
 @font-face {
+  font-family: "Rhytmo Title";
+  src: url("/__l5e/assets-v1/27d849f8-22f9-463d-be44-36d0cda8ed04/vipnagorgialla.regular.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Rhytmo KR";
   src: url("/__l5e/assets-v1/83e47f72-f5dd-49e3-b6da-dfc0a0842ba6/HSJandari-Regular.ttf") format("truetype");
   font-weight: 100 900;
@@ -136,7 +144,7 @@ html[lang="ko"] .font-hero {
   --color-pink-mist: var(--pink-mist);
 
   --font-sans: "Rhytmo Body";
-  --font-display: "Rhytmo Body";
+  --font-display: "Rhytmo Title", "Rhytmo Body";
 }
 
 :root {
@@ -216,7 +224,7 @@ html[lang="ko"] .font-hero {
 }
 
 @utility display {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 0.86;
