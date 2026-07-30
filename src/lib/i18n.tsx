@@ -484,6 +484,18 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<LanguageCode>("pt");
 
+  // Portuguese is the default for first-time visitors; returning shoppers keep
+  // whatever language they picked last.
+  useEffect(() => {
+    const saved = localStorage.getItem("rhytmo:lang") as LanguageCode | null;
+    if (saved && LANGUAGES.some((l) => l.code === saved)) setLang(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("rhytmo:lang", lang);
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   useEffect(() => {
     document.documentElement.lang = HTML_LANG[lang];
   }, [lang]);
