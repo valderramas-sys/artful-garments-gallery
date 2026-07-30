@@ -46,6 +46,10 @@ function Shop() {
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/45" />
       <h1 className="sr-only">RHYTMO products</h1>
       <div className="mx-auto w-full max-w-[1500px]">
+      <p className="mb-8 text-[10px] leading-none tracking-[0.16em] text-muted-foreground/70 uppercase sm:text-[11px]">
+        Based in São Paulo, Brazil.
+      </p>
+
 
       {isLoading && (
         <div className="mx-auto grid grid-cols-2 justify-center gap-x-6 gap-y-12 sm:gap-x-8 lg:grid-cols-4 lg:gap-x-10 lg:gap-y-16">
