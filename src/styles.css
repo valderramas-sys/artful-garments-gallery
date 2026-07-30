@@ -229,12 +229,34 @@ html[lang="ko"] .font-hero {
 
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
+
+  h1 { line-height: 0.94; letter-spacing: -0.035em; }
+  h2 { line-height: 1.02; letter-spacing: -0.028em; }
+  h3 { line-height: 1.1; letter-spacing: -0.022em; }
+  h4 { line-height: 1.18; letter-spacing: -0.016em; }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: -0.004em;
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures contextual;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    letter-spacing: inherit;
   }
 
   ::selection {
@@ -245,29 +267,31 @@ html[lang="ko"] .font-hero {
 
 @utility display {
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.86;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
 @utility font-giga {
-  font-family: "Rhytmo Display";
+  font-family: "Rhytmo Symbols", "Rhytmo Display";
 }
 
 @utility font-hero {
-  font-family: "Rhytmo Hero";
+  font-family: "Rhytmo Symbols", "Rhytmo Hero";
 }
 
 @utility font-num {
-  font-family: "Rhytmo KR", "Rhytmo Numeric";
+  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Numeric";
   font-feature-settings: "tnum" 1;
+  letter-spacing: 0.005em;
 }
 
 @utility label-xs {
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
   text-transform: uppercase;
 }
 
