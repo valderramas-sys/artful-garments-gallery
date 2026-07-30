@@ -36,13 +36,27 @@
   font-display: swap;
 }
 
+/* Symbols-only face: punctuation, currency, math, arrows, decorative glyphs.
+   The unicode-range keeps every letter and digit on the primary typeface. */
 @font-face {
-  font-family: "Rhytmo Title";
-  src: url("/__l5e/assets-v1/27d849f8-22f9-463d-be44-36d0cda8ed04/vipnagorgialla.regular.otf") format("opentype");
+  font-family: "Rhytmo Symbols";
+  src: url("/__l5e/assets-v1/4bf01926-103f-4e68-8ea6-026b9417ced2/NotoSans-SemiBold.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
+  size-adjust: 96%;
+  ascent-override: 100%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  unicode-range:
+    U+0021-002F, U+003A-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+00D7, U+00F7,
+    U+2000-206F, U+2070-209F, U+20A0-20BF, U+2100-214F,
+    U+2150-218F, U+2190-21FF, U+2200-22FF, U+2300-23FF,
+    U+25A0-25FF, U+2600-26FF, U+2700-27BF, U+2B00-2BFF,
+    U+3001-303F, U+FF01-FF0F, U+FF1A-FF20;
 }
+
 
 @font-face {
   font-family: "Rhytmo KR";
@@ -58,9 +72,15 @@ html[lang="ko"] button,
 html[lang="ko"] input,
 html[lang="ko"] select,
 html[lang="ko"] textarea,
+html[lang="ko"] h1,
+html[lang="ko"] h2,
+html[lang="ko"] h3,
+html[lang="ko"] h4,
+html[lang="ko"] .display,
 html[lang="ko"] .font-display {
-  font-family: "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
+  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
 }
+
 
 /* Korean glyphs sit smaller on the em square: scale up slightly and relax
    the vertical rhythm so nothing clips, overlaps or overflows. */
@@ -143,8 +163,8 @@ html[lang="ko"] .font-hero {
   --color-pink-soft: var(--pink-soft);
   --color-pink-mist: var(--pink-mist);
 
-  --font-sans: "Rhytmo Body";
-  --font-display: "Rhytmo Title", "Rhytmo Body";
+  --font-sans: "Rhytmo Symbols", "Rhytmo Body";
+  --font-display: "Rhytmo Symbols", "Rhytmo Body";
 }
 
 :root {
@@ -209,12 +229,34 @@ html[lang="ko"] .font-hero {
 
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
+
+  h1 { line-height: 0.94; letter-spacing: -0.035em; }
+  h2 { line-height: 1.02; letter-spacing: -0.028em; }
+  h3 { line-height: 1.1; letter-spacing: -0.022em; }
+  h4 { line-height: 1.18; letter-spacing: -0.016em; }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: -0.004em;
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures contextual;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    letter-spacing: inherit;
   }
 
   ::selection {
@@ -225,29 +267,31 @@ html[lang="ko"] .font-hero {
 
 @utility display {
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 0.86;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
 @utility font-giga {
-  font-family: "Rhytmo Display";
+  font-family: "Rhytmo Symbols", "Rhytmo Display";
 }
 
 @utility font-hero {
-  font-family: "Rhytmo Hero";
+  font-family: "Rhytmo Symbols", "Rhytmo Hero";
 }
 
 @utility font-num {
-  font-family: "Rhytmo KR", "Rhytmo Numeric";
+  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Numeric";
   font-feature-settings: "tnum" 1;
+  letter-spacing: 0.005em;
 }
 
 @utility label-xs {
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
   text-transform: uppercase;
 }
 
