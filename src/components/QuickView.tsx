@@ -4,6 +4,8 @@ import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useCartStore } from "@/stores/cartStore";
 import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/shopify";
+import { ShippingCalculator } from "@/components/ShippingCalculator";
+import { buildCheckoutUrl } from "@/lib/commerce";
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
@@ -38,8 +40,8 @@ export function QuickView({
   product: ShopifyProduct | null;
   onClose: () => void;
 }) {
-  const { t, product: content, localize } = useI18n();
-  const { formatFrom } = useCurrency();
+  const { t, product: content, localize, lang } = useI18n();
+  const { formatFrom, currency } = useCurrency();
   const { open } = useCart();
   const addItem = useCartStore((s) => s.addItem);
   const checkoutUrl = useCartStore((s) => s.checkoutUrl);
@@ -264,6 +266,8 @@ export function QuickView({
                     </p>
                   </section>
                 </div>
+
+                <ShippingCalculator variantId={variant?.id} quantity={quantity} />
               </div>
             </div>
 
@@ -285,7 +289,10 @@ export function QuickView({
                 disabled={!variant?.availableForSale || loading}
                 onClick={async () => {
                   await addToCart();
-                  const url = useCartStore.getState().checkoutUrl ?? checkoutUrl;
+                  const url = buildCheckoutUrl(
+                    useCartStore.getState().checkoutUrl ?? checkoutUrl,
+                    { currency, lang },
+                  );
                   if (url) window.location.href = url;
                 }}
                 className="glass-btn-primary label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"

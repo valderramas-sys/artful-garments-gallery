@@ -40,6 +40,16 @@ const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrency] = useState<CurrencyCode>("BRL");
+
+  // Restore the shopper's currency after hydration (BRL stays the default).
+  useEffect(() => {
+    const saved = localStorage.getItem("rhytmo:currency") as CurrencyCode | null;
+    if (saved && CURRENCIES.includes(saved)) setCurrency(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("rhytmo:currency", currency);
+  }, [currency]);
   const [rates, setRates] = useState<Record<CurrencyCode, number>>(FALLBACK);
   const [live, setLive] = useState(false);
 

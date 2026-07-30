@@ -32,6 +32,24 @@ const DICT = {
     "nav.checkout": "Checkout",
     "nav.info": "Info",
     "nav.cart": "Cart",
+    "ship.title": "Shipping calculator",
+    "ship.country": "Country",
+    "ship.cep": "Postal code",
+    "ship.calc": "Calculate",
+    "ship.calculating": "Calculating…",
+    "ship.invalid": "Enter a valid postal code.",
+    "ship.none": "No shipping methods available for this destination yet.",
+    "ship.error": "Shipping could not be calculated right now.",
+    "ship.dispatch": "Dispatch",
+    "ship.delivery": "Delivery",
+    "ship.total": "Total estimate",
+    "ship.days": "business days",
+    "ship.free": "Free",
+    "ship.note": "Live rates from Shopify — Correios for Brazil, international carriers worldwide. Final cost is confirmed at checkout.",
+    "account.title": "Account",
+    "account.login": "Sign in",
+    "account.orders": "Order history",
+    "account.tracking": "Track your order",
     "cart.open": "Open cart",
     "cart.close": "Close",
     "cart.empty": "Your cart is empty.",
@@ -97,6 +115,24 @@ const DICT = {
     "nav.checkout": "Finalizar",
     "nav.info": "Informações",
     "nav.cart": "Sacola",
+    "ship.title": "Calcular frete",
+    "ship.country": "País",
+    "ship.cep": "CEP",
+    "ship.calc": "Calcular",
+    "ship.calculating": "Calculando…",
+    "ship.invalid": "Informe um CEP válido.",
+    "ship.none": "Nenhum método de envio disponível para este destino ainda.",
+    "ship.error": "Não foi possível calcular o frete agora.",
+    "ship.dispatch": "Postagem",
+    "ship.delivery": "Entrega",
+    "ship.total": "Estimativa total",
+    "ship.days": "dias úteis",
+    "ship.free": "Grátis",
+    "ship.note": "Valores em tempo real da Shopify — Correios no Brasil e transportadoras internacionais no exterior. O valor final é confirmado no checkout.",
+    "account.title": "Conta",
+    "account.login": "Entrar",
+    "account.orders": "Histórico de pedidos",
+    "account.tracking": "Rastrear pedido",
     "cart.open": "Abrir sacola",
     "cart.close": "Fechar",
     "cart.empty": "Sua sacola está vazia.",
@@ -162,6 +198,24 @@ const DICT = {
     "nav.checkout": "Kasse",
     "nav.info": "Info",
     "nav.cart": "Warenkorb",
+    "ship.title": "Versandrechner",
+    "ship.country": "Land",
+    "ship.cep": "Postleitzahl",
+    "ship.calc": "Berechnen",
+    "ship.calculating": "Wird berechnet…",
+    "ship.invalid": "Bitte eine gültige Postleitzahl eingeben.",
+    "ship.none": "Für dieses Ziel sind noch keine Versandarten verfügbar.",
+    "ship.error": "Der Versand konnte gerade nicht berechnet werden.",
+    "ship.dispatch": "Versandfertig",
+    "ship.delivery": "Zustellung",
+    "ship.total": "Gesamtschätzung",
+    "ship.days": "Werktage",
+    "ship.free": "Kostenlos",
+    "ship.note": "Live-Tarife von Shopify — Correios in Brasilien, internationale Carrier weltweit. Der Endpreis wird an der Kasse bestätigt.",
+    "account.title": "Konto",
+    "account.login": "Anmelden",
+    "account.orders": "Bestellverlauf",
+    "account.tracking": "Sendung verfolgen",
     "cart.open": "Warenkorb öffnen",
     "cart.close": "Schließen",
     "cart.empty": "Dein Warenkorb ist leer.",
@@ -227,6 +281,24 @@ const DICT = {
     "nav.checkout": "결제",
     "nav.info": "안내",
     "nav.cart": "장바구니",
+    "ship.title": "배송비 계산",
+    "ship.country": "국가",
+    "ship.cep": "우편번호",
+    "ship.calc": "계산하기",
+    "ship.calculating": "계산 중…",
+    "ship.invalid": "올바른 우편번호를 입력해 주세요.",
+    "ship.none": "이 지역에 사용할 수 있는 배송 방법이 아직 없습니다.",
+    "ship.error": "지금은 배송비를 계산할 수 없습니다.",
+    "ship.dispatch": "출고",
+    "ship.delivery": "배송",
+    "ship.total": "총 예상 기간",
+    "ship.days": "영업일",
+    "ship.free": "무료",
+    "ship.note": "Shopify 실시간 요금 — 브라질은 Correios, 해외는 국제 배송사. 최종 금액은 결제 시 확정됩니다.",
+    "account.title": "계정",
+    "account.login": "로그인",
+    "account.orders": "주문 내역",
+    "account.tracking": "배송 조회",
     "cart.open": "장바구니 열기",
     "cart.close": "닫기",
     "cart.empty": "장바구니가 비어 있습니다.",
@@ -411,6 +483,18 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<LanguageCode>("pt");
+
+  // Portuguese is the default for first-time visitors; returning shoppers keep
+  // whatever language they picked last.
+  useEffect(() => {
+    const saved = localStorage.getItem("rhytmo:lang") as LanguageCode | null;
+    if (saved && LANGUAGES.some((l) => l.code === saved)) setLang(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("rhytmo:lang", lang);
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   useEffect(() => {
     document.documentElement.lang = HTML_LANG[lang];
