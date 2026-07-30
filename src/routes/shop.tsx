@@ -5,6 +5,7 @@ import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import { ProductCard } from "@/components/ProductCard";
 import { QuickView } from "@/components/QuickView";
 import { useI18n } from "@/lib/i18n";
+import shopBg from "@/assets/shop-bg.gif.asset.json";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -36,7 +37,13 @@ function Shop() {
   const products = data ?? [];
 
   return (
-    <main className="shop-gradient animate-fade-in min-h-svh w-full px-6 pt-28 pb-32 sm:px-10 lg:px-16">
+    <main className="animate-fade-in relative min-h-svh w-full px-6 pt-28 pb-32 sm:px-10 lg:px-16">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${shopBg.url})` }}
+      />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/45" />
       <h1 className="sr-only">RHYTMO products</h1>
       <div className="mx-auto w-full max-w-[1500px]">
 
