@@ -72,9 +72,15 @@ html[lang="ko"] button,
 html[lang="ko"] input,
 html[lang="ko"] select,
 html[lang="ko"] textarea,
+html[lang="ko"] h1,
+html[lang="ko"] h2,
+html[lang="ko"] h3,
+html[lang="ko"] h4,
+html[lang="ko"] .display,
 html[lang="ko"] .font-display {
-  font-family: "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
+  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
 }
+
 
 /* Korean glyphs sit smaller on the em square: scale up slightly and relax
    the vertical rhythm so nothing clips, overlaps or overflows. */
