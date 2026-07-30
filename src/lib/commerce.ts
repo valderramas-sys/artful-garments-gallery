@@ -135,5 +135,6 @@ export const CUSTOMER_LINKS = {
   account: `${STORE_URL}/account`,
   orders: `${STORE_URL}/account`,
   login: `${STORE_URL}/account/login`,
-  tracking: `${STORE_URL}/apps/track123`,
+  /** Shopify shows carrier tracking for each order inside the account area. */
+  tracking: `${STORE_URL}/account`,
 };
