@@ -4,6 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { cartSubtotal, useCartStore } from "@/stores/cartStore";
+import { buildCheckoutUrl, CUSTOMER_LINKS } from "@/lib/commerce";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -23,8 +24,8 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function Checkout() {
-  const { t, localize } = useI18n();
-  const { formatFrom } = useCurrency();
+  const { t, localize, lang } = useI18n();
+  const { formatFrom, currency } = useCurrency();
   const lines = useCartStore((s) => s.lines);
   const checkoutUrl = useCartStore((s) => s.checkoutUrl);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
@@ -37,9 +38,7 @@ function Checkout() {
 
   const appliedCode = discountCodes.find((d) => d.applicable);
   const rejectedCode = discountCodes.find((d) => !d.applicable);
-  const shopifyCheckoutUrl = checkoutUrl
-    ? `${checkoutUrl}${checkoutUrl.includes("?") ? "&" : "?"}channel=online_store`
-    : null;
+  const shopifyCheckoutUrl = buildCheckoutUrl(checkoutUrl, { currency, lang });
 
   const currencyCode = lines[0]?.currencyCode ?? "BRL";
   const subtotal = cartSubtotal(lines);
@@ -211,6 +210,15 @@ function Checkout() {
             }`}
           >
             {t("checkout.place")}
+          </a>
+
+          <a
+            href={CUSTOMER_LINKS.orders}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="glass-btn label-xs mt-3 flex w-full items-center justify-center rounded-full py-3"
+          >
+            {t("account.orders")}
           </a>
 
           <Link
