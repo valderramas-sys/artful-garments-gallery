@@ -35,6 +35,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/info" className="transition-colors duration-250 hover:text-pink">
+                  {t("nav.info")}
+                </Link>
+              </li>
+              <li>
                 <Link to="/checkout" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.checkout")}
                 </Link>
