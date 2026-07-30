@@ -373,9 +373,9 @@ export type ProductContent = {
 export const PRODUCT_CONTENT: Record<LanguageCode, ProductContent> = {
   en: {
     overview:
-      "A collaborative beanie designed with stylist Paradela. Built with a relaxed silhouette, premium sweatshirt fabric and high-definition full-print sublimation.",
+      "A collaborative beanie designed with Fashion Designer Paradela. Built with a relaxed silhouette, premium sweatshirt fabric and high-definition full-print sublimation.",
     specs: [
-      "Collaboration: RHYTMO × Stylist @paradela",
+      "Collaboration: RHYTMO × Fashion Designer @paradela",
       "Full-print sublimation",
       "50% Cotton, 49% Polyester, 1% Elastane",
       "Relaxed fit",
@@ -391,9 +391,9 @@ export const PRODUCT_CONTENT: Record<LanguageCode, ProductContent> = {
   },
   pt: {
     overview:
-      "Gorro em colaboração com o stylist Paradela. Modelagem relaxada, malha moletom premium e estampa sublimada full-print em alta definição.",
+      "Gorro em colaboração com o Fashion Designer Paradela. Modelagem relaxada, malha moletom premium e estampa sublimada full-print em alta definição.",
     specs: [
-      "Colaboração: RHYTMO × Stylist @paradela",
+      "Colaboração: RHYTMO × Fashion Designer @paradela",
       "Estampa sublimada full-print",
       "50% Algodão, 49% Poliéster, 1% Elastano",
       "Modelagem relaxada",
@@ -414,9 +414,9 @@ export const PRODUCT_CONTENT: Record<LanguageCode, ProductContent> = {
   },
   de: {
     overview:
-      "Eine Beanie in Zusammenarbeit mit Stylist Paradela. Entspannte Silhouette, hochwertiger Sweatstoff und hochauflösender Full-Print-Sublimationsdruck.",
+      "Eine Beanie in Zusammenarbeit mit Fashion Designer Paradela. Entspannte Silhouette, hochwertiger Sweatstoff und hochauflösender Full-Print-Sublimationsdruck.",
     specs: [
-      "Kollaboration: RHYTMO × Stylist @paradela",
+      "Kollaboration: RHYTMO × Fashion Designer @paradela",
       "Full-Print-Sublimationsdruck",
       "50% Baumwolle, 49% Polyester, 1% Elasthan",
       "Entspannte Passform",
@@ -437,9 +437,9 @@ export const PRODUCT_CONTENT: Record<LanguageCode, ProductContent> = {
   },
   ko: {
     overview:
-      "스타일리스트 Paradela와 협업한 비니입니다. 여유로운 실루엣, 프리미엄 기모 원단, 고해상도 풀프린트 승화 전사로 완성했습니다.",
+      "패션 디자이너 Paradela와 협업한 비니입니다. 여유로운 실루엣, 프리미엄 기모 원단, 고해상도 풀프린트 승화 전사로 완성했습니다.",
     specs: [
-      "협업: RHYTMO × 스타일리스트 @paradela",
+      "협업: RHYTMO × 패션 디자이너 @paradela",
       "풀프린트 승화 전사",
       "면 50%, 폴리에스터 49%, 엘라스테인 1%",
       "릴랙스 핏",
