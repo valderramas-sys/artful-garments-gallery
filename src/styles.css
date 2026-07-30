@@ -163,8 +163,8 @@ html[lang="ko"] .font-hero {
   --color-pink-soft: var(--pink-soft);
   --color-pink-mist: var(--pink-mist);
 
-  --font-sans: "Rhytmo Body";
-  --font-display: "Rhytmo Title", "Rhytmo Body";
+  --font-sans: "Rhytmo Symbols", "Rhytmo Body";
+  --font-display: "Rhytmo Symbols", "Rhytmo Body";
 }
 
 :root {
