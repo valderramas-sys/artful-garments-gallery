@@ -1,19 +1,28 @@
-## Cause (confirmed from the live network requests)
+# Recomendações de apps de frete Shopify
 
-The Shopify Storefront API is returning your 4 beanies correctly, but alongside them it returns errors:
+## Contexto
+Loja RHYTMO (streetwear), origem Bauru/SP, Brasil, com Shopify configurada para envio nacional via Correios e internacional para América do Sul, América do Norte, União Europeia e Coreia do Sul. O storefront já possui calculadora de frete integrada ao Shopify Storefront API.
 
-`Access denied for quantityAvailable field. Required access: unauthenticated_read_product_inventory access scope.`
+## Recomendações
 
-Our product query in `src/lib/shopify.ts` asks for `quantityAvailable` (stock count, used in the quick-view modal). The storefront token doesn't have the inventory scope, so Shopify returns partial data plus an error entry. Our `storefrontApiRequest` helper throws whenever `data.errors` is non-empty — so a harmless partial error turns the whole shop page into "Products could not be loaded right now."
+### Nacional (Brasil)
+1. **Correios** — app nativo da Shopify para envio nacional (Mini Envios, PAC, SEDEX). Requer plano com carrier-calculated rates.
+2. **Melhor Envio** — compara Correios + Jadlog/Loggi/Azul, gera etiquetas e rastreio automático.
+3. **Frenet** — calculadora multi-transportadora com regras de frete grátis por CEP/peso/dimensão.
+4. **Envialy** — Correios com descontos de contrato e cálculo automático no checkout.
 
-So: nothing is wrong with the products, images, or the store. It's the inventory field + strict error handling.
+### Internacional
+1. **Easyship** — múltiplas transportadoras (DHL, FedEx, UPS, SF), mostra impostos estimados no checkout. Recomendado para os destinos atuais.
+2. **DHL Express Commerce** — app oficial para envio internacional expresso.
+3. **Shippo** — compara preços e imprime etiquetas para várias transportadoras internacionais.
+4. **Sendcloud** — automatiza etiquetas e rastreios, forte na Europa.
 
-## Fix
+## Sugestão de setup
+- **Nacional:** Correios (nativo) ou Melhor Envio.
+- **Internacional:** Easyship ou DHL Express Commerce.
 
-1. **Remove `quantityAvailable` from `PRODUCT_FIELDS`** in `src/lib/shopify.ts` — the token can't read it, so it never returns a value anyway.
-2. **Make `storefrontApiRequest` tolerant of partial errors**: only throw when there is no `data` payload at all. When data exists alongside errors, log a warning and return the data.
-3. **Adjust `src/components/QuickView.tsx`**: `stock` is always null now, so fall back to the `availableForSale` flag ("In stock" / "Sold out") instead of showing a numeric count.
+## Nota importante
+A Shopify Shipping nativa não está disponível para lojas brasileiras. A ativação dos apps deve ser feita no admin da Shopify (Configurações > Envio e entrega > Apps de envio).
 
-## Optional (your side, not code)
-
-If you want real stock numbers displayed, enable the `unauthenticated_read_product_inventory` scope on the storefront app in Shopify admin; then we can re-add the field.
+## Ação proposta
+Nenhuma alteração de código no storefront. As apps controlam o cálculo de frete no checkout; o storefront já envia o CEP/país e recebe as taxas atuais via Shopify Storefront API.
