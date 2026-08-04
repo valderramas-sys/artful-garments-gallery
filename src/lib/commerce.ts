@@ -9,7 +9,11 @@
  */
 
 export const ORIGIN = {
-  city: "São Paulo",
+  address1: "Avenida Affonso José Aiello, 14-100",
+  address2: "Villaggio 2",
+  district: "Vila Aviação",
+  postalCode: "17018-520",
+  city: "Bauru",
   province: "SP",
   countryCode: "BR",
 } as const;
