@@ -1,6 +1,6 @@
 import type { LanguageCode } from "./i18n";
 
-export const INFO_EMAIL = "contato.rhythm@gmail.com";
+export const INFO_EMAIL = "rhytmobrasil@gmail.com";
 export const INFO_INSTAGRAM = "@rhytmo__";
 export const INFO_INSTAGRAM_URL = "https://www.instagram.com/rhytmo__/";
 export const INFO_SITE = "www.rhytmo.com.br";
