@@ -1,7 +1,7 @@
 /**
  * Commercial configuration for the RHYTMO Shopify storefront.
  *
- * Origin: São Paulo, Brazil. Domestic shipping runs through Correios (Shopify
+ * Origin: Bauru/SP, Brazil. Domestic shipping runs through Correios (Shopify
  * carrier-calculated rates); international shipping runs through Shopify's
  * international shipping zones. Every rate shown in the UI comes from Shopify
  * itself, so activating a carrier/payment provider in the Shopify admin makes
