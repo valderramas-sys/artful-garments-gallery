@@ -18,7 +18,7 @@ export const ORIGIN = {
   countryCode: "BR",
 } as const;
 
-export type Region = "south-america" | "north-america" | "european-union" | "south-korea";
+export type Region = "north-america" | "european-union" | "asia";
 
 export type Destination = {
   code: string;
