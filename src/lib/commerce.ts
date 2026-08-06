@@ -34,35 +34,19 @@ export type Destination = {
 /** Handling/dispatch window in business days, before the carrier picks the order up. */
 export const DISPATCH_DAYS: Record<Destination["region"], [number, number]> = {
   brazil: [1, 3],
-  "south-america": [2, 4],
   "north-america": [2, 4],
   "european-union": [2, 4],
-  "south-korea": [2, 4],
+  asia: [2, 4],
 };
 
 /**
  * Destinations enabled at checkout. Mirrors the Shopify shipping zones:
- * Brazil (Correios) + South America + North America + European Union + South Korea.
+ * Brazil + United States + European Union + China, Japan and South Korea.
  */
 export const DESTINATIONS: Destination[] = [
   { code: "BR", name: "Brazil", region: "brazil", postalExample: "00000-000", delivery: [2, 15] },
 
-  // South America
-  { code: "AR", name: "Argentina", region: "south-america", postalExample: "C1000", delivery: [10, 25] },
-  { code: "BO", name: "Bolivia", region: "south-america", postalExample: "0000", delivery: [12, 30] },
-  { code: "CL", name: "Chile", region: "south-america", postalExample: "0000000", delivery: [10, 25] },
-  { code: "CO", name: "Colombia", region: "south-america", postalExample: "000000", delivery: [12, 30] },
-  { code: "EC", name: "Ecuador", region: "south-america", postalExample: "000000", delivery: [12, 30] },
-  { code: "GY", name: "Guyana", region: "south-america", postalExample: "", delivery: [15, 35] },
-  { code: "PY", name: "Paraguay", region: "south-america", postalExample: "0000", delivery: [10, 25] },
-  { code: "PE", name: "Peru", region: "south-america", postalExample: "00000", delivery: [12, 30] },
-  { code: "SR", name: "Suriname", region: "south-america", postalExample: "", delivery: [15, 35] },
-  { code: "UY", name: "Uruguay", region: "south-america", postalExample: "00000", delivery: [10, 25] },
-  { code: "VE", name: "Venezuela", region: "south-america", postalExample: "0000", delivery: [15, 35] },
-
   // North America
-  { code: "CA", name: "Canada", region: "north-america", postalExample: "A1A 1A1", delivery: [15, 35] },
-  { code: "MX", name: "Mexico", region: "north-america", postalExample: "00000", delivery: [15, 35] },
   { code: "US", name: "United States", region: "north-america", postalExample: "00000", delivery: [12, 30] },
 
   // European Union
@@ -83,8 +67,10 @@ export const DESTINATIONS: Destination[] = [
     }),
   ),
 
-  // South Korea
-  { code: "KR", name: "South Korea", region: "south-korea", postalExample: "00000", delivery: [15, 40] },
+  // Asia
+  { code: "CN", name: "China", region: "asia", postalExample: "000000", delivery: [15, 40] },
+  { code: "JP", name: "Japan", region: "asia", postalExample: "000-0000", delivery: [15, 40] },
+  { code: "KR", name: "South Korea", region: "asia", postalExample: "00000", delivery: [15, 40] },
 ];
 
 export const findDestination = (code: string) =>
