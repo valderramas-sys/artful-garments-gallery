@@ -6,8 +6,8 @@ import { useI18n } from "@/lib/i18n";
 import { fetchPaymentMethods } from "@/lib/shopify";
 
 const SOCIALS = [
-  { name: "Instagram", href: "https://instagram.com" },
-  { name: "Pinterest", href: "https://pinterest.com" },
+  { name: "Instagram", href: "https://www.instagram.com/rhytmo__/" },
+  { name: "Pinterest", href: "https://br.pinterest.com/rhytmob/_profile/" },
 ];
 
 export function Footer() {
