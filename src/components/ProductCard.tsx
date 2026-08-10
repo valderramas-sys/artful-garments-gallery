@@ -69,7 +69,7 @@ export function ProductCard({
           });
           open();
         }}
-        className="glass-btn label-xs mt-3 w-full rounded-full px-3 py-3 leading-tight break-words whitespace-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink disabled:opacity-50"
+        className="glass-btn-rose label-xs mt-3 w-full rounded-full px-3 py-3 leading-tight break-words whitespace-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink disabled:opacity-50"
       >
         {variant?.availableForSale ? t("product.add") : t("product.soldout")}
       </button>

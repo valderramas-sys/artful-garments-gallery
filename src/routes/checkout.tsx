@@ -83,7 +83,7 @@ function Checkout() {
                       <p className="text-sm leading-snug font-bold tracking-tight">
                         {localize(line.title)}
                       </p>
-                      <p className="font-num text-sm text-pink sm:hidden">
+                      <p className="font-num text-sm text-brand-magenta sm:hidden">
                         {formatFrom(line.price * line.quantity, line.currencyCode)}
                       </p>
                     </div>
@@ -96,7 +96,7 @@ function Checkout() {
                           type="button"
                           aria-label={`- ${line.title}`}
                           onClick={() => updateQuantity(line.lineId, line.quantity - 1)}
-                          className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
+                          className="text-sm text-brand-blue transition-opacity duration-250 hover:opacity-70"
                         >
                           −
                         </button>
@@ -105,7 +105,7 @@ function Checkout() {
                           type="button"
                           aria-label={`+ ${line.title}`}
                           onClick={() => updateQuantity(line.lineId, line.quantity + 1)}
-                          className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
+                          className="text-sm text-brand-blue transition-opacity duration-250 hover:opacity-70"
                         >
                           +
                         </button>
@@ -119,7 +119,7 @@ function Checkout() {
                       </button>
                     </div>
                   </div>
-                  <p className="font-num hidden text-sm text-pink sm:block">
+                  <p className="font-num hidden text-sm text-brand-magenta sm:block">
                     {formatFrom(line.price * line.quantity, line.currencyCode)}
                   </p>
                 </li>
@@ -152,7 +152,7 @@ function Checkout() {
             </button>
           </form>
           {appliedCode && (
-            <p className="label-xs mb-5 text-pink">
+            <p className="label-xs mb-5 text-brand-magenta">
               {t("checkout.discountapplied")}: {appliedCode.code}
             </p>
           )}

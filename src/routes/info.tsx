@@ -34,7 +34,7 @@ function MailLink() {
   return (
     <a
       href={`mailto:${INFO_EMAIL}`}
-      className="text-pink underline decoration-pink/40 underline-offset-4 transition-colors duration-250 hover:text-pink-deep"
+      className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
     >
       {INFO_EMAIL}
     </a>
@@ -98,7 +98,7 @@ function InfoPage() {
                   key={item}
                   className="grid grid-cols-[10px_minmax(0,1fr)] gap-3 text-[0.8125rem] leading-relaxed"
                 >
-                  <span aria-hidden className="text-pink">
+                  <span aria-hidden className="text-brand-green">
                     •
                   </span>
                   <span>{item}</span>
@@ -137,7 +137,7 @@ function InfoPage() {
                     href={INFO_INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-pink underline decoration-pink/40 underline-offset-4 transition-colors duration-250 hover:text-pink-deep"
+                    className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
                   >
                     {INFO_INSTAGRAM}
                   </a>
@@ -150,7 +150,7 @@ function InfoPage() {
                     href={INFO_SITE_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-pink underline decoration-pink/40 underline-offset-4 transition-colors duration-250 hover:text-pink-deep"
+                    className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
                   >
                     {INFO_SITE}
                   </a>

@@ -295,7 +295,7 @@ export function QuickView({
                   );
                   if (url) window.location.href = url;
                 }}
-                className="glass-btn-go label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
+                className="glass-btn-rose label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
               >
                 {t("product.buy")}
               </button>
