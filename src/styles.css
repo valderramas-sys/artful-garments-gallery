@@ -517,3 +517,91 @@ html[lang="ko"] .font-hero {
     var(--color-background)
   );
 }
+
+/* ---- Reference palette accents -------------------------------------
+   Applied selectively to small interactive elements only. */
+:root {
+  --brand-magenta: oklch(0.45 0.19 0.5);
+  --brand-pink: oklch(0.62 0.22 358);
+  --brand-indigo: oklch(0.36 0.21 274);
+  --brand-blue: oklch(0.62 0.15 274);
+  --brand-green: oklch(0.56 0.17 137);
+  --brand-lime: oklch(0.78 0.19 124);
+}
+
+@theme inline {
+  --color-brand-magenta: var(--brand-magenta);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-indigo: var(--brand-indigo);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-green: var(--brand-green);
+  --color-brand-lime: var(--brand-lime);
+}
+
+/* Accent variant of the glass button — same geometry, different hue. */
+@utility glass-btn-accent {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--brand-blue) 78%, white),
+    color-mix(in oklab, var(--brand-indigo) 82%, transparent)
+  );
+  backdrop-filter: blur(34px) saturate(185%);
+  border: 1px solid color-mix(in oklab, white 42%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+    0 16px 40px -26px color-mix(in oklab, var(--brand-indigo) 70%, transparent);
+  color: var(--primary-foreground);
+  transition:
+    background 250ms var(--ease-out-soft),
+    box-shadow 250ms var(--ease-out-soft),
+    transform 250ms var(--ease-out-soft);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--brand-blue) 92%, white),
+      var(--brand-indigo)
+    );
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
+}
+
+/* Primary CTA glass button — green from the reference palette. */
+@utility glass-btn-go {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--brand-lime) 62%, white),
+    color-mix(in oklab, var(--brand-green) 88%, transparent)
+  );
+  backdrop-filter: blur(34px) saturate(185%);
+  border: 1px solid color-mix(in oklab, white 42%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+    0 16px 40px -26px color-mix(in oklab, var(--brand-green) 70%, transparent);
+  color: var(--primary-foreground);
+  transition:
+    background 250ms var(--ease-out-soft),
+    box-shadow 250ms var(--ease-out-soft),
+    transform 250ms var(--ease-out-soft);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--brand-lime) 78%, white),
+      var(--brand-green)
+    );
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
+}

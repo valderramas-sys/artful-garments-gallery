@@ -127,7 +127,7 @@ export function CartDrawer() {
             className={`label-xs mt-5 flex w-full items-center justify-center rounded-full py-4 transition-all duration-250 ease-[var(--ease-out-soft)] ${
               lines.length === 0
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "glass-btn-primary"
+                : "glass-btn-go"
             }`}
           >
             {t("nav.checkout")}
