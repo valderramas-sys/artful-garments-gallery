@@ -64,7 +64,7 @@ export function Header() {
                 <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
               </svg>
               {count > 0 && (
-                <span className="font-num absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-pink px-1 text-[10px] text-primary-foreground">
+                <span className="font-num absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-brand-magenta px-1 text-[10px] text-primary-foreground">
                   {count}
                 </span>
               )}

@@ -206,7 +206,7 @@ function Checkout() {
             className={`label-xs mt-8 flex w-full items-center justify-center rounded-full px-4 py-5 text-center leading-tight break-words whitespace-normal transition-colors duration-250 ${
               lines.length === 0 || !shopifyCheckoutUrl
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "glass-btn-primary"
+                : "glass-btn-go"
             }`}
           >
             {t("checkout.place")}

@@ -195,7 +195,7 @@ export function QuickView({
                             aria-pressed={variant?.id === v.id}
                             disabled={!v.availableForSale}
                             className={`font-num min-h-10 min-w-10 rounded-2xl px-3.5 text-sm disabled:opacity-40 ${
-                              variant?.id === v.id ? "glass-btn-primary" : "glass-btn"
+                              variant?.id === v.id ? "glass-btn-accent" : "glass-btn"
                             }`}
                           >
                             {v.title}
@@ -212,7 +212,7 @@ export function QuickView({
                         type="button"
                         aria-label={`− ${t("product.quantity")}`}
                         onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                        className="grid h-10 w-10 place-items-center rounded-xl text-pink transition-colors duration-250 hover:bg-pink-mist/60"
+                        className="grid h-10 w-10 place-items-center rounded-xl text-brand-blue transition-colors duration-250 hover:bg-pink-mist/60"
                       >
                         −
                       </button>
@@ -221,7 +221,7 @@ export function QuickView({
                         type="button"
                         aria-label={`+ ${t("product.quantity")}`}
                         onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
-                        className="grid h-10 w-10 place-items-center rounded-xl text-pink transition-colors duration-250 hover:bg-pink-mist/60"
+                        className="grid h-10 w-10 place-items-center rounded-xl text-brand-blue transition-colors duration-250 hover:bg-pink-mist/60"
                       >
                         +
                       </button>
@@ -295,7 +295,7 @@ export function QuickView({
                   );
                   if (url) window.location.href = url;
                 }}
-                className="glass-btn-primary label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
+                className="glass-btn-go label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
               >
                 {t("product.buy")}
               </button>
