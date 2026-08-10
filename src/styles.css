@@ -605,3 +605,43 @@ html[lang="ko"] .font-hero {
     transform: translateY(0) scale(0.99);
   }
 }
+
+/* Translucent glass button tinted with the reference pink.
+   Same geometry, blur, highlights and shadows as .glass-btn. */
+@utility glass-btn-rose {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, white 58%, transparent),
+    color-mix(in oklab, var(--brand-pink) 22%, transparent)
+  );
+  backdrop-filter: blur(34px) saturate(185%) brightness(1.04);
+  border: 1px solid color-mix(in oklab, white 60%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 88%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, white 30%, transparent),
+    0 12px 32px -24px color-mix(in oklab, var(--brand-magenta) 55%, transparent);
+  color: var(--brand-magenta);
+  transition:
+    background 250ms var(--ease-out-soft),
+    box-shadow 250ms var(--ease-out-soft),
+    transform 250ms var(--ease-out-soft),
+    color 250ms var(--ease-out-soft);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, white 70%, transparent),
+      color-mix(in oklab, var(--brand-pink) 38%, transparent)
+    );
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 95%, transparent),
+      0 18px 40px -24px color-mix(in oklab, var(--brand-magenta) 60%, transparent);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
+}

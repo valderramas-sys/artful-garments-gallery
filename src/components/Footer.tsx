@@ -26,22 +26,22 @@ export function Footer() {
             <h3 className="label-xs text-muted-foreground">{t("footer.nav")}</h3>
             <ul className="mt-2.5 space-y-1.5 text-xs">
               <li>
-                <Link to="/" className="transition-colors duration-250 hover:text-pink">
+                <Link to="/" className="transition-colors duration-250 hover:text-brand-magenta">
                   {t("nav.home")}
                 </Link>
               </li>
               <li>
-                <Link to="/shop" className="transition-colors duration-250 hover:text-pink">
+                <Link to="/shop" className="transition-colors duration-250 hover:text-brand-magenta">
                   {t("nav.shop")}
                 </Link>
               </li>
               <li>
-                <Link to="/info" className="transition-colors duration-250 hover:text-pink">
+                <Link to="/info" className="transition-colors duration-250 hover:text-brand-magenta">
                   {t("nav.info")}
                 </Link>
               </li>
               <li>
-                <Link to="/checkout" className="transition-colors duration-250 hover:text-pink">
+                <Link to="/checkout" className="transition-colors duration-250 hover:text-brand-magenta">
                   {t("nav.checkout")}
                 </Link>
               </li>
@@ -105,7 +105,7 @@ export function Footer() {
                     href={href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="glass-btn inline-flex rounded-full px-3 py-1.5 text-[11px]"
+                    className="glass-btn-rose inline-flex rounded-full px-3 py-1.5 text-[11px]"
                   >
                     {name}
                   </a>
