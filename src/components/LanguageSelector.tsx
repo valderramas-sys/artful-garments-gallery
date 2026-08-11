@@ -21,7 +21,7 @@ export function LanguageSelector({ className = "" }: { className?: string }) {
           key={code}
           type="button"
           title={name}
-          onClick={() => setLang(code)}
+          onClick={() => change(code)}
           aria-pressed={lang === code}
           className={`rounded-full px-2 py-1 text-[10px] leading-none font-semibold tracking-[0.08em] transition-all duration-250 ease-[var(--ease-out-soft)] ${
             lang === code ? "glass-btn-accent" : "text-muted-foreground hover:text-brand-blue"
