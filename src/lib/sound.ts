@@ -226,8 +226,11 @@ function unlock() {
 }
 
 if (typeof window !== "undefined") {
-  // Warm the element pool immediately so the first interaction is instant.
+  // Warm the element pool and decode the tap buffer up front (decoding works
+  // before any gesture; only output needs the gesture), so even the very first
+  // interaction plays through WebAudio with no delay.
   tapInstances();
+  preloadTapBuffer();
   const opts = { passive: true, capture: true } as AddEventListenerOptions;
   // Kept attached: every gesture refreshes the timestamp and resumes iOS audio.
   window.addEventListener("touchstart", unlock, opts);
