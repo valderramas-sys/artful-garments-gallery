@@ -25,8 +25,10 @@ export function ProductCard({
 
   const node = product.node;
   const image = productImage(product);
+  const model = secondPhoto(node.title, node.handle);
   const variant = firstAvailableVariant(product);
   const price = node.priceRange.minVariantPrice;
+
 
   return (
     <article className="group card-float rounded-3xl">
