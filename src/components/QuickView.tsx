@@ -152,15 +152,16 @@ export function QuickView({
   return (
     <div
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-80 flex items-end justify-center transition-opacity duration-300 ease-[var(--ease-out-soft)] sm:items-center sm:p-4 ${
+      className={`fixed inset-0 z-80 flex items-end justify-center transition-opacity duration-[240ms] ease-[var(--ease-out-soft)] sm:items-center sm:p-4 ${
         isOpen ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
-        onClick={closeWithSound}
+        onPointerDown={closeWithSound}
         aria-hidden
         className="absolute inset-0 bg-foreground/20 backdrop-blur-[8px]"
       />
+
 
       <div
         role="dialog"
