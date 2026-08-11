@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { WheelCategory } from "./wheel-categories";
-import { playClick } from "@/lib/sound";
+import { playClick, playHover } from "@/lib/sound";
+
 
 type Props = {
   category: WheelCategory;
@@ -107,8 +108,12 @@ export function GlassSphere({
         transition:
           "transform 620ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out, filter 520ms ease-out, box-shadow 520ms ease-out",
       }}
-      onMouseEnter={() => onHoverChange(category.id)}
+      onMouseEnter={() => {
+        onHoverChange(category.id);
+        playHover();
+      }}
       onMouseLeave={() => onHoverChange(null)}
+
     >
       {!isFront ? (
         <button
