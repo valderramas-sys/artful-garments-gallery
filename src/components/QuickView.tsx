@@ -11,7 +11,7 @@ import {
 } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
-import { playClick, playPopupClose, playPopupOpen } from "@/lib/sound";
+import { playClick, playPopupClose, playPopupOpen, playTap } from "@/lib/sound";
 
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
@@ -228,7 +228,10 @@ export function QuickView({
                       <button
                         type="button"
                         aria-label={`− ${t("product.quantity")}`}
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        onClick={() => {
+                          playTap();
+                          setQuantity((q) => Math.max(1, q - 1));
+                        }}
                         className="grid h-10 w-10 place-items-center rounded-xl text-brand-blue transition-colors duration-250 hover:bg-pink-mist/60"
                       >
                         −
@@ -237,7 +240,10 @@ export function QuickView({
                       <button
                         type="button"
                         aria-label={`+ ${t("product.quantity")}`}
-                        onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+                        onClick={() => {
+                          playTap();
+                          setQuantity((q) => Math.min(maxQty, q + 1));
+                        }}
                         className="grid h-10 w-10 place-items-center rounded-xl text-brand-blue transition-colors duration-250 hover:bg-pink-mist/60"
                       >
                         +

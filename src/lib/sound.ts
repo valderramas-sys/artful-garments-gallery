@@ -3,6 +3,7 @@ import arcadeClick from "@/assets/arcade-click.mp3.asset.json";
 import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
 import popupOpen from "@/assets/popup-open.mp3.asset.json";
 import popupClose from "@/assets/popup-close.mp3.asset.json";
+import confirmTap from "@/assets/confirm-tap.mp3.asset.json";
 
 type Slot = { url: string; volume: number; audio: HTMLAudioElement | null; last: number };
 
@@ -12,6 +13,7 @@ const slots: Record<string, Slot> = {
   beep: { url: beepPloc.url, volume: 0.7, audio: null, last: 0 },
   popupOpen: { url: popupOpen.url, volume: 0.7, audio: null, last: 0 },
   popupClose: { url: popupClose.url, volume: 0.7, audio: null, last: 0 },
+  tap: { url: confirmTap.url, volume: 0.7, audio: null, last: 0 },
 };
 
 function ensure(slot: Slot) {
@@ -109,4 +111,9 @@ export function playPopupOpen() {
 /** Plays the pop-up close SFX. */
 export function playPopupClose() {
   play("popupClose");
+}
+
+/** Plays the confirm tap SFX (quantity steppers, shipping calculate). */
+export function playTap() {
+  play("tap");
 }

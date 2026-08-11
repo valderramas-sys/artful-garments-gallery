@@ -1,3 +1,4 @@
+import { playTap } from "@/lib/sound";
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
@@ -87,7 +88,10 @@ export function CartDrawer() {
                         <button
                           type="button"
                           aria-label={`Decrease ${line.title}`}
-                          onClick={() => updateQuantity(line.lineId, line.quantity - 1)}
+                          onClick={() => {
+                            playTap();
+                            updateQuantity(line.lineId, line.quantity - 1);
+                          }}
                           className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
                         >
                           −
@@ -96,7 +100,10 @@ export function CartDrawer() {
                         <button
                           type="button"
                           aria-label={`Increase ${line.title}`}
-                          onClick={() => updateQuantity(line.lineId, line.quantity + 1)}
+                          onClick={() => {
+                            playTap();
+                            updateQuantity(line.lineId, line.quantity + 1);
+                          }}
                           className="text-sm text-pink transition-opacity duration-250 hover:opacity-70"
                         >
                           +

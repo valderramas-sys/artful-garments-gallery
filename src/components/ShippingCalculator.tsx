@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { DESTINATIONS, findDestination, formatCep, isPostalCodeValid } from "@/lib/commerce";
 import { estimateShipping, type ShippingOption } from "@/lib/shipping";
+import { playTap } from "@/lib/sound";
 
 type Status = "idle" | "loading" | "done" | "error" | "invalid";
 
@@ -67,6 +68,7 @@ export function ShippingCalculator({
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          playTap();
           calculate();
         }}
         className="glass-soft mt-2.5 grid gap-2 rounded-2xl p-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
@@ -83,10 +85,10 @@ export function ShippingCalculator({
             setStatus("idle");
             setOptions([]);
           }}
-          className="min-h-10 min-w-0 rounded-xl bg-transparent px-3 text-xs outline-none"
+          className="min-h-10 min-w-0 rounded-xl bg-transparent px-3 text-xs text-ink outline-none"
         >
           {DESTINATIONS.map((d) => (
-            <option key={d.code} value={d.code}>
+            <option key={d.code} value={d.code} className="text-ink">
               {names?.of(d.code) ?? d.name}
             </option>
           ))}
