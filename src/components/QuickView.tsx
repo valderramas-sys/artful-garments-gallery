@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
@@ -13,6 +13,26 @@ import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
 import { playTap, playSwipe, playModalClose } from "@/lib/sound";
 
+
+import p01 from "@/assets/paradela-01-b.png.asset.json";
+import p02 from "@/assets/paradela-02-b.png.asset.json";
+import p03 from "@/assets/paradela-03-b.png.asset.json";
+import p04 from "@/assets/paradela-04-b.png.asset.json";
+
+/** Editorial second photo per beanie (never shared between products). */
+const SECOND_PHOTOS: Record<string, string> = {
+  "0.1": p01.url,
+  "0.2": p02.url,
+  "0.3": p03.url,
+  "0.4": p04.url,
+};
+
+function secondPhoto(title: string, handle: string) {
+  const key = Object.keys(SECOND_PHOTOS).find(
+    (k) => title.includes(k) || handle.includes(k.replace(".", "-")) || handle.endsWith(k.slice(2)),
+  );
+  return key ? SECOND_PHOTOS[key] : null;
+}
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
