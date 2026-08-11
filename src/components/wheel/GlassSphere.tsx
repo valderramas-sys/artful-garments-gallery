@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { WheelCategory } from "./wheel-categories";
-import { playClick } from "@/lib/sound";
+import { playClick, playHover } from "@/lib/sound";
+
 
 type Props = {
   category: WheelCategory;
