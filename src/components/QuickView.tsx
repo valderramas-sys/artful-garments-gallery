@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
@@ -11,7 +11,7 @@ import {
 } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
-import { playClick, playPopupClose, playPopupOpen, playTap } from "@/lib/sound";
+import { playTap } from "@/lib/sound";
 
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
@@ -70,18 +70,21 @@ export function QuickView({
     }
   }, [product, variants]);
 
-  const wasOpen = useRef(false);
-  useEffect(() => {
-    if (isOpen && !wasOpen.current) playPopupOpen();
-    else if (!isOpen && wasOpen.current) playPopupClose();
-    wasOpen.current = isOpen;
-  }, [isOpen]);
+  // Close paths that should play the SFX (everything except "Add to Cart").
+  const closeWithSound = () => {
+    playTap();
+    onClose();
+  };
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || !isOpen) return;
+      playTap();
+      onClose();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, isOpen]);
 
 
   const variant: ShopifyVariant | undefined =
@@ -112,7 +115,7 @@ export function QuickView({
       }`}
     >
       <div
-        onClick={onClose}
+        onClick={closeWithSound}
         aria-hidden
         className="absolute inset-0 bg-foreground/20 backdrop-blur-[8px]"
       />
@@ -131,7 +134,7 @@ export function QuickView({
           <>
             <button
               type="button"
-              onClick={onClose}
+              onClick={closeWithSound}
               aria-label={t("cart.close")}
               className="glass-btn absolute top-3 right-3 z-20 grid h-9 w-9 place-items-center rounded-full sm:top-5 sm:right-5"
             >
@@ -299,7 +302,7 @@ export function QuickView({
                 type="button"
                 disabled={!variant?.availableForSale || loading}
                 onClick={async () => {
-                  playClick();
+                  playTap();
                   await addToCart();
                   onClose();
                   open();
@@ -312,7 +315,7 @@ export function QuickView({
                 type="button"
                 disabled={!variant?.availableForSale || loading}
                 onClick={async () => {
-                  playClick();
+                  playTap();
                   await addToCart();
                   const url = buildCheckoutUrl(
                     useCartStore.getState().checkoutUrl ?? checkoutUrl,

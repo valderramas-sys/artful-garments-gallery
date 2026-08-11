@@ -10,6 +10,10 @@ import { CurrencySelector } from "./CurrencySelector";
 export function CartDrawer() {
   const { t, localize } = useI18n();
   const { isOpen, close } = useCart();
+  const closeWithSound = () => {
+    playTap();
+    close();
+  };
   const { formatFrom } = useCurrency();
   const lines = useCartStore((s) => s.lines);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
@@ -19,15 +23,19 @@ export function CartDrawer() {
   const subtotal = cartSubtotal(lines);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || !isOpen) return;
+      playTap();
+      close();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [close]);
+  }, [close, isOpen]);
 
   return (
     <>
       <div
-        onClick={close}
+        onClick={closeWithSound}
         aria-hidden
         className={`fixed inset-0 z-60 bg-foreground/15 backdrop-blur-[6px] transition-opacity duration-250 ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
@@ -46,7 +54,7 @@ export function CartDrawer() {
             <CurrencySelector />
             <button
               type="button"
-              onClick={close}
+              onClick={closeWithSound}
               className="glass-btn label-xs rounded-full px-3 py-1.5"
             >
               {t("cart.close")}
@@ -111,7 +119,10 @@ export function CartDrawer() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => removeItem(line.lineId)}
+                        onClick={() => {
+                          playTap();
+                          removeItem(line.lineId);
+                        }}
                         className="glass-btn label-xs rounded-full px-3 py-1.5"
                       >
                         {t("cart.remove")}
