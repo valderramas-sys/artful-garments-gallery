@@ -103,8 +103,10 @@ export function QuickView({
   }, [image, product]);
 
   const [slide, setSlide] = useState(0);
+  const [zoom, setZoom] = useState(false);
   useEffect(() => {
     setSlide(0);
+    setZoom(false);
   }, [product]);
 
   const goSlide = (dir: number) => {
