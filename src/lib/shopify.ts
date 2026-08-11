@@ -172,3 +172,19 @@ export async function fetchPaymentMethods(): Promise<Array<{ name: string; label
     .filter((code) => (seen.has(code) ? false : (seen.add(code), true)))
     .map((code) => ({ name: prettify(code), label: PAYMENT_LABELS[code] ?? prettify(code) }));
 }
+
+/**
+ * Shopify CDN resizing: request only the pixels the layout needs.
+ * Keeps the exact same artwork, just a much smaller download.
+ */
+export function sizedImage(url: string | null | undefined, width: number) {
+  if (!url) return url ?? null;
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.includes("shopify")) return url;
+    parsed.searchParams.set("width", String(width));
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}

@@ -63,6 +63,8 @@ export function CartDrawer() {
                   {line.image ? (
                     <img
                       src={line.image}
+                      width={64}
+                      height={80}
                       alt={line.title}
                       loading="lazy"
                       className="aspect-4/5 w-full rounded-2xl bg-surface object-cover"
