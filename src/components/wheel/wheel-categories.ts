@@ -16,8 +16,8 @@ export type WheelCategory = {
  * Nothing new is invented here.
  */
 export const WHEEL_CATEGORIES: WheelCategory[] = [
-  { id: "home", label: "Home", to: "/", Icon: HomeIcon },
   { id: "shop", label: "Shop", to: "/shop", Icon: BagIcon },
+  { id: "home", label: "Home", to: "/", Icon: HomeIcon },
   { id: "info", label: "Info", to: "/info", Icon: InfoIcon },
   
   {

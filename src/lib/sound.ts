@@ -4,6 +4,7 @@ import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
 import popupOpen from "@/assets/popup-open.mp3.asset.json";
 import popupClose from "@/assets/popup-close.mp3.asset.json";
 import confirmTap from "@/assets/confirm-tap.mp3.asset.json";
+import modalClose from "@/assets/modal-close.mp3.asset.json";
 
 /* -------------------------------------------------------------------------- */
 /* Debug audit logging (opt-in)                                               */
@@ -87,6 +88,7 @@ const slots: Record<string, Slot> = {
   beep: { url: beepPloc.url, volume: 0.7, audio: null, last: 0 },
   popupOpen: { url: popupOpen.url, volume: 0.7, audio: null, last: 0 },
   popupClose: { url: popupClose.url, volume: 0.7, audio: null, last: 0 },
+  modalClose: { url: modalClose.url, volume: 0.7, audio: null, last: 0 },
   tap: { url: confirmTap.url, volume: 0.7, audio: null, last: 0 },
 };
 
@@ -291,6 +293,11 @@ export function playSettingsBeep() {
 /** Plays the pop-up open SFX. */
 export function playPopupOpen() {
   play("popupOpen");
+}
+
+/** Plays the shared close SFX for any tab, pop-up, modal or panel. */
+export function playModalClose() {
+  play("modalClose");
 }
 
 /** Plays the pop-up close SFX. */

@@ -11,7 +11,7 @@ import {
 } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
-import { playTap } from "@/lib/sound";
+import { playTap, playSwipe, playModalClose } from "@/lib/sound";
 
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
@@ -72,14 +72,14 @@ export function QuickView({
 
   // Close paths that should play the SFX (everything except "Add to Cart").
   const closeWithSound = () => {
-    playTap();
+    playModalClose();
     onClose();
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || !isOpen) return;
-      playTap();
+      playModalClose();
       onClose();
     };
     window.addEventListener("keydown", onKey);
