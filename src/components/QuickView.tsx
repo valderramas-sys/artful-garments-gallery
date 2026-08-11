@@ -12,27 +12,9 @@ import {
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
 import { playTap, playSwipe, playModalClose } from "@/lib/sound";
+import { secondPhoto } from "@/lib/product-photos";
+import { SwipeHint } from "@/components/SwipeHint";
 
-
-import p01 from "@/assets/paradela-01-b.png.asset.json";
-import p02 from "@/assets/paradela-02-b.png.asset.json";
-import p03 from "@/assets/paradela-03-b.png.asset.json";
-import p04 from "@/assets/paradela-04-b.png.asset.json";
-
-/** Editorial second photo per beanie (never shared between products). */
-const SECOND_PHOTOS: Record<string, string> = {
-  "0.1": p01.url,
-  "0.2": p02.url,
-  "0.3": p03.url,
-  "0.4": p04.url,
-};
-
-function secondPhoto(title: string, handle: string) {
-  const key = Object.keys(SECOND_PHOTOS).find(
-    (k) => title.includes(k) || handle.includes(k.replace(".", "-")) || handle.endsWith(k.slice(2)),
-  );
-  return key ? SECOND_PHOTOS[key] : null;
-}
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
@@ -170,26 +152,28 @@ export function QuickView({
   return (
     <div
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-80 flex items-end justify-center transition-opacity duration-300 ease-[var(--ease-out-soft)] sm:items-center sm:p-4 ${
+      className={`fixed inset-0 z-80 flex items-end justify-center transition-opacity duration-[240ms] ease-[var(--ease-out-soft)] sm:items-center sm:p-4 ${
         isOpen ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
-        onClick={closeWithSound}
+        onPointerDown={closeWithSound}
         aria-hidden
         className="absolute inset-0 bg-foreground/20 backdrop-blur-[8px]"
       />
+
 
       <div
         role="dialog"
         aria-modal="true"
         aria-label={product?.node.title ?? "Product"}
-        className={`aero-glass relative z-10 flex max-h-[94svh] w-full max-w-[1180px] flex-col overflow-hidden rounded-t-3xl transition-all duration-300 ease-[var(--ease-out-soft)] sm:max-h-[92svh] sm:rounded-3xl ${
+        className={`aero-glass relative z-10 flex max-h-[94svh] w-full max-w-[1180px] transform-gpu flex-col overflow-hidden rounded-t-3xl transition-[transform,opacity] duration-[240ms] ease-[var(--ease-out-soft)] will-change-transform sm:max-h-[92svh] sm:rounded-3xl ${
           isOpen
             ? "translate-y-0 scale-100 opacity-100"
             : "translate-y-6 scale-100 opacity-0 sm:scale-[0.98]"
         }`}
       >
+
         {product && (
           <>
             <button
@@ -219,10 +203,10 @@ export function QuickView({
                     onPointerMove={onSwipeMove}
                     onPointerUp={endSwipe}
                     onPointerCancel={endSwipe}
-                    className="relative max-h-[36svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-surface select-none sm:max-h-[74svh] sm:aspect-4/5"
+                    className="relative h-[42svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-surface select-none sm:h-auto sm:max-h-[74svh] sm:aspect-4/5"
                   >
                     <div
-                      className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)]"
+                      className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)] will-change-transform"
                       style={{ transform: `translate3d(-${slide * 100}%, 0, 0)` }}
                     >
                       {gallery.map((src, i) => (
@@ -234,13 +218,17 @@ export function QuickView({
                           alt={product.node.title}
                           draggable={false}
                           loading={i === 0 ? "eager" : "lazy"}
-                          className="max-h-[36svh] w-full shrink-0 rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"
+                          className="h-full w-full shrink-0 rounded-2xl bg-surface object-contain object-center sm:max-h-[74svh]"
                         />
                       ))}
                     </div>
+                    {gallery.length > 1 && (
+                      <SwipeHint className="absolute bottom-3 left-1/2 -translate-x-1/2" />
+                    )}
                   </div>
                 ) : (
-                  <div className="card-float-media max-h-[36svh] w-full rounded-2xl bg-surface-2 sm:aspect-4/5" />
+                  <div className="card-float-media h-[42svh] w-full rounded-2xl bg-surface-2 sm:h-auto sm:aspect-4/5" />
+
                 )}
               </div>
 
