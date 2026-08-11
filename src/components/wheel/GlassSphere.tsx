@@ -26,6 +26,13 @@ export function GlassSphere({
   index,
 }: Props) {
   const { Icon, label } = category;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 120 + index * 70);
+    return () => window.clearTimeout(id);
+  }, [index]);
+
 
   const inner = (
     <>
