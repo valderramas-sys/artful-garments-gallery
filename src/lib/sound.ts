@@ -1,10 +1,13 @@
 import windSwoosh from "@/assets/wind-swoosh.mp3.asset.json";
 import arcadeClick from "@/assets/arcade-click.mp3.asset.json";
+import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
 
 let swooshAudio: HTMLAudioElement | null = null;
 let clickAudio: HTMLAudioElement | null = null;
+let beepAudio: HTMLAudioElement | null = null;
 let lastPlayedAt = 0;
 let lastClickAt = 0;
+let lastBeepAt = 0;
 
 /** Plays the swipe/slide sound used when moving between LAB icons. */
 export function playSwipe() {
