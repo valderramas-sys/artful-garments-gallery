@@ -114,6 +114,8 @@ const TAP_VOLUME = 0.7;
 const TAP_POOL_SIZE = 4;
 
 let tapPool: HTMLAudioElement[] = [];
+/** Elements currently doing a silent unlock pass — never reuse them mid-prime. */
+const priming = new Set<HTMLAudioElement>();
 let tapIndex = 0;
 
 let audioCtx: AudioContext | null = null;
@@ -203,6 +205,7 @@ function unlock() {
   for (const audio of primed) {
     const previous = audio.volume || 0.7;
     audio.volume = 0;
+    priming.add(audio);
     audio
       .play()
       .then(() => {
@@ -212,6 +215,9 @@ function unlock() {
       })
       .catch(() => {
         audio.volume = previous;
+      })
+      .finally(() => {
+        priming.delete(audio);
       });
   }
   audit({ key: "unlock", engine: "webaudio", latencyMs: 0, at: performance.now() });
@@ -323,7 +329,13 @@ export function playTap() {
 
   const pool = tapInstances();
   if (pool.length === 0) return;
-  const audio = pool[tapIndex % pool.length];
+  // Skip any element still finishing its silent unlock pass, otherwise the
+  // priming pause() aborts this playback.
+  let audio = pool[tapIndex % pool.length];
+  for (let i = 0; i < pool.length && priming.has(audio); i += 1) {
+    tapIndex += 1;
+    audio = pool[tapIndex % pool.length];
+  }
   tapIndex += 1;
   audio.volume = TAP_VOLUME;
   try {
