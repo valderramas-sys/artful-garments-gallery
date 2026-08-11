@@ -96,8 +96,7 @@ export function GlassSphere({
         marginTop: -size / 2,
         opacity,
         transform: `scale(${scale})`,
-        // Only the front sphere is interactive.
-        pointerEvents: isFront ? "auto" : "none",
+        pointerEvents: "auto",
         filter: isFront ? "none" : `blur(${(1 - Math.max(depth, 0)) * 1.4}px)`,
         boxShadow: `0 ${size * 0.16}px ${size * 0.3}px -${size * 0.18}px color-mix(in oklab, ${tint} 55%, transparent)`,
         borderRadius: "9999px",
@@ -112,10 +111,8 @@ export function GlassSphere({
           to={category.to}
           className={className}
           draggable={false}
-          tabIndex={isFront ? 0 : -1}
-          aria-hidden={!isFront}
           onClick={(e) => {
-            if (!isFront || suppressClick()) e.preventDefault();
+            if (suppressClick()) e.preventDefault();
           }}
         >
           {inner}
@@ -127,15 +124,14 @@ export function GlassSphere({
           rel="noreferrer noopener"
           className={className}
           draggable={false}
-          tabIndex={isFront ? 0 : -1}
-          aria-hidden={!isFront}
           onClick={(e) => {
-            if (!isFront || suppressClick()) e.preventDefault();
+            if (suppressClick()) e.preventDefault();
           }}
         >
           {inner}
         </a>
       )}
+
     </div>
   );
 }
