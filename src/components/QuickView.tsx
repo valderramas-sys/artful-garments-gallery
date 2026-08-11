@@ -196,7 +196,7 @@ export function QuickView({
 
             <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto overscroll-contain px-5 pt-5 pb-5 sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] sm:gap-9 sm:overflow-hidden sm:px-8 sm:py-8 lg:gap-12 lg:px-10">
               {/* Image */}
-              <div className="min-w-0">
+              <div className="card-float min-w-0">
                 {gallery.length > 0 ? (
                   <div
                     onPointerDown={onSwipeDown}
