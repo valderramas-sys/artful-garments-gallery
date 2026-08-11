@@ -149,7 +149,7 @@ export function QuickView({
 
               {/* Details */}
               <div className="flex min-w-0 flex-col sm:max-h-[74svh] sm:overflow-y-auto sm:overscroll-contain sm:pr-1">
-                <p className="label-xs text-muted-foreground">
+                <p className="label-xs text-ink">
                   {t("product.collab")}: RHYTMO × <ParadelaLink />
                 </p>
 
@@ -158,7 +158,7 @@ export function QuickView({
                 </h2>
 
                 <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <p className="font-num text-xl sm:text-2xl">
+                  <p className="font-num text-xl sm:text-2xl text-ink">
                     {variant
                       ? formatFrom(Number(variant.price.amount), variant.price.currencyCode)
                       : formatFrom(
@@ -168,14 +168,14 @@ export function QuickView({
                   </p>
                   <span
                     className={`label-xs ${
-                      variant?.availableForSale ? "text-muted-foreground" : "text-pink-deep"
+                      variant?.availableForSale ? "text-ink" : "text-pink-deep"
                     }`}
                   >
                     {variant?.availableForSale ? t("product.instock") : t("product.soldout")}
                   </span>
                 </div>
 
-                <p className="mt-4 max-w-[52ch] text-[0.8125rem] leading-relaxed text-muted-foreground">
+                <p className="mt-4 max-w-[52ch] text-[0.8125rem] leading-relaxed text-ink">
                   {content.overview}
                 </p>
 
@@ -183,7 +183,7 @@ export function QuickView({
                 <div className="mt-5 grid gap-5 border-t border-border pt-5 sm:grid-cols-2">
                   {variants.length > 1 && (
                     <fieldset className="min-w-0">
-                      <legend className="label-xs text-muted-foreground">
+                      <legend className="label-xs text-ink">
                         {product.node.options[0]?.name ?? t("cart.size")}
                       </legend>
                       <div className="mt-2.5 flex flex-wrap gap-2">
@@ -206,7 +206,7 @@ export function QuickView({
                   )}
 
                   <div className="min-w-0">
-                    <span className="label-xs text-muted-foreground">{t("product.quantity")}</span>
+                    <span className="label-xs text-ink">{t("product.quantity")}</span>
                     <div className="glass-soft mt-2.5 flex w-fit items-center gap-1 rounded-2xl p-1">
                       <button
                         type="button"
@@ -232,8 +232,8 @@ export function QuickView({
                 {/* Specs + care side by side */}
                 <div className="mt-5 grid gap-5 border-t border-border pt-5 sm:grid-cols-2 sm:gap-8">
                   <section className="min-w-0">
-                    <h3 className="label-xs text-muted-foreground">{t("product.specs")}</h3>
-                    <ul className="mt-2.5 space-y-1.5 text-[0.75rem] leading-relaxed">
+                    <h3 className="label-xs text-ink">{t("product.specs")}</h3>
+                    <ul className="mt-2.5 space-y-1.5 text-[0.75rem] leading-relaxed text-ink">
                       {content.specs.map((spec) => (
                         <li key={spec} className="grid grid-cols-[8px_minmax(0,1fr)] gap-2.5">
                           <span aria-hidden className="text-pink">
@@ -248,8 +248,8 @@ export function QuickView({
                   </section>
 
                   <section className="min-w-0">
-                    <h3 className="label-xs text-muted-foreground">{t("product.care")}</h3>
-                    <ul className="mt-2.5 space-y-1.5 text-[0.75rem] leading-relaxed">
+                    <h3 className="label-xs text-ink">{t("product.care")}</h3>
+                    <ul className="mt-2.5 space-y-1.5 text-[0.75rem] leading-relaxed text-ink">
                       {content.care.map((item) => (
                         <li key={item} className="grid grid-cols-[8px_minmax(0,1fr)] gap-2.5">
                           <span aria-hidden className="text-pink">
@@ -260,8 +260,8 @@ export function QuickView({
                       ))}
                     </ul>
 
-                    <h3 className="label-xs mt-4 text-muted-foreground">{t("product.shipping")}</h3>
-                    <p className="mt-2.5 text-[0.75rem] leading-relaxed text-muted-foreground">
+                    <h3 className="label-xs mt-4 text-ink">{t("product.shipping")}</h3>
+                    <p className="mt-2.5 text-[0.75rem] leading-relaxed text-ink">
                       {content.shipping}
                     </p>
                   </section>

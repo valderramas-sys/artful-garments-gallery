@@ -162,6 +162,7 @@ html[lang="ko"] .font-hero {
   --color-pink-mid: var(--pink-mid);
   --color-pink-soft: var(--pink-soft);
   --color-pink-mist: var(--pink-mist);
+  --color-ink: var(--ink);
 
   --font-sans: "Rhytmo Symbols", "Rhytmo Body";
   --font-display: "Rhytmo Symbols", "Rhytmo Body";
@@ -194,6 +195,7 @@ html[lang="ko"] .font-hero {
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
   --muted-foreground: oklch(1 0 0);
+  --ink: oklch(0.34 0.015 250);
   --accent: var(--pink);
   --accent-foreground: oklch(0.986 0.003 250);
   --destructive: var(--pink-deep);
