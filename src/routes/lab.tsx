@@ -2,6 +2,7 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { CategoryWheel } from "@/components/wheel/CategoryWheel";
 import { requireAdmin, lockAdmin } from "@/lib/admin-gate.functions";
+import backdrop from "@/assets/hero.gif.asset.json";
 
 export const Route = createFileRoute("/lab")({
   // Server-side gate: redirects to /lab-access unless the admin session cookie is valid.
@@ -28,9 +29,18 @@ function Lab() {
   const lock = useServerFn(lockAdmin);
 
   return (
-    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 py-24">
+    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-background px-6 py-24">
+      <img
+        src={backdrop.url}
+        alt=""
+        aria-hidden
+        decoding="async"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+      />
       <h1 className="sr-only">RHYTMO experimental navigation wheel</h1>
-      <CategoryWheel />
+      <div className="relative z-10">
+        <CategoryWheel />
+      </div>
       <button
         type="button"
         onClick={async () => {

@@ -117,6 +117,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLanding = pathname === "/";
+  const isLab = pathname.startsWith("/lab");
   useCartSync();
 
   return (
@@ -127,7 +128,7 @@ function RootComponent() {
             {!isLanding && <Header />}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
-            {!isLanding && <Footer />}
+            {!isLanding && !isLab && <Footer />}
             {!isLanding && <CartDrawer />}
           </CartProvider>
         </CurrencyProvider>
