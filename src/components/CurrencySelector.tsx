@@ -1,7 +1,14 @@
 import { CURRENCIES, useCurrency } from "@/lib/currency";
+import { playSettingsBeep } from "@/lib/sound";
 
 export function CurrencySelector({ className = "" }: { className?: string }) {
   const { currency, setCurrency, live } = useCurrency();
+
+  const change = (code: typeof CURRENCIES[number]) => {
+    if (code === currency) return;
+    playSettingsBeep();
+    setCurrency(code);
+  };
 
   return (
     <div
@@ -14,7 +21,7 @@ export function CurrencySelector({ className = "" }: { className?: string }) {
         <button
           key={code}
           type="button"
-          onClick={() => setCurrency(code)}
+          onClick={() => change(code)}
           aria-pressed={currency === code}
           className={`font-num rounded-full px-1.5 py-1 text-[10px] leading-none tracking-[0.06em] transition-all duration-250 ease-[var(--ease-out-soft)] sm:px-2.5 sm:text-[11px] sm:tracking-[0.1em] ${
             currency === code

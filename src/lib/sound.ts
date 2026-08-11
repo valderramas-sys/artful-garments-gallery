@@ -1,10 +1,13 @@
 import windSwoosh from "@/assets/wind-swoosh.mp3.asset.json";
 import arcadeClick from "@/assets/arcade-click.mp3.asset.json";
+import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
 
 let swooshAudio: HTMLAudioElement | null = null;
 let clickAudio: HTMLAudioElement | null = null;
+let beepAudio: HTMLAudioElement | null = null;
 let lastPlayedAt = 0;
 let lastClickAt = 0;
+let lastBeepAt = 0;
 
 /** Plays the swipe/slide sound used when moving between LAB icons. */
 export function playSwipe() {
@@ -42,6 +45,26 @@ export function playClick() {
 
   clickAudio.currentTime = 0;
   clickAudio.play().catch(() => {
+    // Ignore autoplay/policy errors.
+  });
+}
+
+/** Plays the settings beep used when changing currency or language. */
+export function playSettingsBeep() {
+  if (typeof window === "undefined") return;
+
+  const now = Date.now();
+  if (now - lastBeepAt < 90) return;
+  lastBeepAt = now;
+
+  if (!beepAudio) {
+    beepAudio = new Audio(beepPloc.url);
+    beepAudio.preload = "auto";
+    beepAudio.volume = 0.7;
+  }
+
+  beepAudio.currentTime = 0;
+  beepAudio.play().catch(() => {
     // Ignore autoplay/policy errors.
   });
 }
