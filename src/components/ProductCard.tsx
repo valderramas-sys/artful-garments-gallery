@@ -9,6 +9,8 @@ import {
   type ShopifyProduct,
 } from "@/lib/shopify";
 import { playTap } from "@/lib/sound";
+import { secondPhoto } from "@/lib/product-photos";
+
 
 export function ProductCard({
   product,
