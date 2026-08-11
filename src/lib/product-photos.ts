@@ -1,5 +1,5 @@
 import p01 from "@/assets/paradela-01-b.png.asset.json";
-import p02 from "@/assets/paradela-02-b.png.asset.json";
+import p02 from "@/assets/paradela-02-c.png.asset.json";
 import p03 from "@/assets/paradela-03-b.png.asset.json";
 import p04 from "@/assets/paradela-04-b.png.asset.json";
 
