@@ -62,7 +62,7 @@ export function ShippingCalculator({
 
   return (
     <section className="mt-5 border-t border-border pt-5">
-      <h3 className="label-xs text-muted-foreground">{t("ship.title")}</h3>
+      <h3 className="label-xs text-ink">{t("ship.title")}</h3>
 
       <form
         onSubmit={(e) => {
@@ -105,7 +105,7 @@ export function ShippingCalculator({
           }}
           placeholder={destination.postalExample || t("ship.cep")}
           aria-label={t("ship.cep")}
-          className="font-num min-h-10 min-w-0 rounded-xl bg-transparent px-3 text-xs outline-none placeholder:text-muted-foreground"
+          className="font-num min-h-10 min-w-0 rounded-xl bg-transparent px-3 text-xs outline-none placeholder:text-ink"
         />
 
         <button
@@ -122,10 +122,10 @@ export function ShippingCalculator({
           <p className="text-[0.75rem] text-pink-deep">{t("ship.invalid")}</p>
         )}
         {status === "error" && (
-          <p className="text-[0.75rem] text-muted-foreground">{t("ship.error")}</p>
+          <p className="text-[0.75rem] text-ink">{t("ship.error")}</p>
         )}
         {status === "done" && options.length === 0 && (
-          <p className="text-[0.75rem] text-muted-foreground">{t("ship.none")}</p>
+          <p className="text-[0.75rem] text-ink">{t("ship.none")}</p>
         )}
 
         {status === "done" && options.length > 0 && (
@@ -147,15 +147,15 @@ export function ShippingCalculator({
                 </div>
                 <dl className="mt-2 grid grid-cols-3 gap-2 text-[0.6875rem] leading-tight">
                   <div>
-                    <dt className="label-xs text-muted-foreground">{t("ship.dispatch")}</dt>
+                    <dt className="label-xs text-ink">{t("ship.dispatch")}</dt>
                     <dd className="font-num mt-1">{range(option.dispatch)}</dd>
                   </div>
                   <div>
-                    <dt className="label-xs text-muted-foreground">{t("ship.delivery")}</dt>
+                    <dt className="label-xs text-ink">{t("ship.delivery")}</dt>
                     <dd className="font-num mt-1">{range(option.delivery)}</dd>
                   </div>
                   <div>
-                    <dt className="label-xs text-muted-foreground">{t("ship.total")}</dt>
+                    <dt className="label-xs text-ink">{t("ship.total")}</dt>
                     <dd className="font-num mt-1 text-pink">{range(option.total)}</dd>
                   </div>
                 </dl>
@@ -164,7 +164,7 @@ export function ShippingCalculator({
           </ul>
         )}
 
-        <p className="mt-2.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
+        <p className="mt-2.5 text-[0.6875rem] leading-relaxed text-ink">
           {t("ship.note")}
         </p>
       </div>
