@@ -59,15 +59,15 @@ export function GlassSphere({
         height: size,
         marginLeft: -size / 2,
         marginTop: -size / 2,
-        transform: `rotate(${counterAngle}deg) scale(${hovered ? 1.14 : 1})`,
-        opacity: dimmed ? 0.45 : 1,
+        opacity: mounted ? (dimmed ? 0.45 : 1) : 0,
+        transform: `rotate(${counterAngle}deg) scale(${mounted ? (hovered ? 1.14 : 1) : 0.6})`,
         transition:
-          "transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease-out",
-        animation: `wheel-pop 700ms cubic-bezier(0.22, 1, 0.36, 1) ${index * 70}ms both`,
+          "transform 620ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out",
       }}
       onMouseEnter={() => onHoverChange(category.id)}
       onMouseLeave={() => onHoverChange(null)}
     >
+
       {category.to ? (
         <Link
           to={category.to}
