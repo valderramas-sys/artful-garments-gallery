@@ -119,7 +119,7 @@ export function ShippingCalculator({
 
       <div aria-live="polite" className="mt-3">
         {status === "invalid" && (
-          <p className="text-[0.75rem] text-pink-deep">{t("ship.invalid")}</p>
+          <p className="text-[0.75rem] text-ink">{t("ship.invalid")}</p>
         )}
         {status === "error" && (
           <p className="text-[0.75rem] text-ink">{t("ship.error")}</p>
@@ -136,10 +136,10 @@ export function ShippingCalculator({
                 className="glass-soft animate-fade-in rounded-2xl px-3.5 py-3 transition-all duration-250 ease-[var(--ease-out-soft)]"
               >
                 <div className="flex items-baseline justify-between gap-3">
-                  <p className="text-[0.8125rem] leading-snug font-bold tracking-tight">
+                  <p className="text-[0.8125rem] leading-snug font-bold tracking-tight text-ink">
                     {option.title}
                   </p>
-                  <p className="font-num text-sm text-pink">
+                  <p className="font-num text-sm text-ink">
                     {option.amount === 0
                       ? t("ship.free")
                       : formatFrom(option.amount, option.currencyCode)}
@@ -148,15 +148,15 @@ export function ShippingCalculator({
                 <dl className="mt-2 grid grid-cols-3 gap-2 text-[0.6875rem] leading-tight">
                   <div>
                     <dt className="label-xs text-ink">{t("ship.dispatch")}</dt>
-                    <dd className="font-num mt-1">{range(option.dispatch)}</dd>
+                    <dd className="font-num mt-1 text-ink">{range(option.dispatch)}</dd>
                   </div>
                   <div>
                     <dt className="label-xs text-ink">{t("ship.delivery")}</dt>
-                    <dd className="font-num mt-1">{range(option.delivery)}</dd>
+                    <dd className="font-num mt-1 text-ink">{range(option.delivery)}</dd>
                   </div>
                   <div>
                     <dt className="label-xs text-ink">{t("ship.total")}</dt>
-                    <dd className="font-num mt-1 text-pink">{range(option.total)}</dd>
+                    <dd className="font-num mt-1 text-ink">{range(option.total)}</dd>
                   </div>
                 </dl>
               </li>
