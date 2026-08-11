@@ -203,7 +203,7 @@ export function QuickView({
                     onPointerMove={onSwipeMove}
                     onPointerUp={endSwipe}
                     onPointerCancel={endSwipe}
-                    className="relative h-[42svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-surface select-none sm:h-auto sm:max-h-[74svh] sm:aspect-4/5"
+                    className="relative h-[42svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-transparent select-none sm:h-auto sm:max-h-[74svh] sm:aspect-4/5"
                   >
                     <div
                       className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)] will-change-transform"
@@ -218,16 +218,16 @@ export function QuickView({
                           alt={product.node.title}
                           draggable={false}
                           loading={i === 0 ? "eager" : "lazy"}
-                          className="h-full w-full shrink-0 rounded-2xl bg-surface object-contain object-center sm:max-h-[74svh]"
+                          className="h-full w-full shrink-0 rounded-2xl bg-transparent object-contain object-center sm:max-h-[74svh]"
                         />
                       ))}
                     </div>
                     {gallery.length > 1 && (
-                      <SwipeHint className="absolute bottom-3 left-1/2 -translate-x-1/2" />
+                      <SwipeHint tone="dark" className="absolute bottom-3 left-1/2 -translate-x-1/2" />
                     )}
                   </div>
                 ) : (
-                  <div className="card-float-media h-[42svh] w-full rounded-2xl bg-surface-2 sm:h-auto sm:aspect-4/5" />
+                  <div className="card-float-media h-[42svh] w-full rounded-2xl bg-transparent sm:h-auto sm:aspect-4/5" />
 
                 )}
               </div>
