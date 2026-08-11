@@ -22,6 +22,16 @@ export function CategoryWheel() {
   const [hovered, setHoveredState] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
 
+  const setHovered = useCallback((id: string | null) => {
+    setHoveredState((prev) => {
+      if (id !== null && id !== prev) {
+        playHover();
+      }
+      return id;
+    });
+  }, []);
+
+
 
   const count = WHEEL_CATEGORIES.length;
   const slice = 360 / count;
