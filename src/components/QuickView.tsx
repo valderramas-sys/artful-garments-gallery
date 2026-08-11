@@ -409,6 +409,72 @@ export function QuickView({
           </>
         )}
       </div>
+
+      {product && gallery.length > 0 && (
+        <div
+          aria-hidden={!zoom}
+          className={`fixed inset-0 z-90 flex items-center justify-center transition-opacity duration-200 ease-[var(--ease-out-soft)] ${
+            zoom ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
+          <div
+            aria-hidden
+            onPointerDown={() => {
+              playModalClose();
+              setZoom(false);
+            }}
+            className="absolute inset-0 bg-foreground/60 backdrop-blur-[10px]"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              playModalClose();
+              setZoom(false);
+            }}
+            aria-label={t("cart.close")}
+            className="glass-btn absolute top-4 right-4 z-20 grid h-10 w-10 place-items-center rounded-full"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden
+            >
+              <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+          <div
+            onPointerDown={onSwipeDown}
+            onPointerMove={onSwipeMove}
+            onPointerUp={endSwipe}
+            onPointerCancel={endSwipe}
+            className={`relative z-10 h-[92svh] w-[96vw] touch-pan-y overflow-hidden select-none transition-transform duration-200 ease-[var(--ease-out-soft)] ${
+              zoom ? "scale-100" : "scale-[0.98]"
+            }`}
+          >
+            <div
+              className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)] will-change-transform"
+              style={{ transform: `translate3d(-${slide * 100}%, 0, 0)` }}
+            >
+              {gallery.map((src) => (
+                <img
+                  key={src}
+                  src={sizedImage(src, 2000) ?? src}
+                  alt={product.node.title}
+                  draggable={false}
+                  className="h-full w-full shrink-0 object-contain object-center"
+                />
+              ))}
+            </div>
+            {gallery.length > 1 && (
+              <SwipeHint tone="dark" className="absolute bottom-4 left-1/2 -translate-x-1/2" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
+
   );
 }
