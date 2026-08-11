@@ -117,6 +117,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLanding = pathname === "/";
+  const isLab = pathname.startsWith("/lab");
   useCartSync();
 
   return (
