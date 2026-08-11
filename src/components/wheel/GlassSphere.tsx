@@ -12,6 +12,8 @@ type Props = {
   isFront: boolean;
   hovered: boolean;
   onHoverChange: (id: string | null) => void;
+  /** Bring this sphere to the centre when it is not the selected one. */
+  onSelect: () => void;
   /** Suppress navigation right after a drag gesture. */
   suppressClick: () => boolean;
   index: number;
@@ -34,6 +36,7 @@ export function GlassSphere({
   isFront,
   hovered,
   onHoverChange,
+  onSelect,
   suppressClick,
   index,
 }: Props) {
@@ -106,7 +109,19 @@ export function GlassSphere({
       onMouseEnter={() => onHoverChange(category.id)}
       onMouseLeave={() => onHoverChange(null)}
     >
-      {category.to ? (
+      {!isFront ? (
+        <button
+          type="button"
+          aria-label={label}
+          className={className}
+          onClick={(e) => {
+            e.preventDefault();
+            if (!suppressClick()) onSelect();
+          }}
+        >
+          {inner}
+        </button>
+      ) : category.to ? (
         <Link
           to={category.to}
           className={className}
