@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CategoryWheel } from "@/components/wheel/CategoryWheel";
+import { SwipeHint } from "@/components/SwipeHint";
+
 
 export const Route = createFileRoute("/lab")({
   head: () => ({
