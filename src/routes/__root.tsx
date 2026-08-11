@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Backdrop } from "../components/Backdrop";
+import { StaticBackdrop } from "../components/StaticBackdrop";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart";
 import { CurrencyProvider } from "../lib/currency";
