@@ -125,6 +125,13 @@ function RootComponent() {
       <I18nProvider>
         <CurrencyProvider>
           <CartProvider>
+            {!isLanding && (
+              <div
+                aria-hidden
+                className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${backdrop.url})` }}
+              />
+            )}
             {!isLanding && <Header />}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
@@ -136,4 +143,5 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
 
