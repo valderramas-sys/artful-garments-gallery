@@ -1,7 +1,14 @@
 import { CURRENCIES, useCurrency } from "@/lib/currency";
+import { playSettingsBeep } from "@/lib/sound";
 
 export function CurrencySelector({ className = "" }: { className?: string }) {
   const { currency, setCurrency, live } = useCurrency();
+
+  const change = (code: typeof CURRENCIES[number]) => {
+    if (code === currency) return;
+    playSettingsBeep();
+    setCurrency(code);
+  };
 
   return (
     <div
