@@ -1,7 +1,14 @@
 import { LANGUAGES, useI18n } from "@/lib/i18n";
+import { playSettingsBeep } from "@/lib/sound";
 
 export function LanguageSelector({ className = "" }: { className?: string }) {
   const { lang, setLang, t } = useI18n();
+
+  const change = (code: typeof LANGUAGES[number]["code"]) => {
+    if (code === lang) return;
+    playSettingsBeep();
+    setLang(code);
+  };
 
   return (
     <div
