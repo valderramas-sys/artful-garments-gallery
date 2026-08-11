@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
+import { playTap } from "@/lib/sound";
 import { Logo } from "./Logo";
 import { CurrencySelector } from "./CurrencySelector";
 import { useI18n } from "@/lib/i18n";
@@ -46,7 +47,10 @@ export function Header() {
             <CurrencySelector />
             <button
               type="button"
-              onClick={open}
+              onClick={() => {
+                playTap();
+                open();
+              }}
               aria-label={`${t("cart.open")}, ${count}`}
               className="glass-btn relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
             >

@@ -39,9 +39,12 @@ let unlocked = false;
 function unlock() {
   if (unlocked || typeof window === "undefined") return;
   unlocked = true;
-  for (const slot of Object.values(slots)) {
-    const audio = ensure(slot);
-    const previous = audio.volume;
+  const primed: HTMLAudioElement[] = [
+    ...Object.values(slots).map((slot) => ensure(slot)),
+    ...tapInstances(),
+  ];
+  for (const audio of primed) {
+    const previous = audio.volume || 0.7;
     audio.volume = 0;
     audio
       .play()
@@ -57,6 +60,8 @@ function unlock() {
 }
 
 if (typeof window !== "undefined") {
+  // Warm the tap clip immediately so the first interaction is instant.
+  tapInstances();
   const opts = { passive: true } as AddEventListenerOptions;
   const handler = () => {
     unlock();
@@ -67,6 +72,27 @@ if (typeof window !== "undefined") {
   window.addEventListener("touchstart", handler, opts);
   window.addEventListener("pointerdown", handler, opts);
   window.addEventListener("keydown", handler, opts);
+}
+
+// Dedicated low-latency pool for the confirm-tap SFX: several preloaded
+// instances so rapid, overlapping interactions never wait on a rewind.
+const TAP_POOL_SIZE = 4;
+let tapPool: HTMLAudioElement[] = [];
+let tapIndex = 0;
+
+function tapInstances() {
+  if (tapPool.length === 0 && typeof window !== "undefined") {
+    tapPool = Array.from({ length: TAP_POOL_SIZE }, () => {
+      const audio = new Audio(slots.tap.url);
+      audio.preload = "auto";
+      audio.volume = slots.tap.volume;
+      audio.setAttribute("playsinline", "");
+      (audio as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
+      audio.load();
+      return audio;
+    });
+  }
+  return tapPool;
 }
 
 function play(key: keyof typeof slots) {
@@ -113,7 +139,23 @@ export function playPopupClose() {
   play("popupClose");
 }
 
-/** Plays the confirm tap SFX (quantity steppers, shipping calculate). */
+/**
+ * Plays the confirm tap SFX instantly (no debounce, no delay) using a
+ * preloaded pool so it can retrigger back-to-back.
+ */
 export function playTap() {
-  play("tap");
+  if (typeof window === "undefined") return;
+  const pool = tapInstances();
+  if (pool.length === 0) return;
+  const audio = pool[tapIndex % pool.length];
+  tapIndex += 1;
+  audio.volume = slots.tap.volume;
+  try {
+    audio.currentTime = 0;
+  } catch {
+    // Ignore seek errors before metadata is ready.
+  }
+  audio.play().catch(() => {
+    // Ignore autoplay/policy errors.
+  });
 }

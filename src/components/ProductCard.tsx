@@ -8,7 +8,7 @@ import {
   sizedImage,
   type ShopifyProduct,
 } from "@/lib/shopify";
-import { playClick } from "@/lib/sound";
+import { playTap } from "@/lib/sound";
 
 export function ProductCard({
   product,
@@ -32,7 +32,10 @@ export function ProductCard({
     <article className="group card-float rounded-3xl">
       <button
         type="button"
-        onClick={() => onQuickView(product)}
+        onClick={() => {
+          playTap();
+          onQuickView(product);
+        }}
         aria-label={localize(node.title)}
         className="block w-full rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink"
       >
@@ -68,7 +71,7 @@ export function ProductCard({
         disabled={!variant || !variant.availableForSale || loading}
         onClick={async () => {
           if (!variant) return;
-          playClick();
+          playTap();
           await addItem({
             variantId: variant.id,
             productId: node.id,
