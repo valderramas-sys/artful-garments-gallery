@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { WheelCategory } from "./wheel-categories";
-import { playClick } from "@/lib/sound";
 
 
 
@@ -81,7 +80,7 @@ export function GlassSphere({
         }}
       />
       <span
-        className="relative z-10 mt-1 text-[9px] leading-none tracking-[0.18em] uppercase transition-opacity duration-300 sm:text-[10px]"
+        className="relative z-10 mt-1 text-[10px] leading-none tracking-[0.18em] uppercase transition-opacity duration-300"
         style={{ opacity: isFront ? 0.85 : 0.45 }}
       >
         {label}
@@ -121,7 +120,6 @@ export function GlassSphere({
           className={className}
           onClick={(e) => {
             e.preventDefault();
-            playClick();
             if (!suppressClick()) onSelect();
           }}
         >
@@ -133,7 +131,6 @@ export function GlassSphere({
           className={className}
           draggable={false}
           onClick={(e) => {
-            playClick();
             if (suppressClick()) e.preventDefault();
           }}
         >
@@ -147,7 +144,6 @@ export function GlassSphere({
           className={className}
           draggable={false}
           onClick={(e) => {
-            playClick();
             if (suppressClick()) e.preventDefault();
           }}
         >

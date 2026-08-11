@@ -4,7 +4,6 @@ import { useCart } from "@/lib/cart";
 import { Logo } from "./Logo";
 import { CurrencySelector } from "./CurrencySelector";
 import { useI18n } from "@/lib/i18n";
-import { playClick } from "@/lib/sound";
 
 export function Header() {
   const { count, open } = useCart();
@@ -15,7 +14,6 @@ export function Header() {
 
   const goHome = (e: React.MouseEvent) => {
     e.preventDefault();
-    playClick();
     if (pathname === "/") return;
     setLeaving(true);
     document.body.dataset.leaving = "true";
