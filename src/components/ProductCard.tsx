@@ -58,6 +58,7 @@ export function ProductCard({
         disabled={!variant || !variant.availableForSale || loading}
         onClick={async () => {
           if (!variant) return;
+          playClick();
           await addItem({
             variantId: variant.id,
             productId: node.id,
