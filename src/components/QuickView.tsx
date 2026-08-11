@@ -65,11 +65,19 @@ export function QuickView({
     }
   }, [product, variants]);
 
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) playPopupOpen();
+    else if (!isOpen && wasOpen.current) playPopupClose();
+    wasOpen.current = isOpen;
+  }, [isOpen]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
 
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];
