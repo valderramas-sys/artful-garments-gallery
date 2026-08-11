@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GlassSphere } from "./GlassSphere";
 import { WHEEL_CATEGORIES } from "./wheel-categories";
+import { playHover } from "@/lib/sound";
+
 
 /** Responsive geometry: [ring radius, sphere diameter]. */
 function geometry(width: number): { radius: number; sphere: number } {
