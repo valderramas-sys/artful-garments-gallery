@@ -4,32 +4,24 @@ import { WHEEL_CATEGORIES } from "./wheel-categories";
 
 /** Responsive geometry: [ring radius, sphere diameter]. */
 function geometry(width: number): { radius: number; sphere: number } {
-  if (width < 480) return { radius: 130, sphere: 86 };
-  if (width < 768) return { radius: 180, sphere: 100 };
-  if (width < 1200) return { radius: 240, sphere: 116 };
-  return { radius: 300, sphere: 132 };
+  if (width < 380) return { radius: 108, sphere: 76 };
+  if (width < 480) return { radius: 128, sphere: 84 };
+  if (width < 768) return { radius: 176, sphere: 98 };
+  if (width < 1200) return { radius: 236, sphere: 114 };
+  return { radius: 296, sphere: 130 };
 }
 
-const norm = (deg: number) => {
-  let d = ((deg + 180) % 360 + 360) % 360 - 180;
-  return d;
-};
+const norm = (deg: number) => (((deg + 180) % 360) + 360) % 360 - 180;
 
 export function CategoryWheel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [{ radius, sphere }, setGeo] = useState(() => geometry(1280));
-  const [angle, setAngle] = useState(0);
+  const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
 
-  const drag = useRef({
-    active: false,
-    lastX: 0,
-    lastTime: 0,
-    velocity: 0,
-    moved: 0,
-  });
-  const raf = useRef<number | null>(null);
+  const count = WHEEL_CATEGORIES.length;
+  const slice = 360 / count;
 
   useEffect(() => {
     const measure = () => setGeo(geometry(window.innerWidth));
@@ -39,93 +31,84 @@ export function CategoryWheel() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const stopInertia = () => {
-    if (raf.current !== null) {
-      cancelAnimationFrame(raf.current);
-      raf.current = null;
-    }
-  };
+  const step = useCallback((dir: number) => {
+    setIndex((i) => (i + dir + count) % count);
+  }, [count]);
 
-  const runInertia = useCallback(() => {
-    stopInertia();
-    const step = () => {
-      const d = drag.current;
-      d.velocity *= 0.94;
-      if (Math.abs(d.velocity) < 0.02) {
-        raf.current = null;
-        return;
-      }
-      setAngle((a) => a + d.velocity);
-      raf.current = requestAnimationFrame(step);
+  const stepRef = useRef(step);
+  stepRef.current = step;
+
+  // Keyboard navigation (arrows never scroll the page while the wheel is mounted).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+      if (!keys.includes(e.key)) return;
+      e.preventDefault();
+      stepRef.current(e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 1);
     };
-    raf.current = requestAnimationFrame(step);
+    window.addEventListener("keydown", onKey, { passive: false });
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Wheel / trackpad navigation with accumulation so one flick moves one item.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    let acc = 0;
+    let lock = 0;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+      const dx = e.deltaX * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+      acc += Math.abs(dx) > Math.abs(dy) ? dx : dy;
+      const now = performance.now();
+      if (Math.abs(acc) > 40 && now - lock > 220) {
+        stepRef.current(acc > 0 ? 1 : -1);
+        acc = 0;
+        lock = now;
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // Swipe: one gesture = one step, always snapping to a centered item.
+  const swipe = useRef({ active: false, x: 0, y: 0, fired: false });
+
   const onPointerDown = (e: React.PointerEvent) => {
-    stopInertia();
-    const d = drag.current;
-    d.active = true;
-    d.moved = 0;
-    d.lastX = e.clientX;
-    d.lastTime = performance.now();
-    d.velocity = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    swipe.current = { active: true, x: e.clientX, y: e.clientY, fired: false };
   };
-
   const onPointerMove = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (!d.active) return;
-    const dx = e.clientX - d.lastX;
-    const now = performance.now();
-    const dt = Math.max(now - d.lastTime, 1);
-    const delta = dx * 0.32;
-    d.velocity = delta * (16 / dt);
-    d.lastX = e.clientX;
-    d.lastTime = now;
-    d.moved += Math.abs(dx);
-    setAngle((a) => a + delta);
+    const s = swipe.current;
+    if (!s.active || s.fired) return;
+    const dx = e.clientX - s.x;
+    if (Math.abs(dx) > 44) {
+      s.fired = true;
+      step(dx < 0 ? 1 : -1);
+    }
+  };
+  const endSwipe = () => {
+    swipe.current.active = false;
   };
 
-  const endDrag = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (!d.active) return;
-    d.active = false;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      /* pointer already released */
-    }
-    if (Math.abs(d.velocity) > 0.15) runInertia();
-  };
+  const suppressClick = useCallback(() => swipe.current.fired, []);
 
-  useEffect(() => stopInertia, []);
-
-  const suppressClick = useCallback(() => drag.current.moved > 6, []);
-
-  const slice = 360 / WHEEL_CATEGORIES.length;
-
-  // Which sphere currently sits closest to the front-facing position.
-  let frontIndex = 0;
-  let frontDelta = 999;
-  WHEEL_CATEGORIES.forEach((_, i) => {
-    const d = Math.abs(norm(slice * i + angle));
-    if (d < frontDelta) {
-      frontDelta = d;
-      frontIndex = i;
-    }
-  });
-  const frontActive = frontDelta < slice / 2;
+  const angle = -slice * index;
 
   return (
     <div
       ref={containerRef}
+      tabIndex={0}
+      role="listbox"
+      aria-label="RHYTMO navigation wheel"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      className="relative touch-none cursor-grab select-none active:cursor-grabbing"
+      onPointerUp={endSwipe}
+      onPointerCancel={endSwipe}
+      className="relative touch-none select-none outline-none"
       style={{
         width: radius * 2 + sphere,
+        maxWidth: "100vw",
         height: radius * 1.15 + sphere,
         perspective: radius * 3.2,
         perspectiveOrigin: "50% 45%",
@@ -138,15 +121,15 @@ export function CategoryWheel() {
         style={{
           transformStyle: "preserve-3d",
           transform: `translateZ(${-radius * 0.2}px) rotateX(9deg) rotateY(${angle}deg) scale(${ready ? 1 : 0.92})`,
-          transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
           willChange: "transform",
         }}
       >
         {WHEEL_CATEGORIES.map((category, i) => {
           const theta = slice * i;
           const delta = norm(theta + angle);
-          const depth = Math.cos((delta * Math.PI) / 180); // 1 = front, -1 = back
-          const isFront = frontActive && i === frontIndex;
+          const depth = Math.cos((delta * Math.PI) / 180);
+          const isFront = i === index;
           return (
             <div
               key={category.id}
@@ -154,6 +137,7 @@ export function CategoryWheel() {
               style={{
                 transformStyle: "preserve-3d",
                 transform: `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${-theta - angle}deg) rotateX(-9deg)`,
+                transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             >
               <GlassSphere
@@ -164,6 +148,7 @@ export function CategoryWheel() {
                 isFront={isFront}
                 hovered={hovered === category.id}
                 onHoverChange={setHovered}
+                onSelect={() => setIndex(i)}
                 suppressClick={suppressClick}
               />
             </div>
