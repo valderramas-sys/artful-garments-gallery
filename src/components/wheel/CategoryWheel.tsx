@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GlassSphere } from "./GlassSphere";
 import { WHEEL_CATEGORIES } from "./wheel-categories";
+import { playHover } from "@/lib/sound";
+
 
 /** Responsive geometry: [ring radius, sphere diameter]. */
 function geometry(width: number): { radius: number; sphere: number } {
@@ -17,8 +19,19 @@ export function CategoryWheel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [{ radius, sphere }, setGeo] = useState(() => geometry(1280));
   const [index, setIndex] = useState(0);
-  const [hovered, setHovered] = useState<string | null>(null);
+  const [hovered, setHoveredState] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+
+  const setHovered = useCallback((id: string | null) => {
+    setHoveredState((prev) => {
+      if (id !== null && id !== prev) {
+        playHover();
+      }
+      return id;
+    });
+  }, []);
+
+
 
   const count = WHEEL_CATEGORIES.length;
   const slice = 360 / count;
