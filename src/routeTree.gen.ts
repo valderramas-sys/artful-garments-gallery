@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShopRouteImport } from './routes/shop'
-import { Route as LabAccessRouteImport } from './routes/lab-access'
 import { Route as LabRouteImport } from './routes/lab'
 import { Route as InfoRouteImport } from './routes/info'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -19,11 +18,6 @@ import { Route as IndexRouteImport } from './routes/index'
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LabAccessRoute = LabAccessRouteImport.update({
-  id: '/lab-access',
-  path: '/lab-access',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabRoute = LabRouteImport.update({
@@ -52,7 +46,6 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
-  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRoutesByTo {
@@ -60,7 +53,6 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
-  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRoutesById {
@@ -69,22 +61,14 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
-  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/lab-access' | '/shop'
+  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/shop'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/info' | '/lab' | '/lab-access' | '/shop'
-  id:
-    | '__root__'
-    | '/'
-    | '/checkout'
-    | '/info'
-    | '/lab'
-    | '/lab-access'
-    | '/shop'
+  to: '/' | '/checkout' | '/info' | '/lab' | '/shop'
+  id: '__root__' | '/' | '/checkout' | '/info' | '/lab' | '/shop'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +76,6 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   InfoRoute: typeof InfoRoute
   LabRoute: typeof LabRoute
-  LabAccessRoute: typeof LabAccessRoute
   ShopRoute: typeof ShopRoute
 }
 
@@ -103,13 +86,6 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lab-access': {
-      id: '/lab-access'
-      path: '/lab-access'
-      fullPath: '/lab-access'
-      preLoaderRoute: typeof LabAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lab': {
@@ -148,7 +124,6 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   InfoRoute: InfoRoute,
   LabRoute: LabRoute,
-  LabAccessRoute: LabAccessRoute,
   ShopRoute: ShopRoute,
 }
 export const routeTree = rootRouteImport

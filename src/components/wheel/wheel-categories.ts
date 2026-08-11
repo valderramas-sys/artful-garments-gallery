@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { HomeIcon, BagIcon, InfoIcon, CheckoutIcon, InstagramIcon, PinterestIcon } from "./WheelIcons";
+import { HomeIcon, BagIcon, InfoIcon, InstagramIcon, PinterestIcon } from "./WheelIcons";
 
 export type WheelCategory = {
   id: string;
@@ -19,7 +19,7 @@ export const WHEEL_CATEGORIES: WheelCategory[] = [
   { id: "home", label: "Home", to: "/", Icon: HomeIcon },
   { id: "shop", label: "Shop", to: "/shop", Icon: BagIcon },
   { id: "info", label: "Info", to: "/info", Icon: InfoIcon },
-  { id: "checkout", label: "Checkout", to: "/checkout", Icon: CheckoutIcon },
+  
   {
     id: "instagram",
     label: "Instagram",
