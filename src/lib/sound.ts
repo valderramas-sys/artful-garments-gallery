@@ -200,7 +200,9 @@ function unlock() {
 
   const primed: HTMLAudioElement[] = [
     ...Object.values(slots).map((slot) => ensure(slot)),
-    ...tapInstances(),
+    // Reserve the first tap element so a tap fired inside this same gesture
+    // is never aborted by the silent priming pause.
+    ...tapInstances().slice(1),
   ];
   for (const audio of primed) {
     const previous = audio.volume || 0.7;
