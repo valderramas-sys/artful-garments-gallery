@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as LabAccessRouteImport } from './routes/lab-access'
+import { Route as LabRouteImport } from './routes/lab'
 import { Route as InfoRouteImport } from './routes/info'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +19,16 @@ import { Route as IndexRouteImport } from './routes/index'
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabAccessRoute = LabAccessRouteImport.update({
+  id: '/lab-access',
+  path: '/lab-access',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabRoute = LabRouteImport.update({
+  id: '/lab',
+  path: '/lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InfoRoute = InfoRouteImport.update({
@@ -39,12 +51,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
+  '/lab': typeof LabRoute
+  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
+  '/lab': typeof LabRoute
+  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRoutesById {
@@ -52,20 +68,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
   '/info': typeof InfoRoute
+  '/lab': typeof LabRoute
+  '/lab-access': typeof LabAccessRoute
   '/shop': typeof ShopRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/info' | '/shop'
+  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/lab-access' | '/shop'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/info' | '/shop'
-  id: '__root__' | '/' | '/checkout' | '/info' | '/shop'
+  to: '/' | '/checkout' | '/info' | '/lab' | '/lab-access' | '/shop'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/info'
+    | '/lab'
+    | '/lab-access'
+    | '/shop'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
   InfoRoute: typeof InfoRoute
+  LabRoute: typeof LabRoute
+  LabAccessRoute: typeof LabAccessRoute
   ShopRoute: typeof ShopRoute
 }
 
@@ -76,6 +103,20 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab-access': {
+      id: '/lab-access'
+      path: '/lab-access'
+      fullPath: '/lab-access'
+      preLoaderRoute: typeof LabAccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab': {
+      id: '/lab'
+      path: '/lab'
+      fullPath: '/lab'
+      preLoaderRoute: typeof LabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/info': {
@@ -106,18 +147,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
   InfoRoute: InfoRoute,
+  LabRoute: LabRoute,
+  LabAccessRoute: LabAccessRoute,
   ShopRoute: ShopRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
