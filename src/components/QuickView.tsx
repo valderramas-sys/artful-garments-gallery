@@ -166,12 +166,13 @@ export function QuickView({
         role="dialog"
         aria-modal="true"
         aria-label={product?.node.title ?? "Product"}
-        className={`aero-glass relative z-10 flex max-h-[94svh] w-full max-w-[1180px] flex-col overflow-hidden rounded-t-3xl transition-all duration-300 ease-[var(--ease-out-soft)] sm:max-h-[92svh] sm:rounded-3xl ${
+        className={`aero-glass relative z-10 flex max-h-[94svh] w-full max-w-[1180px] transform-gpu flex-col overflow-hidden rounded-t-3xl transition-[transform,opacity] duration-[240ms] ease-[var(--ease-out-soft)] will-change-transform sm:max-h-[92svh] sm:rounded-3xl ${
           isOpen
             ? "translate-y-0 scale-100 opacity-100"
             : "translate-y-6 scale-100 opacity-0 sm:scale-[0.98]"
         }`}
       >
+
         {product && (
           <>
             <button
