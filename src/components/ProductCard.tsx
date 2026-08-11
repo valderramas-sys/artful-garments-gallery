@@ -65,7 +65,7 @@ export function ProductCard({
                 aria-hidden
                 loading="lazy"
                 decoding="async"
-                className="pointer-events-none absolute inset-0 hidden aspect-4/5 w-full rounded-3xl bg-surface object-contain opacity-0 transition-opacity duration-300 ease-[var(--ease-out-soft)] md:block md:group-hover:opacity-100"
+                className="pointer-events-none absolute inset-0 hidden aspect-4/5 w-full rounded-3xl bg-white object-contain opacity-0 transition-opacity duration-300 ease-[var(--ease-out-soft)] md:block md:group-hover:opacity-100"
               />
             )}
           </div>
