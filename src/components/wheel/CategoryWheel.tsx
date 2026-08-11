@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GlassSphere } from "./GlassSphere";
 import { WHEEL_CATEGORIES } from "./wheel-categories";
-import { playHover } from "@/lib/sound";
+import { playSwipe } from "@/lib/sound";
 
 
 /** Responsive geometry: [ring radius, sphere diameter]. */
@@ -23,12 +23,7 @@ export function CategoryWheel() {
   const [ready, setReady] = useState(false);
 
   const setHovered = useCallback((id: string | null) => {
-    setHoveredState((prev) => {
-      if (id !== null && id !== prev) {
-        playHover();
-      }
-      return id;
-    });
+    setHoveredState(id);
   }, []);
 
 
@@ -44,8 +39,19 @@ export function CategoryWheel() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  const goTo = useCallback((next: number) => {
+    setIndex((i) => {
+      if (next === i) return i;
+      playSwipe();
+      return next;
+    });
+  }, []);
+
   const step = useCallback((dir: number) => {
-    setIndex((i) => (i + dir + count) % count);
+    setIndex((i) => {
+      playSwipe();
+      return (i + dir + count) % count;
+    });
   }, [count]);
 
   const stepRef = useRef(step);
@@ -161,7 +167,7 @@ export function CategoryWheel() {
                 isFront={isFront}
                 hovered={hovered === category.id}
                 onHoverChange={setHovered}
-                onSelect={() => setIndex(i)}
+                onSelect={() => goTo(i)}
                 suppressClick={suppressClick}
               />
             </div>
