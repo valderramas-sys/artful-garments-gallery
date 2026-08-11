@@ -20,10 +20,10 @@ export function Footer() {
 
   return (
     <footer className="px-4 pb-4 sm:px-8 sm:pb-6">
-      <div className="aero-glass glass-sheen mx-auto max-w-[1600px] rounded-3xl px-5 py-6 shadow-[0_14px_44px_-32px_rgb(0_0_0/0.28)] sm:px-8 sm:py-7 lg:px-10">
+      <div className="aero-glass glass-sheen mx-auto max-w-[1600px] rounded-3xl px-5 py-6 text-ink shadow-[0_14px_44px_-32px_rgb(0_0_0/0.28)] sm:px-8 sm:py-7 lg:px-10">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           <section>
-            <h3 className="label-xs text-muted-foreground">{t("footer.nav")}</h3>
+            <h3 className="label-xs text-ink">{t("footer.nav")}</h3>
             <ul className="mt-2.5 space-y-1.5 text-xs">
               <li>
                 <Link to="/" className="transition-colors duration-250 hover:text-brand-magenta">
@@ -49,17 +49,17 @@ export function Footer() {
           </section>
 
           <section>
-            <h3 className="label-xs text-muted-foreground">{t("footer.shipping")}</h3>
+            <h3 className="label-xs text-ink">{t("footer.shipping")}</h3>
             <dl className="mt-2.5 space-y-2.5">
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.brazil")}</dt>
-                <dd className="mt-1 text-[9px] leading-[1.6] text-muted-foreground">
+                <dd className="mt-1 text-[9px] leading-[1.6] text-ink">
                   {t("footer.brazil.copy")}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.world")}</dt>
-                <dd className="mt-1 text-[9px] leading-[1.6] text-muted-foreground">
+                <dd className="mt-1 text-[9px] leading-[1.6] text-ink">
                   {t("footer.world.copy")}
                 </dd>
               </div>
@@ -67,7 +67,7 @@ export function Footer() {
           </section>
 
           <section>
-            <h3 className="label-xs text-muted-foreground">{t("footer.payments")}</h3>
+            <h3 className="label-xs text-ink">{t("footer.payments")}</h3>
             {payments && payments.length > 0 ? (
               <ul className="mt-2.5 flex flex-wrap gap-1.5">
                 {payments.map(({ name, label }) => (
@@ -75,7 +75,7 @@ export function Footer() {
                     <span
                       title={name}
                       aria-label={name}
-                      className="glass-soft font-num grid h-6 min-w-[2.5rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.06em] text-foreground"
+                      className="glass-soft font-num grid h-6 min-w-[2.5rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.06em] text-ink"
                     >
                       {label}
                     </span>
@@ -83,21 +83,21 @@ export function Footer() {
                 ))}
               </ul>
             ) : (
-              <p className="mt-2.5 text-[11px] leading-relaxed text-muted-foreground">
+              <p className="mt-2.5 text-[11px] leading-relaxed text-ink">
                 Secure checkout by Shopify
               </p>
             )}
 
-            <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+            <p className="mt-3 text-[11px] leading-relaxed text-ink">
               São Paulo, Brasil
             </p>
           </section>
 
           <section>
-            <h3 className="label-xs text-muted-foreground">{t("footer.language")}</h3>
+            <h3 className="label-xs text-ink">{t("footer.language")}</h3>
             <LanguageSelector className="mt-2.5" />
 
-            <h3 className="label-xs mt-5 text-muted-foreground">{t("footer.social")}</h3>
+            <h3 className="label-xs mt-5 text-ink">{t("footer.social")}</h3>
             <ul className="mt-2.5 flex flex-wrap gap-1.5">
               {SOCIALS.map(({ name, href }) => (
                 <li key={name}>
@@ -116,7 +116,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 border-t border-white/50 pt-3">
-          <p className="font-num text-[10px] tracking-[0.14em] text-muted-foreground">
+          <p className="font-num text-[10px] tracking-[0.14em] text-ink">
             {t("footer.rights")}
           </p>
         </div>

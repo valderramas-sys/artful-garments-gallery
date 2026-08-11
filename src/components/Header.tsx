@@ -38,7 +38,7 @@ export function Header() {
             to="/"
             onClick={goHome}
             aria-label="RHYTMO — home"
-            className="flex min-w-0 shrink items-center text-foreground transition-colors duration-250 hover:text-pink"
+            className="flex min-w-0 shrink items-center text-ink transition-colors duration-250 hover:text-pink"
           >
             <Logo className="h-7 w-[150px] shrink-0 sm:h-11 sm:w-[268px]" />
           </Link>
