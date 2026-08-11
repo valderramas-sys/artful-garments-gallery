@@ -2,6 +2,7 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { CategoryWheel } from "@/components/wheel/CategoryWheel";
 import { requireAdmin, lockAdmin } from "@/lib/admin-gate.functions";
+import backdrop from "@/assets/hero.gif.asset.json";
 
 export const Route = createFileRoute("/lab")({
   // Server-side gate: redirects to /lab-access unless the admin session cookie is valid.
