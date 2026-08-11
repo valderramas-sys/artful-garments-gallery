@@ -129,7 +129,7 @@ function RootComponent() {
           <CartProvider>
             {!isLanding && (
               <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-                <Backdrop />
+                {isLab ? <Backdrop /> : <StaticBackdrop />}
               </div>
             )}
             {!isLanding && !isLab && <Header />}
