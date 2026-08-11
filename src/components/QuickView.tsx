@@ -86,11 +86,51 @@ export function QuickView({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, isOpen]);
 
-
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];
   const maxQty = 10;
   const image = product ? productImage(product) : null;
+
+  // Primary Shopify photo first, brand editorial photo second.
+  const gallery = useMemo(() => {
+    const list: string[] = [];
+    if (image) list.push(image);
+    const second = product ? secondPhoto(product.node.title, product.node.handle) : null;
+    if (second) list.push(second);
+    return list;
+  }, [image, product]);
+
+  const [slide, setSlide] = useState(0);
+  useEffect(() => {
+    setSlide(0);
+  }, [product]);
+
+  const goSlide = (dir: number) => {
+    if (gallery.length < 2) return;
+    setSlide((s) => {
+      const next = Math.min(gallery.length - 1, Math.max(0, s + dir));
+      if (next !== s) playSwipe();
+      return next;
+    });
+  };
+
+  const swipe = useRef({ x: 0, active: false, fired: false });
+  const onSwipeDown = (e: React.PointerEvent) => {
+    swipe.current = { x: e.clientX, active: true, fired: false };
+  };
+  const onSwipeMove = (e: React.PointerEvent) => {
+    const s = swipe.current;
+    if (!s.active || s.fired) return;
+    const dx = e.clientX - s.x;
+    if (Math.abs(dx) > 40) {
+      s.fired = true;
+      goSlide(dx < 0 ? 1 : -1);
+    }
+  };
+  const endSwipe = () => {
+    swipe.current.active = false;
+  };
+
 
   const addToCart = async () => {
     if (!product || !variant) return;
