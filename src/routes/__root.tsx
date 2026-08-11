@@ -11,7 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import backdrop from "../assets/hero.gif.asset.json";
+import { Backdrop } from "../components/Backdrop";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart";
 import { CurrencyProvider } from "../lib/currency";
@@ -127,11 +127,9 @@ function RootComponent() {
         <CurrencyProvider>
           <CartProvider>
             {!isLanding && (
-              <div
-                aria-hidden
-                className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${backdrop.url})` }}
-              />
+              <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+                <Backdrop />
+              </div>
             )}
             {!isLanding && !isLab && <Header />}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
