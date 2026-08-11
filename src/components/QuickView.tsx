@@ -6,6 +6,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
+import { playClick } from "@/lib/sound";
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
@@ -276,11 +277,12 @@ export function QuickView({
                 type="button"
                 disabled={!variant?.availableForSale || loading}
                 onClick={async () => {
+                  playClick();
                   await addToCart();
                   onClose();
                   open();
                 }}
-                className="glass-btn-go label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
+                className="glass-btn-ink label-xs rounded-full px-4 py-3.5 leading-tight break-words whitespace-normal disabled:opacity-50"
               >
                 {t("product.add")}
               </button>
@@ -288,6 +290,7 @@ export function QuickView({
                 type="button"
                 disabled={!variant?.availableForSale || loading}
                 onClick={async () => {
+                  playClick();
                   await addToCart();
                   const url = buildCheckoutUrl(
                     useCartStore.getState().checkoutUrl ?? checkoutUrl,

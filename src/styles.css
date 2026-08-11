@@ -608,6 +608,40 @@ html[lang="ko"] .font-hero {
   }
 }
 
+/* Dark grey glass CTA — same geometry/blur as the other glass buttons. */
+@utility glass-btn-ink {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--ink) 70%, white),
+    color-mix(in oklab, var(--ink) 92%, transparent)
+  );
+  backdrop-filter: blur(34px) saturate(185%);
+  border: 1px solid color-mix(in oklab, white 32%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 38%, transparent),
+    0 16px 40px -26px color-mix(in oklab, var(--ink) 70%, transparent);
+  color: white;
+  transition:
+    background 250ms var(--ease-out-soft),
+    box-shadow 250ms var(--ease-out-soft),
+    transform 250ms var(--ease-out-soft);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--ink) 82%, white),
+      var(--ink)
+    );
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
+}
+
 /* Translucent glass button tinted with the reference pink.
    Same geometry, blur, highlights and shadows as .glass-btn. */
 @utility glass-btn-rose {

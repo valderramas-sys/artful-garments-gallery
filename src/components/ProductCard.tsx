@@ -3,6 +3,7 @@ import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useCartStore } from "@/stores/cartStore";
 import { firstAvailableVariant, productImage, type ShopifyProduct } from "@/lib/shopify";
+import { playClick } from "@/lib/sound";
 
 export function ProductCard({
   product,
@@ -58,6 +59,7 @@ export function ProductCard({
         disabled={!variant || !variant.availableForSale || loading}
         onClick={async () => {
           if (!variant) return;
+          playClick();
           await addItem({
             variantId: variant.id,
             productId: node.id,
@@ -71,7 +73,7 @@ export function ProductCard({
           });
           open();
         }}
-        className="glass-btn-rose label-xs mt-3 w-full rounded-full px-3 py-3 leading-tight break-words whitespace-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink disabled:opacity-50"
+        className="glass-btn-ink label-xs mt-3 w-full rounded-full px-3 py-3 leading-tight break-words whitespace-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink disabled:opacity-50"
       >
         {variant?.availableForSale ? t("product.add") : t("product.soldout")}
       </button>

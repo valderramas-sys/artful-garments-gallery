@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { playClick } from "@/lib/sound";
 import type { WheelCategory } from "./wheel-categories";
 
 
@@ -120,7 +121,10 @@ export function GlassSphere({
           className={className}
           onClick={(e) => {
             e.preventDefault();
-            if (!suppressClick()) onSelect();
+            if (!suppressClick()) {
+              playClick();
+              onSelect();
+            }
           }}
         >
           {inner}
@@ -132,6 +136,7 @@ export function GlassSphere({
           draggable={false}
           onClick={(e) => {
             if (suppressClick()) e.preventDefault();
+            else playClick();
           }}
         >
           {inner}
@@ -145,6 +150,7 @@ export function GlassSphere({
           draggable={false}
           onClick={(e) => {
             if (suppressClick()) e.preventDefault();
+            else playClick();
           }}
         >
           {inner}
