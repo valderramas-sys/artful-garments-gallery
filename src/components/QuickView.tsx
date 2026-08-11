@@ -3,7 +3,12 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useCartStore } from "@/stores/cartStore";
-import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/shopify";
+import {
+  productImage,
+  sizedImage,
+  type ShopifyProduct,
+  type ShopifyVariant,
+} from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
 import { playClick, playPopupClose, playPopupOpen } from "@/lib/sound";
@@ -147,7 +152,9 @@ export function QuickView({
               <div className="card-float min-w-0">
                 {image ? (
                   <img
-                    src={image}
+                    src={sizedImage(image, 1000) ?? image}
+                    width={800}
+                    height={1000}
                     alt={product.node.title}
                     loading="lazy"
                     className="max-h-[36svh] w-full rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"

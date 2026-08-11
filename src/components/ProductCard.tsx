@@ -2,7 +2,12 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useCartStore } from "@/stores/cartStore";
-import { firstAvailableVariant, productImage, type ShopifyProduct } from "@/lib/shopify";
+import {
+  firstAvailableVariant,
+  productImage,
+  sizedImage,
+  type ShopifyProduct,
+} from "@/lib/shopify";
 import { playClick } from "@/lib/sound";
 
 export function ProductCard({
@@ -33,7 +38,11 @@ export function ProductCard({
       >
         {image ? (
           <img
-            src={image}
+            src={sizedImage(image, 800) ?? image}
+            srcSet={`${sizedImage(image, 400)} 400w, ${sizedImage(image, 800)} 800w, ${sizedImage(image, 1200)} 1200w`}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            width={800}
+            height={1000}
             alt={node.images.edges[0]?.node.altText ?? node.title}
             loading="lazy"
             decoding="async"
