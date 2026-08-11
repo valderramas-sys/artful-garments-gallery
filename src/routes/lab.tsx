@@ -20,9 +20,11 @@ function Lab() {
   return (
     <main className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 py-24">
       <h1 className="sr-only">RHYTMO experimental navigation wheel</h1>
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col items-center">
         <CategoryWheel />
+        <SwipeHint className="pointer-events-none mt-4 sm:mt-6" />
       </div>
     </main>
   );
 }
+
