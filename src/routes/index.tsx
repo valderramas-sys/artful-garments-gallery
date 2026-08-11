@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import backdrop from "@/assets/hero.gif.asset.json";
+import { playClick } from "@/lib/sound";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,6 +33,7 @@ function Landing() {
   }, []);
 
   const enter = () => {
+    playClick();
     setLeaving(true);
     window.setTimeout(() => navigate({ to: "/lab" }), 380);
   };
