@@ -127,7 +127,7 @@ function RootComponent() {
             {!isLanding && <Header />}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
-            {!isLanding && <Footer />}
+            {!isLanding && !isLab && <Footer />}
             {!isLanding && <CartDrawer />}
           </CartProvider>
         </CurrencyProvider>
