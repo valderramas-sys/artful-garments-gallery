@@ -40,20 +40,35 @@ export function ProductCard({
         className="block w-full rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink"
       >
         {image ? (
-          <img
-            src={sizedImage(image, 800) ?? image}
-            srcSet={`${sizedImage(image, 400)} 400w, ${sizedImage(image, 800)} 800w, ${sizedImage(image, 1200)} 1200w`}
-            sizes="(min-width: 1024px) 25vw, 50vw"
-            width={800}
-            height={1000}
-            alt={node.images.edges[0]?.node.altText ?? node.title}
-            loading="lazy"
-            decoding="async"
-            className="aspect-4/5 w-full rounded-3xl bg-surface object-cover"
-          />
+          <div className="relative w-full">
+            <img
+              src={sizedImage(image, 800) ?? image}
+              srcSet={`${sizedImage(image, 400)} 400w, ${sizedImage(image, 800)} 800w, ${sizedImage(image, 1200)} 1200w`}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+              width={800}
+              height={1000}
+              alt={node.images.edges[0]?.node.altText ?? node.title}
+              loading="lazy"
+              decoding="async"
+              className="aspect-4/5 w-full rounded-3xl bg-surface object-cover transition-opacity duration-300 ease-[var(--ease-out-soft)] md:group-hover:opacity-0"
+            />
+            {model && (
+              <img
+                src={model}
+                width={800}
+                height={1000}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                decoding="async"
+                className="pointer-events-none absolute inset-0 hidden aspect-4/5 w-full rounded-3xl bg-surface object-contain opacity-0 transition-opacity duration-300 ease-[var(--ease-out-soft)] md:block md:group-hover:opacity-100"
+              />
+            )}
+          </div>
         ) : (
           <div className="card-float-media aspect-4/5 w-full rounded-3xl bg-surface-2" />
         )}
+
       </button>
 
       <div className="mt-5 flex flex-col gap-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-3">
