@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { WheelCategory } from "./wheel-categories";
+import { playClick } from "@/lib/sound";
 
 type Props = {
   category: WheelCategory;
@@ -116,6 +117,7 @@ export function GlassSphere({
           className={className}
           onClick={(e) => {
             e.preventDefault();
+            playClick();
             if (!suppressClick()) onSelect();
           }}
         >
@@ -127,6 +129,7 @@ export function GlassSphere({
           className={className}
           draggable={false}
           onClick={(e) => {
+            playClick();
             if (suppressClick()) e.preventDefault();
           }}
         >
@@ -140,6 +143,7 @@ export function GlassSphere({
           className={className}
           draggable={false}
           onClick={(e) => {
+            playClick();
             if (suppressClick()) e.preventDefault();
           }}
         >
