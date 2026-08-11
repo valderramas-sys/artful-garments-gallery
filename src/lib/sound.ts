@@ -1,70 +1,112 @@
 import windSwoosh from "@/assets/wind-swoosh.mp3.asset.json";
 import arcadeClick from "@/assets/arcade-click.mp3.asset.json";
 import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
+import popupOpen from "@/assets/popup-open.mp3.asset.json";
+import popupClose from "@/assets/popup-close.mp3.asset.json";
 
-let swooshAudio: HTMLAudioElement | null = null;
-let clickAudio: HTMLAudioElement | null = null;
-let beepAudio: HTMLAudioElement | null = null;
-let lastPlayedAt = 0;
-let lastClickAt = 0;
-let lastBeepAt = 0;
+type Slot = { url: string; volume: number; audio: HTMLAudioElement | null; last: number };
+
+const slots: Record<string, Slot> = {
+  swipe: { url: windSwoosh.url, volume: 0.6, audio: null, last: 0 },
+  click: { url: arcadeClick.url, volume: 0.7, audio: null, last: 0 },
+  beep: { url: beepPloc.url, volume: 0.7, audio: null, last: 0 },
+  popupOpen: { url: popupOpen.url, volume: 0.7, audio: null, last: 0 },
+  popupClose: { url: popupClose.url, volume: 0.7, audio: null, last: 0 },
+};
+
+function ensure(slot: Slot) {
+  if (!slot.audio) {
+    const audio = new Audio(slot.url);
+    audio.preload = "auto";
+    audio.volume = slot.volume;
+    // iOS/Safari: keep playback inline instead of opening a media overlay.
+    audio.setAttribute("playsinline", "");
+    (audio as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
+    audio.load();
+    slot.audio = audio;
+  }
+  return slot.audio;
+}
+
+let unlocked = false;
+
+/**
+ * Mobile browsers only allow audio after a user gesture. Prime every clip on
+ * the first interaction so later playback (including async handlers) works.
+ */
+function unlock() {
+  if (unlocked || typeof window === "undefined") return;
+  unlocked = true;
+  for (const slot of Object.values(slots)) {
+    const audio = ensure(slot);
+    const previous = audio.volume;
+    audio.volume = 0;
+    audio
+      .play()
+      .then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = previous;
+      })
+      .catch(() => {
+        audio.volume = previous;
+      });
+  }
+}
+
+if (typeof window !== "undefined") {
+  const opts = { passive: true } as AddEventListenerOptions;
+  const handler = () => {
+    unlock();
+    window.removeEventListener("touchstart", handler);
+    window.removeEventListener("pointerdown", handler);
+    window.removeEventListener("keydown", handler);
+  };
+  window.addEventListener("touchstart", handler, opts);
+  window.addEventListener("pointerdown", handler, opts);
+  window.addEventListener("keydown", handler, opts);
+}
+
+function play(key: keyof typeof slots) {
+  if (typeof window === "undefined") return;
+  const slot = slots[key];
+  const now = Date.now();
+  if (now - slot.last < 90) return;
+  slot.last = now;
+
+  const audio = ensure(slot);
+  audio.volume = slot.volume;
+  try {
+    audio.currentTime = 0;
+  } catch {
+    // Ignore seek errors before metadata is ready.
+  }
+  audio.play().catch(() => {
+    // Ignore autoplay/policy errors.
+  });
+}
 
 /** Plays the swipe/slide sound used when moving between LAB icons. */
 export function playSwipe() {
-  if (typeof window === "undefined") return;
-
-  const now = Date.now();
-  if (now - lastPlayedAt < 90) return;
-  lastPlayedAt = now;
-
-  if (!swooshAudio) {
-    swooshAudio = new Audio(windSwoosh.url);
-    swooshAudio.preload = "auto";
-    swooshAudio.volume = 0.6;
-  }
-
-  swooshAudio.currentTime = 0;
-  swooshAudio.play().catch(() => {
-    // Ignore autoplay/policy errors.
-  });
+  play("swipe");
 }
 
 /** Plays the arcade UI click used on primary buttons. */
 export function playClick() {
-  if (typeof window === "undefined") return;
-
-  const now = Date.now();
-  if (now - lastClickAt < 90) return;
-  lastClickAt = now;
-
-  if (!clickAudio) {
-    clickAudio = new Audio(arcadeClick.url);
-    clickAudio.preload = "auto";
-    clickAudio.volume = 0.7;
-  }
-
-  clickAudio.currentTime = 0;
-  clickAudio.play().catch(() => {
-    // Ignore autoplay/policy errors.
-  });
+  play("click");
 }
 
 /** Plays the settings beep used when changing currency or language. */
 export function playSettingsBeep() {
-  if (typeof window === "undefined") return;
+  play("beep");
+}
 
-  const now = Date.now();
-  if (now - lastBeepAt < 90) return;
-  lastBeepAt = now;
+/** Plays the pop-up open SFX. */
+export function playPopupOpen() {
+  play("popupOpen");
+}
 
-  if (!beepAudio) {
-    beepAudio = new Audio(beepPloc.url);
-    beepAudio.preload = "auto";
-    beepAudio.volume = 0.7;
-  }
-
-  beepAudio.currentTime = 0;
-  beepAudio.play().catch(() => {
-    // Ignore autoplay/policy errors.
-  });
+/** Plays the pop-up close SFX. */
+export function playPopupClose() {
+  play("popupClose");
 }

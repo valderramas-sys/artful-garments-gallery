@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
@@ -6,7 +6,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { productImage, type ShopifyProduct, type ShopifyVariant } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
-import { playClick } from "@/lib/sound";
+import { playClick, playPopupClose, playPopupOpen } from "@/lib/sound";
+
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
@@ -64,11 +65,19 @@ export function QuickView({
     }
   }, [product, variants]);
 
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) playPopupOpen();
+    else if (!isOpen && wasOpen.current) playPopupClose();
+    wasOpen.current = isOpen;
+  }, [isOpen]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
 
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];

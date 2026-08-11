@@ -63,17 +63,35 @@ export function GlassSphere({
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-500"
         style={{
-          background: `radial-gradient(120% 110% at 30% 18%, color-mix(in oklab, white 78%, transparent), color-mix(in oklab, ${tint} 42%, transparent) 62%, color-mix(in oklab, ${tint} 62%, transparent))`,
+          background: `radial-gradient(118% 108% at 30% 16%, color-mix(in oklab, white 82%, transparent), color-mix(in oklab, ${tint} 38%, transparent) 58%, color-mix(in oklab, ${tint} 62%, transparent))`,
           opacity: isFront ? 0.95 : 0.62,
         }}
       />
+      {/* Crisp rim light around the edge. */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-[16%] top-[9%] h-[32%] rounded-full bg-white/60 blur-[7px] transition-opacity duration-300"
-        style={{ opacity: active ? 0.9 : 0.55 }}
+        className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-500"
+        style={{
+          background: `conic-gradient(from 210deg, color-mix(in oklab, white 90%, transparent), transparent 22%, transparent 62%, color-mix(in oklab, white 70%, transparent) 82%, transparent)`,
+          mask: "radial-gradient(closest-side, transparent 82%, black 92%, black 100%)",
+          WebkitMask: "radial-gradient(closest-side, transparent 82%, black 92%, black 100%)",
+          opacity: isFront ? 0.85 : 0.4,
+        }}
+      />
+      {/* Top specular highlight. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-[18%] top-[8%] h-[30%] rounded-full bg-white/70 blur-[6px] transition-opacity duration-300"
+        style={{ opacity: active ? 0.95 : 0.6 }}
+      />
+      {/* Lower bounce light. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-[28%] bottom-[8%] h-[16%] rounded-full bg-white/40 blur-[8px] transition-opacity duration-300"
+        style={{ opacity: isFront ? 0.6 : 0.3 }}
       />
       <Icon
-        className="relative z-10 transition-transform duration-500 ease-out"
+        className="relative z-10 drop-shadow-[0_1px_1px_rgba(255,255,255,0.55)] transition-transform duration-500 ease-out"
         style={{
           width: size * 0.3,
           height: size * 0.3,
@@ -82,7 +100,7 @@ export function GlassSphere({
       />
       <span
         className="relative z-10 mt-1 text-[10px] leading-none tracking-[0.18em] uppercase transition-opacity duration-300"
-        style={{ opacity: isFront ? 0.85 : 0.45 }}
+        style={{ opacity: isFront ? 0.9 : 0.45 }}
       >
         {label}
       </span>
@@ -90,7 +108,8 @@ export function GlassSphere({
   );
 
   const className =
-    "glass-btn relative flex h-full w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-full text-center select-none";
+    "glass-sphere relative flex h-full w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-full text-center select-none";
+
 
   return (
     <div
