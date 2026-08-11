@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import heroGif from "@/assets/hero.gif.asset.json";
+import { AnimatedGif } from "@/components/AnimatedGif";
 import { playClick } from "@/lib/sound";
 
 export const Route = createFileRoute("/")({
@@ -45,10 +46,8 @@ function Landing() {
       className="relative h-[100svh] w-full overflow-hidden bg-background opacity-0 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[entered=true]:opacity-100 data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
     >
       <h1 className="sr-only">RHYTMO</h1>
-      <img
+      <AnimatedGif
         src={heroGif.url}
-        alt=""
-        aria-hidden
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
