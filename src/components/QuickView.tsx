@@ -82,11 +82,15 @@ export function QuickView({
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || !isOpen) return;
       playModalClose();
+      if (zoom) {
+        setZoom(false);
+        return;
+      }
       onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, isOpen]);
+  }, [onClose, isOpen, zoom]);
 
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];
