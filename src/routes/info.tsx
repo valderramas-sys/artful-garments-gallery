@@ -34,7 +34,7 @@ function MailLink() {
   return (
     <a
       href={`mailto:${INFO_EMAIL}`}
-      className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+      className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
     >
       {INFO_EMAIL}
     </a>
@@ -45,7 +45,7 @@ function MailLink() {
 function Paragraph({ text }: { text: string }) {
   const parts = text.split("{email}");
   return (
-    <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+    <p className="text-[0.8125rem] leading-relaxed text-ink">
       {parts.map((part, i) => (
         <span key={i}>
           {part}
@@ -78,7 +78,7 @@ function InfoPage() {
           <h1 className="font-display text-4xl leading-[0.9] tracking-tight uppercase sm:text-6xl lg:text-7xl">
             {c.title}
           </h1>
-          <p className="mt-4 text-sm text-muted-foreground">{c.intro}</p>
+          <p className="mt-4 text-sm text-ink">{c.intro}</p>
         </header>
 
         <div className="grid gap-5 sm:gap-7">
@@ -96,9 +96,9 @@ function InfoPage() {
               {c.privacy.uses.map((item) => (
                 <li
                   key={item}
-                  className="grid grid-cols-[10px_minmax(0,1fr)] gap-3 text-[0.8125rem] leading-relaxed"
+                  className="grid grid-cols-[10px_minmax(0,1fr)] gap-3 text-[0.8125rem] leading-relaxed text-ink"
                 >
-                  <span aria-hidden className="text-brand-green">
+                  <span aria-hidden className="text-ink">
                     •
                   </span>
                   <span>{item}</span>
@@ -125,32 +125,32 @@ function InfoPage() {
           <Section title={c.contact.title}>
             <dl className="grid gap-5 sm:grid-cols-3">
               <div>
-                <dt className="label-xs text-muted-foreground">{c.contact.email}</dt>
+                <dt className="label-xs text-ink">{c.contact.email}</dt>
                 <dd className="mt-2 text-[0.8125rem] break-words">
                   <MailLink />
                 </dd>
               </div>
               <div>
-                <dt className="label-xs text-muted-foreground">{c.contact.instagram}</dt>
+                <dt className="label-xs text-ink">{c.contact.instagram}</dt>
                 <dd className="mt-2 text-[0.8125rem]">
                   <a
                     href={INFO_INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
                   >
                     {INFO_INSTAGRAM}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="label-xs text-muted-foreground">{c.contact.website}</dt>
+                <dt className="label-xs text-ink">{c.contact.website}</dt>
                 <dd className="mt-2 text-[0.8125rem] break-words">
                   <a
                     href={INFO_SITE_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-brand-blue underline decoration-brand-blue/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
                   >
                     {INFO_SITE}
                   </a>
