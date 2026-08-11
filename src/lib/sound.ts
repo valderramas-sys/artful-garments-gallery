@@ -6,15 +6,6 @@ let hoverAudio: HTMLAudioElement | null = null;
 let context: AudioContext | null = null;
 let lastHoverAt = 0;
 
-function ensureAudio(asset: typeof popOpen, ref: { current: HTMLAudioElement | null }) {
-  if (typeof window === "undefined") return null;
-  if (!ref.current) {
-    ref.current = new Audio(asset.url);
-    ref.current.preload = "auto";
-  }
-  return ref.current;
-}
-
 function resumeContext() {
   if (typeof window === "undefined") return;
   if (!context && window.AudioContext) {
@@ -26,18 +17,23 @@ function resumeContext() {
 }
 
 export function playClick() {
-  const el = ensureAudio(popOpen, { current: clickAudio });
-  if (!el) return;
+  if (typeof window === "undefined") return;
+  if (!clickAudio) {
+    clickAudio = new Audio(popOpen.url);
+    clickAudio.preload = "auto";
+  }
 
   resumeContext();
 
-  el.currentTime = 0;
-  el.play().catch(() => {
+  clickAudio.currentTime = 0;
+  clickAudio.play().catch(() => {
     // Ignore autoplay/policy errors.
   });
 }
 
 export function playHover() {
+  if (typeof window === "undefined") return;
+
   const now = Date.now();
   if (now - lastHoverAt < 90) return;
   lastHoverAt = now;
@@ -47,7 +43,6 @@ export function playHover() {
     hoverAudio.preload = "auto";
     hoverAudio.volume = 0.6;
   }
-  if (typeof window === "undefined") return;
 
   resumeContext();
 
@@ -56,4 +51,5 @@ export function playHover() {
     // Ignore autoplay/policy errors.
   });
 }
+
 
