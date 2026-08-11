@@ -111,7 +111,7 @@ function ensure(slot: Slot) {
 /* -------------------------------------------------------------------------- */
 
 const TAP_VOLUME = 0.7;
-const TAP_POOL_SIZE = 4;
+const TAP_POOL_SIZE = 2;
 
 let tapPool: HTMLAudioElement[] = [];
 /** Elements currently doing a silent unlock pass — never reuse them mid-prime. */
