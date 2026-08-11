@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { useSession } from "@tanstack/react-start/server";
-import { redirect } from "@tanstack/react-router";
 import { createHash, timingSafeEqual } from "node:crypto";
 
 type AdminSession = { admin?: boolean };
@@ -25,13 +24,10 @@ function matches(input: string, expected: string): boolean {
   return timingSafeEqual(a, b);
 }
 
-/** Gate used by every admin-only payload. Throws a redirect when locked. */
+/** Gate used by every admin-only payload. Returns the session state. */
 export const requireAdmin = createServerFn({ method: "GET" }).handler(async () => {
   const session = await useSession<AdminSession>(sessionConfig());
-  if (!session.data.admin) {
-    throw redirect({ to: "/lab-access" });
-  }
-  return { admin: true as const };
+  return { admin: session.data.admin === true };
 });
 
 export const unlockAdmin = createServerFn({ method: "POST" })

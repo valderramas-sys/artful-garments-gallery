@@ -1,11 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { CategoryWheel } from "@/components/wheel/CategoryWheel";
 import { requireAdmin, lockAdmin } from "@/lib/admin-gate.functions";
 
 export const Route = createFileRoute("/lab")({
   // Server-side gate: redirects to /lab-access unless the admin session cookie is valid.
-  loader: () => requireAdmin(),
+  beforeLoad: async () => {
+    const { admin } = await requireAdmin();
+    if (!admin) throw redirect({ to: "/lab-access" });
+  },
   head: () => ({
     meta: [
       { title: "Lab — RHYTMO" },
