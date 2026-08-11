@@ -133,7 +133,7 @@ function RootComponent() {
                 style={{ backgroundImage: `url(${backdrop.url})` }}
               />
             )}
-            {!isLanding && <Header />}
+            {!isLanding && !isLab && <Header />}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
             {!isLanding && !isLab && <Footer />}

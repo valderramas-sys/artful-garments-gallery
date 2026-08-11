@@ -39,9 +39,10 @@ function Shop() {
     <main className="animate-fade-in relative min-h-svh w-full px-6 pt-28 pb-32 sm:px-10 lg:px-16">
       <h1 className="sr-only">RHYTMO products</h1>
       <div className="mx-auto w-full max-w-[1500px]">
-      <p className="mb-8 text-[10px] leading-none tracking-[0.16em] text-muted-foreground/70 uppercase sm:text-[11px]">
-        Based in São Paulo, Brazil.
+      <p className="mb-12 text-center text-[11px] leading-none tracking-[0.16em] text-white uppercase sm:text-xs">
+        Rhytmo X Paradela Beanies Collab.
       </p>
+
 
 
       {isLoading && (
@@ -56,7 +57,7 @@ function Shop() {
       )}
 
       {!isLoading && (isError || products.length === 0) && (
-        <p className="py-24 text-center text-sm text-muted-foreground">
+        <p className="py-24 text-center text-sm text-white">
           {isError ? "Products could not be loaded right now." : t("cart.empty")}
         </p>
       )}

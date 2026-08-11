@@ -44,8 +44,10 @@ export function ProductCard({
       </button>
 
       <div className="mt-5 flex flex-col gap-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-3">
-        <h2 className="text-sm leading-snug font-bold tracking-tight">{localize(node.title)}</h2>
-        <p className="font-num shrink-0 text-sm text-muted-foreground">
+        <h2 className="text-sm leading-snug font-bold tracking-tight text-white">
+          {localize(node.title)}
+        </h2>
+        <p className="font-num shrink-0 text-sm text-white">
           {formatFrom(Number(price.amount), price.currencyCode)}
         </p>
       </div>
