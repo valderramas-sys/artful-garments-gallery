@@ -3,6 +3,7 @@ import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useCartStore } from "@/stores/cartStore";
 import { firstAvailableVariant, productImage, type ShopifyProduct } from "@/lib/shopify";
+import { playClick } from "@/lib/sound";
 
 export function ProductCard({
   product,
