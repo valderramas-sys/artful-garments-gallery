@@ -48,3 +48,23 @@ export function playClick() {
     // Ignore autoplay/policy errors.
   });
 }
+
+/** Plays the settings beep used when changing currency or language. */
+export function playSettingsBeep() {
+  if (typeof window === "undefined") return;
+
+  const now = Date.now();
+  if (now - lastBeepAt < 90) return;
+  lastBeepAt = now;
+
+  if (!beepAudio) {
+    beepAudio = new Audio(beepPloc.url);
+    beepAudio.preload = "auto";
+    beepAudio.volume = 0.7;
+  }
+
+  beepAudio.currentTime = 0;
+  beepAudio.play().catch(() => {
+    // Ignore autoplay/policy errors.
+  });
+}
