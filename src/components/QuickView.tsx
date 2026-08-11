@@ -213,19 +213,37 @@ export function QuickView({
             <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto overscroll-contain px-5 pt-5 pb-5 sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] sm:gap-9 sm:overflow-hidden sm:px-8 sm:py-8 lg:gap-12 lg:px-10">
               {/* Image */}
               <div className="card-float min-w-0">
-                {image ? (
-                  <img
-                    src={sizedImage(image, 1000) ?? image}
-                    width={800}
-                    height={1000}
-                    alt={product.node.title}
-                    loading="lazy"
-                    className="max-h-[36svh] w-full rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"
-                  />
+                {gallery.length > 0 ? (
+                  <div
+                    onPointerDown={onSwipeDown}
+                    onPointerMove={onSwipeMove}
+                    onPointerUp={endSwipe}
+                    onPointerCancel={endSwipe}
+                    className="relative max-h-[36svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-surface select-none sm:max-h-[74svh] sm:aspect-4/5"
+                  >
+                    <div
+                      className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)]"
+                      style={{ transform: `translate3d(-${slide * 100}%, 0, 0)` }}
+                    >
+                      {gallery.map((src, i) => (
+                        <img
+                          key={src}
+                          src={sizedImage(src, 1000) ?? src}
+                          width={800}
+                          height={1000}
+                          alt={product.node.title}
+                          draggable={false}
+                          loading={i === 0 ? "eager" : "lazy"}
+                          className="max-h-[36svh] w-full shrink-0 rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ) : (
                   <div className="card-float-media max-h-[36svh] w-full rounded-2xl bg-surface-2 sm:aspect-4/5" />
                 )}
               </div>
+
 
               {/* Details */}
               <div className="flex min-w-0 flex-col sm:max-h-[74svh] sm:overflow-y-auto sm:overscroll-contain sm:pr-1">
