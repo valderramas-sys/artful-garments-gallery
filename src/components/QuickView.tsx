@@ -63,6 +63,7 @@ export function QuickView({
   );
   const [variantId, setVariantId] = useState<string | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
+  const [zoom, setZoom] = useState(false);
 
   useEffect(() => {
     if (product) {
