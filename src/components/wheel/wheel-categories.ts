@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { HomeIcon, BagIcon, InfoIcon, CheckoutIcon, InstagramIcon, PinterestIcon } from "./WheelIcons";
+import { HomeIcon, BagIcon, InfoIcon, InstagramIcon, PinterestIcon } from "./WheelIcons";
 
 export type WheelCategory = {
   id: string;
