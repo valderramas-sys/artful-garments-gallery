@@ -1,4 +1,4 @@
-import { playTap } from "@/lib/sound";
+import { playTap, playModalClose } from "@/lib/sound";
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
@@ -11,7 +11,7 @@ export function CartDrawer() {
   const { t, localize } = useI18n();
   const { isOpen, close } = useCart();
   const closeWithSound = () => {
-    playTap();
+    playModalClose();
     close();
   };
   const { formatFrom } = useCurrency();
@@ -25,7 +25,7 @@ export function CartDrawer() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || !isOpen) return;
-      playTap();
+      playModalClose();
       close();
     };
     window.addEventListener("keydown", onKey);

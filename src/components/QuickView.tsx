@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
@@ -11,8 +11,28 @@ import {
 } from "@/lib/shopify";
 import { ShippingCalculator } from "@/components/ShippingCalculator";
 import { buildCheckoutUrl } from "@/lib/commerce";
-import { playTap } from "@/lib/sound";
+import { playTap, playSwipe, playModalClose } from "@/lib/sound";
 
+
+import p01 from "@/assets/paradela-01-b.png.asset.json";
+import p02 from "@/assets/paradela-02-b.png.asset.json";
+import p03 from "@/assets/paradela-03-b.png.asset.json";
+import p04 from "@/assets/paradela-04-b.png.asset.json";
+
+/** Editorial second photo per beanie (never shared between products). */
+const SECOND_PHOTOS: Record<string, string> = {
+  "0.1": p01.url,
+  "0.2": p02.url,
+  "0.3": p03.url,
+  "0.4": p04.url,
+};
+
+function secondPhoto(title: string, handle: string) {
+  const key = Object.keys(SECOND_PHOTOS).find(
+    (k) => title.includes(k) || handle.includes(k.replace(".", "-")) || handle.endsWith(k.slice(2)),
+  );
+  return key ? SECOND_PHOTOS[key] : null;
+}
 
 const PARADELA_URL = "https://www.instagram.com/paradela___/";
 
@@ -72,25 +92,65 @@ export function QuickView({
 
   // Close paths that should play the SFX (everything except "Add to Cart").
   const closeWithSound = () => {
-    playTap();
+    playModalClose();
     onClose();
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || !isOpen) return;
-      playTap();
+      playModalClose();
       onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose, isOpen]);
 
-
   const variant: ShopifyVariant | undefined =
     variants.find((v) => v.id === variantId) ?? variants[0];
   const maxQty = 10;
   const image = product ? productImage(product) : null;
+
+  // Primary Shopify photo first, brand editorial photo second.
+  const gallery = useMemo(() => {
+    const list: string[] = [];
+    if (image) list.push(image);
+    const second = product ? secondPhoto(product.node.title, product.node.handle) : null;
+    if (second) list.push(second);
+    return list;
+  }, [image, product]);
+
+  const [slide, setSlide] = useState(0);
+  useEffect(() => {
+    setSlide(0);
+  }, [product]);
+
+  const goSlide = (dir: number) => {
+    if (gallery.length < 2) return;
+    setSlide((s) => {
+      const next = Math.min(gallery.length - 1, Math.max(0, s + dir));
+      if (next !== s) playSwipe();
+      return next;
+    });
+  };
+
+  const swipe = useRef({ x: 0, active: false, fired: false });
+  const onSwipeDown = (e: React.PointerEvent) => {
+    swipe.current = { x: e.clientX, active: true, fired: false };
+  };
+  const onSwipeMove = (e: React.PointerEvent) => {
+    const s = swipe.current;
+    if (!s.active || s.fired) return;
+    const dx = e.clientX - s.x;
+    if (Math.abs(dx) > 40) {
+      s.fired = true;
+      goSlide(dx < 0 ? 1 : -1);
+    }
+  };
+  const endSwipe = () => {
+    swipe.current.active = false;
+  };
+
 
   const addToCart = async () => {
     if (!product || !variant) return;
@@ -153,19 +213,37 @@ export function QuickView({
             <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto overscroll-contain px-5 pt-5 pb-5 sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] sm:gap-9 sm:overflow-hidden sm:px-8 sm:py-8 lg:gap-12 lg:px-10">
               {/* Image */}
               <div className="card-float min-w-0">
-                {image ? (
-                  <img
-                    src={sizedImage(image, 1000) ?? image}
-                    width={800}
-                    height={1000}
-                    alt={product.node.title}
-                    loading="lazy"
-                    className="max-h-[36svh] w-full rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"
-                  />
+                {gallery.length > 0 ? (
+                  <div
+                    onPointerDown={onSwipeDown}
+                    onPointerMove={onSwipeMove}
+                    onPointerUp={endSwipe}
+                    onPointerCancel={endSwipe}
+                    className="relative max-h-[36svh] w-full touch-pan-y overflow-hidden rounded-2xl bg-surface select-none sm:max-h-[74svh] sm:aspect-4/5"
+                  >
+                    <div
+                      className="flex h-full w-full transition-transform duration-[420ms] ease-[var(--ease-out-soft)]"
+                      style={{ transform: `translate3d(-${slide * 100}%, 0, 0)` }}
+                    >
+                      {gallery.map((src, i) => (
+                        <img
+                          key={src}
+                          src={sizedImage(src, 1000) ?? src}
+                          width={800}
+                          height={1000}
+                          alt={product.node.title}
+                          draggable={false}
+                          loading={i === 0 ? "eager" : "lazy"}
+                          className="max-h-[36svh] w-full shrink-0 rounded-2xl bg-surface object-cover sm:max-h-[74svh] sm:aspect-4/5"
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ) : (
                   <div className="card-float-media max-h-[36svh] w-full rounded-2xl bg-surface-2 sm:aspect-4/5" />
                 )}
               </div>
+
 
               {/* Details */}
               <div className="flex min-w-0 flex-col sm:max-h-[74svh] sm:overflow-y-auto sm:overscroll-contain sm:pr-1">

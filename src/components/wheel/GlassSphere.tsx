@@ -99,8 +99,12 @@ export function GlassSphere({
         }}
       />
       <span
-        className="relative z-10 mt-1 text-[10px] leading-none tracking-[0.18em] uppercase transition-opacity duration-300"
-        style={{ opacity: isFront ? 0.9 : 0.45 }}
+        className="relative z-10 mt-1 max-w-[86%] leading-none tracking-[0.18em] whitespace-nowrap uppercase transition-opacity duration-300"
+        style={{
+          opacity: isFront ? 0.9 : 0.45,
+          // Scale down just enough that longer labels stay inside the bubble.
+          fontSize: `${Math.max(6.5, Math.min(10, (size * 0.72) / (label.length * 0.8)))}px`,
+        }}
       >
         {label}
       </span>

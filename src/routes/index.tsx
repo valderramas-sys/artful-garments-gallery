@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Backdrop, backdropPoster } from "@/components/Backdrop";
+import heroGif from "@/assets/hero.gif.asset.json";
 import { playClick } from "@/lib/sound";
 
 export const Route = createFileRoute("/")({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "preload", as: "image", href: backdropPoster, fetchPriority: "high" }],
+    links: [{ rel: "preload", as: "image", href: heroGif.url, fetchPriority: "high" }],
   }),
   component: Landing,
 });
@@ -45,7 +45,13 @@ function Landing() {
       className="relative h-[100svh] w-full overflow-hidden bg-background opacity-0 transition-all duration-[380ms] ease-[var(--ease-out-soft)] data-[entered=true]:opacity-100 data-[leaving=true]:scale-[1.03] data-[leaving=true]:opacity-0"
     >
       <h1 className="sr-only">RHYTMO</h1>
-      <Backdrop className="absolute inset-0" />
+      <img
+        src={heroGif.url}
+        alt=""
+        aria-hidden
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
       <div className="absolute inset-0 grid place-items-center">
         <button
           type="button"
