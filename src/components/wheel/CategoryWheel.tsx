@@ -19,8 +19,9 @@ export function CategoryWheel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [{ radius, sphere }, setGeo] = useState(() => geometry(1280));
   const [index, setIndex] = useState(0);
-  const [hovered, setHovered] = useState<string | null>(null);
+  const [hovered, setHoveredState] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+
 
   const count = WHEEL_CATEGORIES.length;
   const slice = 360 / count;
