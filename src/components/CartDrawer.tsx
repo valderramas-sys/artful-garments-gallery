@@ -55,7 +55,7 @@ export function CartDrawer() {
             <button
               type="button"
               onClick={closeWithSound}
-              className="glass-btn label-xs rounded-full px-3 py-1.5"
+              className="btn-secondary label-xs rounded-full px-3 py-1.5"
             >
               {t("cart.close")}
             </button>
@@ -83,7 +83,9 @@ export function CartDrawer() {
                   )}
                   <div className="min-w-0">
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3">
-                      <h3 className="text-sm leading-snug font-bold tracking-tight text-ink">{localize(line.title)}</h3>
+                      <h3 className="text-sm leading-snug font-bold tracking-tight text-ink">
+                        {localize(line.title)}
+                      </h3>
                       <p className="font-num text-sm text-ink">
                         {formatFrom(line.price * line.quantity, line.currencyCode)}
                       </p>
@@ -104,7 +106,9 @@ export function CartDrawer() {
                         >
                           −
                         </button>
-                        <span className="font-num w-4 text-center text-xs text-ink">{line.quantity}</span>
+                        <span className="font-num w-4 text-center text-xs text-ink">
+                          {line.quantity}
+                        </span>
                         <button
                           type="button"
                           aria-label={`Increase ${line.title}`}
@@ -123,7 +127,7 @@ export function CartDrawer() {
                           playTap();
                           removeItem(line.lineId);
                         }}
-                        className="glass-btn label-xs rounded-full px-3 py-1.5"
+                        className="btn-secondary label-xs rounded-full px-3 py-1.5"
                       >
                         {t("cart.remove")}
                       </button>
@@ -145,9 +149,7 @@ export function CartDrawer() {
             onClick={close}
             aria-disabled={lines.length === 0}
             className={`label-xs mt-5 flex w-full items-center justify-center rounded-full py-4 transition-all duration-250 ease-[var(--ease-out-soft)] ${
-              lines.length === 0
-                ? "pointer-events-none bg-surface-2 text-ink"
-                : "glass-btn-go"
+              lines.length === 0 ? "pointer-events-none bg-surface-2 text-ink" : "btn-primary"
             }`}
           >
             {t("nav.checkout")}

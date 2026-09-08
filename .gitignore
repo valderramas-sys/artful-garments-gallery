@@ -20,6 +20,9 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Claude Code local session state (permissions etc.) — not shared config
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -30,3 +33,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Loose reference/design material at the repo root — not imported by src/ or
+# public/ (those have their own copies of anything actually used). Kept on
+# disk, just not tracked, to avoid a ~120MB first commit. Untrack this block
+# if any of these should actually ship with the repo.
+/*.zip
+/Paradela*.png
+/hf_*.png
+/WhatsApp Image*.jpeg
+/original-*.mp4
+/pixellab-*.gif
+/robot.png
+/robot-*.png
+/rhytmo_final/

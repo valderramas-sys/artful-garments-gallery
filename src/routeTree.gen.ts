@@ -14,6 +14,7 @@ import { Route as LabRouteImport } from './routes/lab'
 import { Route as InfoRouteImport } from './routes/info'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShopHandleRouteImport } from './routes/shop_.$handle'
 
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
@@ -40,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopHandleRoute = ShopHandleRouteImport.update({
+  id: '/shop_/$handle',
+  path: '/shop/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop/$handle': typeof ShopHandleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop/$handle': typeof ShopHandleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,21 @@ export interface FileRoutesById {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop_/$handle': typeof ShopHandleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/shop'
+  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/shop' | '/shop/$handle'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/info' | '/lab' | '/shop'
-  id: '__root__' | '/' | '/checkout' | '/info' | '/lab' | '/shop'
+  to: '/' | '/checkout' | '/info' | '/lab' | '/shop' | '/shop/$handle'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/info'
+    | '/lab'
+    | '/shop'
+    | '/shop_/$handle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +93,7 @@ export interface RootRouteChildren {
   InfoRoute: typeof InfoRoute
   LabRoute: typeof LabRoute
   ShopRoute: typeof ShopRoute
+  ShopHandleRoute: typeof ShopHandleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop_/$handle': {
+      id: '/shop_/$handle'
+      path: '/shop/$handle'
+      fullPath: '/shop/$handle'
+      preLoaderRoute: typeof ShopHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   InfoRoute: InfoRoute,
   LabRoute: LabRoute,
   ShopRoute: ShopRoute,
+  ShopHandleRoute: ShopHandleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

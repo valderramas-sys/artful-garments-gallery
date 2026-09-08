@@ -1,10 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
- * Renders an animated GIF that always restarts playing after a page refresh,
- * bfcache restore, or when the tab becomes visible again on mobile Safari.
- * The source file is untouched — only the <img> element is re-primed.
+ * GIF que sempre volta a tocar do primeiro quadro — depois de um refresh, de
+ * uma restauração de bfcache, ou quando a aba volta a ficar visível no Safari
+ * do iPhone. O arquivo não é tocado; só o elemento <img> é reprimido.
+ *
+ * A reinicialização precisa de uma URL DIFERENTE a cada vez, senão o decodificador
+ * reaproveita o GIF já decodificado e o mantém congelado. Antes isso era um
+ * `?p=N` na própria URL, o que funcionava — e cobrava um download inteiro por
+ * reinício, porque para o navegador é outro recurso. Medido: o gif do robô
+ * ocioso baixava três vezes numa única visita à página do produto.
+ *
+ * Aqui a foto é baixada UMA vez e vira um Blob; cada reinício é um
+ * createObjectURL novo sobre o mesmo Blob. URL distinta, decodificador
+ * reiniciado, zero bytes na rede.
  */
+
+/** Um download por arquivo, compartilhado por todas as instâncias e estados do robô. */
+const blobs = new Map<string, Promise<Blob | null>>();
+
+function loadGif(src: string) {
+  const hit = blobs.get(src);
+  if (hit) return hit;
+  const request = fetch(src)
+    .then((response) => (response.ok ? response.blob() : null))
+    .catch(() => null);
+  blobs.set(src, request);
+  return request;
+}
+
 export function AnimatedGif({
   src,
   className = "",
@@ -14,38 +38,51 @@ export function AnimatedGif({
   className?: string;
   fetchPriority?: "high" | "low" | "auto";
 }) {
-  const ref = useRef<HTMLImageElement>(null);
-  const [nonce, setNonce] = useState(0);
+  // Começa na URL do arquivo: é o que o servidor renderiza, então a hidratação
+  // casa. A troca para a blob: URL acontece depois, já no cliente.
+  const [url, setUrl] = useState(src);
 
   useEffect(() => {
-    const restart = () => setNonce((n) => n + 1);
+    let live = true;
+    let current: string | null = null;
+    // Ao trocar de estado (o robô muda de gif), volta para a URL do arquivo
+    // enquanto o Blob do novo não chega: a limpeza abaixo já revogou a blob:
+    // URL do estado anterior, e ficar apontando para ela seria imagem quebrada.
+    setUrl(src);
 
-    // Initial prime after hydration so a cached, already-decoded GIF
-    // (which Safari can paint frozen on its first frame) starts over.
-    restart();
+    const restart = async () => {
+      const blob = await loadGif(src);
+      if (!live || !blob) return;
+      const next = URL.createObjectURL(blob);
+      if (current) URL.revokeObjectURL(current);
+      current = next;
+      setUrl(next);
+    };
+
+    // Primeira preparação depois da hidratação, para o caso de o GIF já estar
+    // em cache e decodificado — que é quando o Safari o pinta parado.
+    void restart();
 
     const onVisible = () => {
-      if (document.visibilityState === "visible") restart();
+      if (document.visibilityState === "visible") void restart();
     };
     const onPageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) restart();
+      if (e.persisted) void restart();
     };
 
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onPageShow);
     return () => {
+      live = false;
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("pageshow", onPageShow);
+      if (current) URL.revokeObjectURL(current);
     };
-  }, []);
-
-  // Same bytes, distinct URL per prime → the decoder restarts from frame 0.
-  const url = nonce === 0 ? src : `${src}${src.includes("?") ? "&" : "?"}p=${nonce}`;
+  }, [src]);
 
   return (
     <img
-      ref={ref}
-      key={nonce}
+      key={url}
       src={url}
       alt=""
       aria-hidden

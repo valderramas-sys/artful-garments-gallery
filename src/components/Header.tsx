@@ -33,18 +33,18 @@ export function Header() {
           leaving ? "opacity-100" : "opacity-0"
         }`}
       />
-      <header className="glass-bar fixed inset-x-0 top-0 z-50">
+      <header className="site-header-bar fixed inset-x-0 top-0 z-50">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-3 py-3.5 sm:gap-6 sm:px-5 sm:py-5 lg:px-8">
           <Link
             to="/"
             onClick={goHome}
             aria-label="RHYTMO — home"
-            className="flex min-w-0 shrink items-center text-ink transition-colors duration-250 hover:text-pink"
+            className="group flex min-w-0 shrink items-center"
           >
-            <Logo className="h-7 w-[150px] shrink-0 sm:h-11 sm:w-[268px]" />
+            <Logo className="h-[46px] sm:h-[60px]" />
           </Link>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <CurrencySelector />
+            <CurrencySelector className="header-chip" />
             <button
               type="button"
               onClick={() => {
@@ -52,10 +52,8 @@ export function Header() {
                 open();
               }}
               aria-label={`${t("cart.open")}, ${count}`}
-              className="glass-btn relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
+              className="header-chip btn-secondary relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink"
             >
-
-
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -68,7 +66,7 @@ export function Header() {
                 <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
               </svg>
               {count > 0 && (
-                <span className="font-num absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-brand-magenta px-1 text-[10px] text-primary-foreground">
+                <span className="font-num absolute -top-0.5 -right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-pink px-1 text-[10px] text-primary-foreground">
                   {count}
                 </span>
               )}

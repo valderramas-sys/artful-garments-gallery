@@ -38,22 +38,15 @@ export function InfoIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function CheckoutIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base} {...props}>
-      <rect x="3.2" y="6.2" width="17.6" height="11.6" rx="2.2" />
-      <path d="M3.2 10.3h17.6" />
-      <path d="M6.8 14.4h3.4" />
-    </svg>
-  );
-}
-
 export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
-      <rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4.6" />
-      <circle cx="12" cy="12" r="3.9" />
-      <path d="M16.9 7.1h.01" />
+      <rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4.8" />
+      <circle cx="12" cy="12" r="4.1" />
+      {/* O flash era `M16.9 7.1h.01` — um segmento de comprimento zero que só
+          aparece por causa do stroke-linecap redondo, com o diâmetro da
+          espessura do traço. Vira um ponto quase invisível nesta escala. */}
+      <circle cx="16.75" cy="7.25" r="0.95" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -62,8 +55,9 @@ export function PinterestIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>
       <circle cx="12" cy="12" r="8.4" />
-      <path d="M11 20.1c.6-1.9 1.3-4.4 1.5-5.2" />
-      <path d="M9.4 14.3c-.6-.9-.8-2-.5-3.2.5-2 2.3-3.2 4.2-2.9 1.8.3 2.9 1.8 2.6 3.7-.3 2-1.7 3.3-3.2 3-.8-.2-1.2-.8-1.1-1.5" />
+      {/* Eram três traços soltos que não fechavam num "P". Agora é um P de
+          verdade — haste e bojo — na mesma construção dos outros ícones. */}
+      <path d="M10.1 17.9V7.5h3.1a2.9 2.9 0 0 1 0 5.8h-3.1" />
     </svg>
   );
 }

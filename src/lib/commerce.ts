@@ -8,16 +8,6 @@
  * it appear on the storefront with no code change.
  */
 
-export const ORIGIN = {
-  address1: "Avenida Affonso José Aiello, 14-100",
-  address2: "Villaggio 2",
-  district: "Vila Aviação",
-  postalCode: "17018-520",
-  city: "Bauru",
-  province: "SP",
-  countryCode: "BR",
-} as const;
-
 export type Region = "north-america" | "european-union" | "asia";
 
 export type Destination = {
@@ -47,25 +37,52 @@ export const DESTINATIONS: Destination[] = [
   { code: "BR", name: "Brazil", region: "brazil", postalExample: "00000-000", delivery: [2, 15] },
 
   // North America
-  { code: "US", name: "United States", region: "north-america", postalExample: "00000", delivery: [12, 30] },
+  {
+    code: "US",
+    name: "United States",
+    region: "north-america",
+    postalExample: "00000",
+    delivery: [12, 30],
+  },
 
   // European Union
-  ...([
-    ["AT", "Austria"], ["BE", "Belgium"], ["BG", "Bulgaria"], ["HR", "Croatia"], ["CY", "Cyprus"],
-    ["CZ", "Czechia"], ["DK", "Denmark"], ["EE", "Estonia"], ["FI", "Finland"], ["FR", "France"],
-    ["DE", "Germany"], ["GR", "Greece"], ["HU", "Hungary"], ["IE", "Ireland"], ["IT", "Italy"],
-    ["LV", "Latvia"], ["LT", "Lithuania"], ["LU", "Luxembourg"], ["MT", "Malta"],
-    ["NL", "Netherlands"], ["PL", "Poland"], ["PT", "Portugal"], ["RO", "Romania"],
-    ["SK", "Slovakia"], ["SI", "Slovenia"], ["ES", "Spain"], ["SE", "Sweden"],
-  ] as const).map(
-    ([code, name]): Destination => ({
-      code,
-      name,
-      region: "european-union",
-      postalExample: "00000",
-      delivery: [15, 40],
-    }),
-  ),
+  ...(
+    [
+      ["AT", "Austria"],
+      ["BE", "Belgium"],
+      ["BG", "Bulgaria"],
+      ["HR", "Croatia"],
+      ["CY", "Cyprus"],
+      ["CZ", "Czechia"],
+      ["DK", "Denmark"],
+      ["EE", "Estonia"],
+      ["FI", "Finland"],
+      ["FR", "France"],
+      ["DE", "Germany"],
+      ["GR", "Greece"],
+      ["HU", "Hungary"],
+      ["IE", "Ireland"],
+      ["IT", "Italy"],
+      ["LV", "Latvia"],
+      ["LT", "Lithuania"],
+      ["LU", "Luxembourg"],
+      ["MT", "Malta"],
+      ["NL", "Netherlands"],
+      ["PL", "Poland"],
+      ["PT", "Portugal"],
+      ["RO", "Romania"],
+      ["SK", "Slovakia"],
+      ["SI", "Slovenia"],
+      ["ES", "Spain"],
+      ["SE", "Sweden"],
+    ] as const
+  ).map(([code, name]): Destination => ({
+    code,
+    name,
+    region: "european-union",
+    postalExample: "00000",
+    delivery: [15, 40],
+  })),
 
   // Asia
   { code: "CN", name: "China", region: "asia", postalExample: "000000", delivery: [15, 40] },
@@ -121,10 +138,3 @@ export function buildCheckoutUrl(
 const STORE_URL = "https://ywbqs6-gd.myshopify.com";
 
 /** Shopify-hosted customer surfaces (account, order history, order tracking). */
-export const CUSTOMER_LINKS = {
-  account: `${STORE_URL}/account`,
-  orders: `${STORE_URL}/account`,
-  login: `${STORE_URL}/account/login`,
-  /** Shopify shows carrier tracking for each order inside the account area. */
-  tracking: `${STORE_URL}/account`,
-};

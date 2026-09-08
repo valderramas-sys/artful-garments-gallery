@@ -26,22 +26,22 @@ export function Footer() {
             <h3 className="label-xs text-ink">{t("footer.nav")}</h3>
             <ul className="mt-2.5 space-y-1.5 text-xs">
               <li>
-                <Link to="/" className="transition-colors duration-250 hover:text-brand-magenta">
+                <Link to="/" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.home")}
                 </Link>
               </li>
               <li>
-                <Link to="/shop" className="transition-colors duration-250 hover:text-brand-magenta">
+                <Link to="/shop" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.shop")}
                 </Link>
               </li>
               <li>
-                <Link to="/info" className="transition-colors duration-250 hover:text-brand-magenta">
+                <Link to="/info" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.info")}
                 </Link>
               </li>
               <li>
-                <Link to="/checkout" className="transition-colors duration-250 hover:text-brand-magenta">
+                <Link to="/checkout" className="transition-colors duration-250 hover:text-pink">
                   {t("nav.checkout")}
                 </Link>
               </li>
@@ -53,15 +53,11 @@ export function Footer() {
             <dl className="mt-2.5 space-y-2.5">
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.brazil")}</dt>
-                <dd className="mt-1 text-[9px] leading-[1.6] text-ink">
-                  {t("footer.brazil.copy")}
-                </dd>
+                <dd className="mt-1 text-xs leading-[1.6] text-ink">{t("footer.brazil.copy")}</dd>
               </div>
               <div>
                 <dt className="text-xs font-semibold tracking-tight">{t("footer.world")}</dt>
-                <dd className="mt-1 text-[9px] leading-[1.6] text-ink">
-                  {t("footer.world.copy")}
-                </dd>
+                <dd className="mt-1 text-xs leading-[1.6] text-ink">{t("footer.world.copy")}</dd>
               </div>
             </dl>
           </section>
@@ -75,7 +71,7 @@ export function Footer() {
                     <span
                       title={name}
                       aria-label={name}
-                      className="glass-soft font-num grid h-6 min-w-[2.5rem] place-items-center rounded-lg px-2 text-[10px] tracking-[0.06em] text-ink"
+                      className="glass-soft font-num grid h-6 min-w-[2.5rem] place-items-center rounded-lg px-2 text-[11px] tracking-[0.06em] text-ink"
                     >
                       {label}
                     </span>
@@ -88,9 +84,7 @@ export function Footer() {
               </p>
             )}
 
-            <p className="mt-3 text-[11px] leading-relaxed text-ink">
-              São Paulo, Brasil
-            </p>
+            <p className="mt-3 text-[11px] leading-relaxed text-ink">São Paulo, Brasil</p>
           </section>
 
           <section>
@@ -105,7 +99,7 @@ export function Footer() {
                     href={href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="glass-btn-rose inline-flex rounded-full px-3 py-1.5 text-[11px]"
+                    className="btn-ghost inline-flex rounded-full border border-border px-3 py-1.5 text-[11px]"
                   >
                     {name}
                   </a>
@@ -116,9 +110,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 border-t border-white/50 pt-3">
-          <p className="font-num text-[10px] tracking-[0.14em] text-ink">
-            {t("footer.rights")}
-          </p>
+          <p className="font-num text-[10px] tracking-[0.14em] text-ink">{t("footer.rights")}</p>
         </div>
       </div>
     </footer>

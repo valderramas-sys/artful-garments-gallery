@@ -1,20 +1,13 @@
 @import "tailwindcss" source(none);
 @source "../src";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+/* Os .woff2 saem de scripts/subset-fonts.mjs; as masters .otf/.ttf ficam em
+   assets/fonts, fora de public, porque não são servidas. */
 @font-face {
   font-family: "Rhytmo Body";
-  src: url("/__l5e/assets-v1/71bb5449-7479-44ae-9f0e-8fa655e0bfe5/Medium.otf") format("opentype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rhytmo Display";
-  src: url("/__l5e/assets-v1/04f98bd5-0f0f-443d-b899-425ffd4dffad/Giga.otf") format("opentype");
+  src: url("/fonts/Medium.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -22,25 +15,64 @@
 
 @font-face {
   font-family: "Rhytmo Numeric";
-  src: url("/__l5e/assets-v1/e5ac5f10-f247-46dc-94b7-045631014401/Coolvetica_Rg.otf") format("opentype");
+  src: url("/fonts/Coolvetica_Rg.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
+/* Rhytmo Extras — gerada por scripts/build-rhytmo-extras.mjs a partir dos
+   próprios contornos do Medium.otf. Tapa os dois buracos daquele arquivo:
+   ele não tem NENHUM glifo acentuado (o cmap manda ç para o glifo do c, ã
+   para o do a — o codepoint "existe", então o navegador nunca cai para a
+   fonte seguinte, só apaga o acento), e 29 das 32 posições de pontuação
+   ASCII apontam todas para o MESMO desenho provisório.
+
+   São duas famílias apontando para o MESMO arquivo — uma requisição só —
+   porque os dois casos precisam de alcance diferente:
+
+   • "Rhytmo Extras" (acentos) entra em todas as pilhas. Antes, todo acento
+     vinha da NotoSans, cujo "a" tem avanço 585/1000em contra 1090 do Medium:
+     é a divergência de 86% na largura que aparecia em "CAFÉ".
+
+   • "Rhytmo Extras Punct" entra SÓ na pilha retrô (--font-pixel). O texto do
+     corpo já tira a pontuação da NotoSans há tempos e está correto; trocá-la
+     ali mexeria no site inteiro sem necessidade. */
 @font-face {
-  font-family: "Rhytmo Hero";
-  src: url("/__l5e/assets-v1/b43188ad-d50d-4036-b5ee-8a9246d4f4d8/GoodLookingFont.otf") format("opentype");
+  font-family: "Rhytmo Extras";
+  src: url("/fonts/RhytmoExtras.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
+  unicode-range:
+    U+00C0-00C5, U+00C7-00CF, U+00D1-00D6, U+00D9-00DD, U+00E0-00E5, U+00E7-00EF, U+00F1-00F6,
+    U+00F9-00FD, U+00FF;
+}
+
+@font-face {
+  font-family: "Rhytmo Extras Punct";
+  src: url("/fonts/RhytmoExtras.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  /* U+0040 (@) fica de fora de propósito: duas tentativas de construir a
+     espiral com as formas geométricas desta fonte leram como alvo e como
+     "Œ". Ele cai na "Rhytmo Symbols", que já cobre U+003A-0040. */
+  unicode-range: U+0021-0022, U+0027-0029, U+002C-002F, U+003A-003B, U+003F, U+005F;
 }
 
 /* Symbols-only face: punctuation, currency, math, arrows, decorative glyphs.
-   The unicode-range keeps every letter and digit on the primary typeface. */
+   O alcance continua cobrindo U+00A1-00FF inteiro, mas isso agora é rede de
+   segurança, não a solução: a "Rhytmo Extras" vem antes nas pilhas e leva
+   todo acentuado que o site usa, com o desenho do próprio Medium. O que
+   sobra aqui do bloco Latin-1 são as letras que a Extras não cobre — Æ, Ð,
+   Ø, Þ, ß, æ, ð, ø, þ — mais × e ÷. Sem alguma dessas duas famílias na
+   frente, o Medium.otf desenha essas letras sem acento nenhum, em silêncio,
+   porque o cmap dele mapeia o codepoint acentuado para o glifo da letra
+   base — verificado lendo as tabelas cmap dos .otf/.ttf, não a olho. */
 @font-face {
   font-family: "Rhytmo Symbols";
-  src: url("/__l5e/assets-v1/4bf01926-103f-4e68-8ea6-026b9417ced2/NotoSans-SemiBold.ttf") format("truetype");
+  src: url("/fonts/NotoSans-Symbols.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -49,18 +81,14 @@
   descent-override: 25%;
   line-gap-override: 0%;
   unicode-range:
-    U+0021-002F, U+003A-0040, U+005B-0060, U+007B-007E,
-    U+00A1-00BF, U+00D7, U+00F7,
-    U+2000-206F, U+2070-209F, U+20A0-20BF, U+2100-214F,
-    U+2150-218F, U+2190-21FF, U+2200-22FF, U+2300-23FF,
-    U+25A0-25FF, U+2600-26FF, U+2700-27BF, U+2B00-2BFF,
-    U+3001-303F, U+FF01-FF0F, U+FF1A-FF20;
+    U+0021-002F, U+003A-0040, U+005B-0060, U+007B-007E, U+00A1-00FF, U+2000-206F, U+2070-209F,
+    U+20A0-20BF, U+2100-214F, U+2150-218F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+25A0-25FF,
+    U+2600-26FF, U+2700-27BF, U+2B00-2BFF, U+3001-303F, U+FF01-FF0F, U+FF1A-FF20;
 }
-
 
 @font-face {
   font-family: "Rhytmo KR";
-  src: url("/__l5e/assets-v1/83e47f72-f5dd-49e3-b6da-dfc0a0842ba6/HSJandari-Regular.ttf") format("truetype");
+  src: url("/fonts/HSJandari-Regular.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -78,9 +106,9 @@ html[lang="ko"] h3,
 html[lang="ko"] h4,
 html[lang="ko"] .display,
 html[lang="ko"] .font-display {
-  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
+  font-family:
+    "Rhytmo Extras", "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Body", "Apple SD Gothic Neo", sans-serif;
 }
-
 
 /* Korean glyphs sit smaller on the em square: scale up slightly and relax
    the vertical rhythm so nothing clips, overlaps or overflows. */
@@ -112,20 +140,16 @@ html[lang="ko"] .label-xs {
   line-height: 1.5;
 }
 
-html[lang="ko"] .display,
-html[lang="ko"] .font-giga,
-html[lang="ko"] .font-hero {
+html[lang="ko"] .display {
   letter-spacing: -0.005em;
   line-height: 1.1;
 }
 
-
-
-
 /*
  * RHYTMO — design system
- * Palette restricted to the provided cool neutrals:
- * #f8fafc, #d9eafd, #bcccdc, #9aa6b2 (+ derived deep slate for text/CTAs).
+ * Dark-native ground, cool/indigo-biased neutrals, one magenta accent.
+ * Only the product photo and the bubble's iridescence carry real
+ * saturation — everything else in the UI stays close to monochrome.
  */
 
 @theme inline {
@@ -164,53 +188,80 @@ html[lang="ko"] .font-hero {
   --color-pink-mist: var(--pink-mist);
   --color-ink: var(--ink);
 
-  --font-sans: "Rhytmo Symbols", "Rhytmo Body";
-  --font-display: "Rhytmo Symbols", "Rhytmo Body";
+  --font-sans: "Rhytmo Extras", "Rhytmo Symbols", "Rhytmo Body";
+  --font-display: "Rhytmo Extras", "Rhytmo Symbols", "Rhytmo Body";
+
+  /* Pilha da interface retrô (HUD, balão do robô, roda, PRESS START). Estava
+     repetida como `"Rhytmo Pixel", monospace` em 12 regras, e nenhuma delas
+     tinha cobertura para a pontuação de mentira do Medium — era por isso que
+     "@THIAGOVSOUZA_" saía ":THIAGOVSOUZA:" e "// 2026" saía ":: 2026".
+
+     A ordem importa e não é a mesma do corpo do texto: "Rhytmo Symbols" vem
+     ANTES de "Rhytmo Pixel" porque o Medium reivindica todos os codepoints de
+     pontuação (com desenho provisório) e venceria a disputa. O alcance da
+     Symbols exclui letras e dígitos, então elas continuam vindo do Medium. */
+  --font-pixel: "Rhytmo Extras", "Rhytmo Extras Punct", "Rhytmo Symbols", "Rhytmo Pixel", monospace;
 }
 
 :root {
   --radius: 0.25rem;
 
-  /* neutrals from the palette */
-  --background: oklch(0.986 0.003 250);
-  --foreground: oklch(1 0 0);
-  --surface: oklch(0.955 0.012 248);
-  --surface-2: oklch(0.905 0.024 245);
+  /* The header is `fixed`, so nothing pushes page content below it on its
+     own — every route that needs clearance reads this instead of a
+     hand-copied padding number. It must match what Header.tsx actually
+     renders (logo height + the bar's own vertical padding): 46px logo +
+     14px*2 padding = 74px below 640px; 60px logo + 20px*2 padding = 100px
+     at 640px and up, the same breakpoint Header.tsx's own sm: classes
+     switch at. Change the logo or the bar's padding, update this too. */
+  --header-h: 74px;
 
-  --card: oklch(0.975 0.006 248);
+  /* RHYTMO — dark-native ground. The product photo is the only saturated
+     thing on screen; every neutral here carries a slight cool/indigo bias
+     instead of true gray, so it reads as chosen, not default. */
+  --background: oklch(0.19 0.045 276);
+  --foreground: oklch(0.94 0.014 270);
+  --surface: oklch(0.24 0.05 276);
+  --surface-2: oklch(0.3 0.055 274);
+
+  --card: oklch(0.24 0.05 276);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.986 0.003 250);
+  --popover: oklch(0.22 0.048 276);
   --popover-foreground: var(--foreground);
 
-  /* accent family (interactive) — derived from #9aa6b2 / #bcccdc / #d9eafd */
-  --pink-deep: oklch(0.43 0.045 248);
-  --pink: oklch(0.55 0.045 248);
-  --pink-mid: oklch(0.70 0.023 245);
-  --pink-soft: oklch(0.83 0.028 240);
-  --pink-mist: oklch(0.925 0.028 245);
+  /* accent family (interactive) — one magenta, five steps of it. */
+  --pink-deep: oklch(0.56 0.23 350); /* hover/active on solid accent */
+  --pink: oklch(0.64 0.24 350); /* the accent */
+  --pink-mid: oklch(0.72 0.19 350); /* accent on dark, softer */
+  --pink-soft: oklch(0.8 0.1 350); /* rare: accent text on light chrome */
+  --pink-mist: oklch(0.32 0.09 350); /* faint accent wash on dark surfaces */
 
   --primary: var(--pink);
-  --primary-foreground: oklch(0.986 0.003 250);
+  --primary-foreground: oklch(0.99 0.006 270);
   --secondary: var(--surface);
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
-  --muted-foreground: oklch(1 0 0);
-  --ink: oklch(0.34 0.015 250);
+  --muted-foreground: oklch(0.66 0.03 274);
+  --ink: oklch(0.8 0.02 272);
   --accent: var(--pink);
-  --accent-foreground: oklch(0.986 0.003 250);
-  --destructive: var(--pink-deep);
-  --destructive-foreground: oklch(0.986 0.003 250);
-  --border: oklch(0.905 0.018 246);
-  --input: oklch(0.905 0.018 246);
+  --accent-foreground: oklch(0.99 0.006 270);
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.99 0.006 270);
+  --border: oklch(0.34 0.05 274);
+  --input: oklch(0.34 0.05 274);
   --ring: var(--pink-mid);
 
   --gradient-sheen: linear-gradient(
     120deg,
-    color-mix(in oklab, var(--pink-mist) 60%, transparent),
-    color-mix(in oklab, var(--pink-soft) 22%, transparent)
+    color-mix(in oklab, var(--pink-mist) 55%, transparent),
+    color-mix(in oklab, var(--pink-soft) 16%, transparent)
   );
-  --shadow-soft: 0 24px 60px -40px color-mix(in oklab, var(--pink-deep) 30%, transparent);
+  --shadow-soft: 0 24px 60px -40px oklch(0 0 0 / 55%);
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 640px) {
+  :root {
+    --header-h: 100px;
+  }
 }
 
 @layer base {
@@ -221,25 +272,50 @@ html[lang="ko"] .font-hero {
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
-    /* Lighter, more editorial scale for latin locales. */
-    font-size: 93.75%;
+    font-size: 100%;
+  }
+
+  /* Baseline guard against stray horizontal scroll from full-bleed / fixed
+     elements (game backdrop, robot, wheel stage). Nothing in the layout is
+     meant to exceed the viewport width, so this only ever hides accidental
+     overflow — it never clips intentional content. */
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   html[lang="ko"] {
     font-size: 100%;
   }
 
-  h1, h2, h3, h4, .font-display {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
-  h1 { line-height: 0.94; letter-spacing: -0.035em; }
-  h2 { line-height: 1.02; letter-spacing: -0.028em; }
-  h3 { line-height: 1.1; letter-spacing: -0.022em; }
-  h4 { line-height: 1.18; letter-spacing: -0.016em; }
+  h1 {
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+  }
+  h2 {
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+  }
+  h3 {
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+  }
+  h4 {
+    line-height: 1.18;
+    letter-spacing: -0.016em;
+  }
 
   body {
     background-color: var(--color-background);
@@ -248,6 +324,15 @@ html[lang="ko"] .font-hero {
     font-size: 1rem;
     line-height: 1.6;
     letter-spacing: -0.004em;
+    /* Rhytmo Body's lowercase glyphs are already drawn as full caps shapes
+       (a unicase display design), so this is a no-op for plain ASCII —
+       but it matters for accented letters, which fall through to the
+       NotoSans fallback (see the Rhytmo Symbols unicode-range comment
+       above): without this, an accented syllable renders in NotoSans'
+       lowercase, at a visibly different size/weight than the rest of the
+       (visually-capitalized) word. Forcing uppercase makes NotoSans draw
+       its uppercase accented glyphs instead, closing most of that seam. */
+    text-transform: uppercase;
     font-kerning: normal;
     font-variant-ligatures: common-ligatures contextual;
   }
@@ -256,7 +341,10 @@ html[lang="ko"] .font-hero {
     text-wrap: pretty;
   }
 
-  button, input, select, textarea {
+  button,
+  input,
+  select,
+  textarea {
     font-family: inherit;
     letter-spacing: inherit;
   }
@@ -275,18 +363,21 @@ html[lang="ko"] .font-hero {
   text-transform: uppercase;
 }
 
-@utility font-giga {
-  font-family: "Rhytmo Symbols", "Rhytmo Display";
-}
-
-@utility font-hero {
-  font-family: "Rhytmo Symbols", "Rhytmo Hero";
-}
-
+/* A "Rhytmo Symbols" não tem dígitos (o unicode-range dela pula U+0030-0039),
+   então quem os desenha é a família seguinte. Aqui havia uma "Rhytmo KR" no
+   meio, e o efeito era duplo e invisível: TODO preço do site saía desenhado
+   pela HSJandari — a fonte coreana, 25% mais larga que a Coolvetica — e as
+   165 KB dela eram baixadas em toda visita, em qualquer idioma, só para isso.
+   O coreano continua com a fonte inteira, pela regra html[lang="ko"] logo
+   abaixo. */
 @utility font-num {
-  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Numeric";
+  font-family: "Rhytmo Symbols", "Rhytmo Numeric";
   font-feature-settings: "tnum" 1;
   letter-spacing: 0.005em;
+}
+
+html[lang="ko"] .font-num {
+  font-family: "Rhytmo Symbols", "Rhytmo KR", "Rhytmo Numeric";
 }
 
 @utility label-xs {
@@ -303,21 +394,20 @@ html[lang="ko"] .font-hero {
 @utility aero-glass {
   position: relative;
   isolation: isolate;
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in oklab, white 55%, transparent),
-      color-mix(in oklab, var(--pink-mist) 22%, transparent) 45%,
-      color-mix(in oklab, var(--background) 40%, transparent)
-    );
-  backdrop-filter: blur(44px) saturate(190%) brightness(1.06);
-  border: 1px solid color-mix(in oklab, white 62%, transparent);
+  background: linear-gradient(
+    145deg,
+    color-mix(in oklab, var(--surface-2) 65%, transparent),
+    color-mix(in oklab, var(--pink-mist) 20%, transparent) 45%,
+    color-mix(in oklab, var(--background) 55%, transparent)
+  );
+  backdrop-filter: blur(44px) saturate(190%) brightness(1.02);
+  border: 1px solid color-mix(in oklab, white 14%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 85%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, white 32%, transparent),
-    inset 1px 0 0 color-mix(in oklab, white 40%, transparent),
-    0 32px 80px -48px color-mix(in oklab, var(--pink-deep) 45%, transparent),
-    0 2px 14px -8px color-mix(in oklab, var(--pink-deep) 22%, transparent);
+    inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, white 6%, transparent),
+    inset 1px 0 0 color-mix(in oklab, white 8%, transparent),
+    0 32px 80px -48px oklch(0 0 0 / 55%),
+    0 2px 14px -8px oklch(0 0 0 / 35%);
 
   &::before {
     content: "";
@@ -328,10 +418,10 @@ html[lang="ko"] .font-hero {
     border-radius: inherit;
     background: linear-gradient(
       160deg,
-      color-mix(in oklab, white 45%, transparent) 0%,
+      color-mix(in oklab, white 10%, transparent) 0%,
       transparent 38%,
       transparent 72%,
-      color-mix(in oklab, var(--pink-soft) 22%, transparent) 100%
+      color-mix(in oklab, var(--pink-soft) 14%, transparent) 100%
     );
   }
 }
@@ -340,28 +430,55 @@ html[lang="ko"] .font-hero {
 @utility glass-soft {
   background: linear-gradient(
     150deg,
-    color-mix(in oklab, white 48%, transparent),
-    color-mix(in oklab, var(--surface) 34%, transparent)
+    color-mix(in oklab, var(--surface-2) 60%, transparent),
+    color-mix(in oklab, var(--surface) 45%, transparent)
   );
   backdrop-filter: blur(28px) saturate(175%);
-  border: 1px solid color-mix(in oklab, white 55%, transparent);
+  border: 1px solid color-mix(in oklab, white 12%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 78%, transparent),
-    0 10px 30px -22px color-mix(in oklab, var(--pink-deep) 40%, transparent);
+    inset 0 1px 0 color-mix(in oklab, white 14%, transparent),
+    0 10px 30px -22px oklch(0 0 0 / 45%);
 }
 
-/* Full-bleed bars (header, sticky footers) — max blur, single hairline edge. */
-@utility glass-bar {
+/* Site header — flat panel with a hard offset shadow, the same
+   contour-not-blur language as the logo itself (solid outline, offset
+   shadow, no softness) and already established elsewhere in this file
+   (.game-start-button, .game-swipe-hint). Was frosted glass; changed on
+   feedback so the bar reads as part of the logo's world, not a separate
+   UI layer floating over it. Only Header.tsx uses this. */
+/* The contour (border + offset shadow) is what reads as "the logo's
+   world" — the fill doesn't have to be opaque to carry that. Went fully
+   opaque + no backdrop-filter for one round on feedback ("casar com a
+   logo") and that also killed the glass-through-header effect the site
+   had everywhere else (scrolled content blurred behind the bar). Both
+   are back now: translucent fill, blur restored, contour untouched. */
+@utility site-header-bar {
   background: linear-gradient(
-    to bottom,
-    color-mix(in oklab, white 16%, transparent),
-    color-mix(in oklab, white 6%, transparent)
+    180deg,
+    color-mix(in oklab, #11153d 62%, transparent) 0%,
+    color-mix(in oklab, #171b4d 58%, transparent) 100%
   );
-  backdrop-filter: blur(48px) saturate(190%);
-  border-bottom: 1px solid color-mix(in oklab, white 28%, transparent);
+  backdrop-filter: blur(22px) saturate(160%);
+  border-bottom: 3px solid var(--game-white);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 85%, transparent),
-    0 18px 44px -40px color-mix(in oklab, var(--pink-deep) 45%, transparent);
+    0 5px 0 var(--game-pink),
+    0 9px 0 rgba(17, 21, 61, 0.35);
+}
+
+/* Currency pill + cart button inside the header only — same hard
+   contour, swapped in over their shared `glass-soft`/`btn-secondary`
+   look (which stays glass everywhere else: footer, checkout, drawer).
+   !important matches this file's existing convention for overriding a
+   shared utility for one instance (see .game-swipe-hint). backdrop-filter
+   is deliberately NOT overridden here — these chips keep blurring
+   whatever's behind them too, same as the bar itself now does. */
+.header-chip {
+  background: rgba(17, 21, 61, 0.4) !important;
+  border: 2px solid rgba(248, 250, 252, 0.65) !important;
+  box-shadow: 3px 3px 0 var(--game-pink) !important;
+}
+.header-chip:hover {
+  border-color: var(--game-white) !important;
 }
 
 /* Specular sweep for hero / feature elements. */
@@ -385,37 +502,28 @@ html[lang="ko"] .font-hero {
   }
 }
 
-/* Interactive glass button — used by every actionable control. */
-@utility glass-btn {
+/* ---- Button hierarchy ------------------------------------------------
+   Three weights, not six hues: one solid primary per screen, a hairline
+   secondary for supporting actions and unselected toggle states, and a
+   boxless ghost for tertiary links. Nothing here uses backdrop-filter —
+   liquid glass is reserved for the product bubble, where it means
+   something; a button doesn't need to look like a window. */
+
+@utility btn-primary {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, white 58%, transparent),
-    color-mix(in oklab, var(--surface) 30%, transparent)
-  );
-  backdrop-filter: blur(34px) saturate(185%) brightness(1.04);
-  border: 1px solid color-mix(in oklab, white 60%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 88%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, white 30%, transparent),
-    0 12px 32px -24px color-mix(in oklab, var(--pink-deep) 45%, transparent);
-  color: var(--pink-deep);
+  background: var(--pink);
+  border: 1px solid color-mix(in oklab, white 18%, transparent);
+  box-shadow: 0 14px 30px -20px color-mix(in oklab, var(--pink-deep) 65%, transparent);
+  color: var(--primary-foreground);
   transition:
     background 250ms var(--ease-out-soft),
     box-shadow 250ms var(--ease-out-soft),
-    transform 250ms var(--ease-out-soft),
-    color 250ms var(--ease-out-soft);
+    transform 250ms var(--ease-out-soft);
 
   &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, white 72%, transparent),
-      color-mix(in oklab, var(--pink-mist) 42%, transparent)
-    );
-    box-shadow:
-      inset 0 1px 0 color-mix(in oklab, white 95%, transparent),
-      0 18px 40px -24px color-mix(in oklab, var(--pink-deep) 55%, transparent);
+    background: var(--pink-deep);
+    box-shadow: 0 18px 36px -20px color-mix(in oklab, var(--pink-deep) 75%, transparent);
     transform: translateY(-1px);
   }
 
@@ -424,37 +532,34 @@ html[lang="ko"] .font-hero {
   }
 }
 
-/* Primary emphasis variant of the glass button. */
-@utility glass-btn-primary {
+@utility btn-secondary {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--pink) 78%, white),
-    color-mix(in oklab, var(--pink-deep) 72%, transparent)
-  );
-  backdrop-filter: blur(34px) saturate(185%);
-  border: 1px solid color-mix(in oklab, white 42%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
-    0 16px 40px -26px color-mix(in oklab, var(--pink-deep) 70%, transparent);
-  color: var(--primary-foreground);
+  background: color-mix(in oklab, var(--surface) 65%, transparent);
+  border: 1px solid var(--border);
+  color: var(--ink);
   transition:
     background 250ms var(--ease-out-soft),
-    box-shadow 250ms var(--ease-out-soft),
+    border-color 250ms var(--ease-out-soft),
+    color 250ms var(--ease-out-soft),
     transform 250ms var(--ease-out-soft);
 
   &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, var(--pink) 92%, white),
-      var(--pink-deep)
-    );
-    transform: translateY(-1px);
+    border-color: color-mix(in oklab, var(--pink) 50%, var(--border));
+    color: var(--foreground);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
+    transform: scale(0.99);
+  }
+}
+
+@utility btn-ghost {
+  color: var(--muted-foreground);
+  transition: color 250ms var(--ease-out-soft);
+
+  &:hover:not(:disabled) {
+    color: var(--ink);
   }
 }
 
@@ -463,8 +568,7 @@ html[lang="ko"] .font-hero {
   perspective: 1200px;
   transform-style: preserve-3d;
 
-  & img,
-  & .card-float-media {
+  & img {
     transform: translateZ(0) translateY(0) scale(1);
     box-shadow:
       0 18px 40px -26px color-mix(in oklab, var(--pink-deep) 55%, transparent),
@@ -475,15 +579,13 @@ html[lang="ko"] .font-hero {
     will-change: transform;
   }
 
-  &:hover img,
-  &:hover .card-float-media {
+  &:hover img {
     transform: translateY(-8px) rotateX(2.2deg) scale(1.015);
     box-shadow:
       0 34px 60px -30px color-mix(in oklab, var(--pink-deep) 60%, transparent),
       0 10px 22px -12px color-mix(in oklab, var(--pink-deep) 30%, transparent);
   }
 }
-
 
 @utility reveal {
   opacity: 0;
@@ -511,137 +613,6 @@ html[lang="ko"] .font-hero {
 }
 
 /* Shop page only: understated gray-to-light gradient behind the product grid. */
-.shop-gradient {
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--color-surface-2) 92%, var(--color-foreground) 8%),
-    var(--color-surface),
-    var(--color-background)
-  );
-}
-
-/* ---- Reference palette accents -------------------------------------
-   Applied selectively to small interactive elements only. */
-:root {
-  --brand-magenta: oklch(0.45 0.19 0.5);
-  --brand-pink: oklch(0.62 0.22 358);
-  --brand-indigo: oklch(0.36 0.21 274);
-  --brand-blue: oklch(0.62 0.15 274);
-  --brand-green: oklch(0.56 0.17 137);
-  --brand-lime: oklch(0.78 0.19 124);
-}
-
-@theme inline {
-  --color-brand-magenta: var(--brand-magenta);
-  --color-brand-pink: var(--brand-pink);
-  --color-brand-indigo: var(--brand-indigo);
-  --color-brand-blue: var(--brand-blue);
-  --color-brand-green: var(--brand-green);
-  --color-brand-lime: var(--brand-lime);
-}
-
-/* Accent variant of the glass button — same geometry, different hue. */
-@utility glass-btn-accent {
-  position: relative;
-  isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--brand-blue) 78%, white),
-    color-mix(in oklab, var(--brand-indigo) 82%, transparent)
-  );
-  backdrop-filter: blur(34px) saturate(185%);
-  border: 1px solid color-mix(in oklab, white 42%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
-    0 16px 40px -26px color-mix(in oklab, var(--brand-indigo) 70%, transparent);
-  color: var(--primary-foreground);
-  transition:
-    background 250ms var(--ease-out-soft),
-    box-shadow 250ms var(--ease-out-soft),
-    transform 250ms var(--ease-out-soft);
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, var(--brand-blue) 92%, white),
-      var(--brand-indigo)
-    );
-    transform: translateY(-1px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
-  }
-}
-
-/* Primary CTA glass button — green from the reference palette. */
-@utility glass-btn-go {
-  position: relative;
-  isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--brand-lime) 62%, white),
-    color-mix(in oklab, var(--brand-green) 88%, transparent)
-  );
-  backdrop-filter: blur(34px) saturate(185%);
-  border: 1px solid color-mix(in oklab, white 42%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
-    0 16px 40px -26px color-mix(in oklab, var(--brand-green) 70%, transparent);
-  color: var(--primary-foreground);
-  transition:
-    background 250ms var(--ease-out-soft),
-    box-shadow 250ms var(--ease-out-soft),
-    transform 250ms var(--ease-out-soft);
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, var(--brand-lime) 78%, white),
-      var(--brand-green)
-    );
-    transform: translateY(-1px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
-  }
-}
-
-/* Dark grey glass CTA — same geometry/blur as the other glass buttons. */
-@utility glass-btn-ink {
-  position: relative;
-  isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--ink) 34%, transparent),
-    color-mix(in oklab, var(--ink) 52%, transparent)
-  );
-  backdrop-filter: blur(30px) saturate(180%) brightness(1.02);
-  border: 1px solid color-mix(in oklab, white 42%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 48%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, white 18%, transparent),
-    0 16px 40px -28px color-mix(in oklab, var(--ink) 55%, transparent);
-  color: white;
-  transition:
-    background 250ms var(--ease-out-soft),
-    box-shadow 250ms var(--ease-out-soft),
-    transform 250ms var(--ease-out-soft);
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, var(--ink) 46%, transparent),
-      color-mix(in oklab, var(--ink) 64%, transparent)
-    );
-    transform: translateY(-1px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
-  }
-}
 
 /* Refined glass sphere used by the LAB wheel: crisper rim, cleaner specular. */
 @utility glass-sphere {
@@ -675,58 +646,7 @@ html[lang="ko"] .font-hero {
   }
 }
 
-
-/* Translucent glass button tinted with the reference pink.
-   Same geometry, blur, highlights and shadows as .glass-btn. */
-@utility glass-btn-rose {
-  position: relative;
-  isolation: isolate;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, white 58%, transparent),
-    color-mix(in oklab, var(--brand-pink) 22%, transparent)
-  );
-  backdrop-filter: blur(34px) saturate(185%) brightness(1.04);
-  border: 1px solid color-mix(in oklab, white 60%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 88%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, white 30%, transparent),
-    0 12px 32px -24px color-mix(in oklab, var(--brand-magenta) 55%, transparent);
-  color: var(--brand-magenta);
-  transition:
-    background 250ms var(--ease-out-soft),
-    box-shadow 250ms var(--ease-out-soft),
-    transform 250ms var(--ease-out-soft),
-    color 250ms var(--ease-out-soft);
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(
-      150deg,
-      color-mix(in oklab, white 70%, transparent),
-      color-mix(in oklab, var(--brand-pink) 38%, transparent)
-    );
-    box-shadow:
-      inset 0 1px 0 color-mix(in oklab, white 95%, transparent),
-      0 18px 40px -24px color-mix(in oklab, var(--brand-magenta) 60%, transparent);
-    transform: translateY(-1px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0) scale(0.99);
-  }
-}
-
 /* Entrance animation for the experimental navigation wheel spheres. */
-@keyframes wheel-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
 /* Decorative "drag me" hint: translucent glass pill with nudging arrows. */
 @utility swipe-hint {
@@ -793,5 +713,2302 @@ html[lang="ko"] .font-hero {
   .swipe-hint .swipe-hint-arrow-left,
   .swipe-hint .swipe-hint-arrow-right {
     animation: none;
+  }
+}
+
+/* ---- Product discovery (shop) ------------------------------------------
+   The glass bubble shell, its iridescence, speculars, Fresnel ring and
+   the liquid-morph keyframes were removed: products now float free in
+   the scene, with the canvas cutout's own silhouette as the shape. Only
+   the drift animation and the sizing survive from that system. */
+
+/* Smooth vertical weightless drift */
+@keyframes bubble-drift {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+/* Free-floating product photo. The circular mask that used to fade it
+   into the glass shell is gone — with no bubble around it, the cutout's
+   own silhouette is the shape. The shadow does the work the glass used
+   to do: it's what keeps the product from looking pasted onto the sky. */
+@utility product-photo {
+  filter: drop-shadow(0 18px 26px rgba(9, 12, 32, 0.5)) drop-shadow(0 4px 8px rgba(9, 12, 32, 0.35));
+  transition: transform 350ms var(--ease-out-soft);
+}
+
+/* Small glass pill for the hover/tap name preview above a bubble. */
+@utility bubble-label {
+  background: color-mix(in oklab, black 65%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 8px 24px -6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Unified Bubble Size tier — identical diameter across all products */
+/* One unified diameter, sized as a fraction of the viewport. The first
+   pass (16.5rem floor = 264px) ran the row off both edges on desktop;
+   the correction after that (10rem floor = 160px) went too far the
+   other way and stopped reading as the thing the page is about. This
+   sits between the two: still proportional to the screen, but the
+   product stays the largest, most obvious object on the page. */
+@utility bubble-size {
+  width: clamp(14rem, 30vw, 20.5rem);
+  height: clamp(14rem, 30vw, 20.5rem);
+  flex-shrink: 0;
+}
+
+@utility animate-bubble-float {
+  animation: bubble-drift 7s ease-in-out infinite;
+}
+
+/* Pop transition: realistic elastic tension followed by prismatic vaporization. */
+@keyframes bubble-pop {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1) saturate(1);
+  }
+  25% {
+    transform: scale(0.95) rotate(-3deg);
+    opacity: 0.95;
+    filter: brightness(1.2) saturate(1.4);
+  }
+  50% {
+    transform: scale(1.15) rotate(2deg);
+    opacity: 0.8;
+    filter: brightness(1.5) saturate(1.8) blur(1px);
+  }
+  100% {
+    transform: scale(1.85) rotate(0deg);
+    opacity: 0;
+    filter: brightness(2) saturate(2) blur(8px);
+  }
+}
+
+@utility animate-bubble-pop {
+  animation: bubble-pop 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Single line horizontal track for product bubbles */
+@utility bubble-track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Retro scanlines */
+.scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+}
+
+/* RHYTMO welcome robot ---------------------------------------------------- */
+@font-face {
+  font-family: "Rhytmo Pixel";
+  src: url("/fonts/Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.rhytmo-pixel-text {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  image-rendering: pixelated;
+}
+
+/* RHYTMO // PIXEL GAME UI REFRESH */
+:root {
+  --game-ink: #11153d;
+  --game-deep: #242f9b;
+  --game-blue: #466fd4;
+  --game-lilac: #9ba3eb;
+  --game-ice: #dbddfd;
+  --game-pink: #e53888;
+  --game-pink-soft: #f37199;
+  --game-white: #f8fafc;
+  --game-gray: #bcccdc;
+  --game-muted: #9aa6b2;
+  /* The robot's own rendered width, and how far bottom-left HUD text
+     (.game-landing-hud, .game-hud-bottom) has to clear it — not siblings
+     in the DOM (Robot is mounted by __root.tsx, the HUD text by each
+     route), so this can't be a custom property scoped to .welcome-robot;
+     it has to live somewhere both can reach. Grow or shrink the robot by
+     editing --robot-w alone; the clearance follows automatically. */
+  --robot-w: clamp(112px, 12vw, 180px);
+  --robot-clearance: calc(var(--robot-w) + 28px);
+}
+/* =======================================================================
+   RHYTMO // BACKDROP — nine depth planes, gothic-nocturne reference.
+
+   The depth read comes from three rules, all borrowed from how the
+   reference art actually works:
+
+   1. GRADUATED PARALLAX. Every plane drifts a different amount against
+      the cursor (--parallax-x/-y, set by Backdrop.tsx). Sky barely
+      moves (x2), embers move most (x26). That spread is what the eye
+      reads as distance.
+   2. ATMOSPHERIC PERSPECTIVE. Distant planes sit closer to the sky's
+      own value (low contrast, slightly desaturated); near planes go
+      almost black. Nothing distant is ever as dark as something close.
+   3. FOG BETWEEN PLANES. Mist bands separate each silhouette from the
+      one behind it — that separation, not the number of shapes, is
+      what makes a busy scene read as deep instead of cluttered.
+
+   Product safety: the brightest band of sky sits at the horizon, low on
+   screen. The middle of the viewport — where the products float — stays
+   the quietest part of the composition, and every silhouette is dark
+   navy so anything in front of it separates instantly.
+
+   PALETTE: the saturated Rhytmo blue (--sky-*, below), not the dark
+   near-black experiment. The UI tokens (--background/--surface) are
+   deliberately NOT changed by this — panels, cards and text keep the
+   contrast they were tuned for and now read as dark surfaces sitting
+   on a blue world.
+   ======================================================================= */
+
+:root {
+  /* Saturated-blue pass: the five hexes the brief gave (#1C47DF, #1D4ADF,
+     #1E4BDF, #1E4CDE, #2152D9) are the same colour — identical hue and
+     saturation, at most 6 points apart on any one channel — so the ramp is
+     built from #1E4CDE alone, not interpolated between them.
+     --sky-ink stays: it's the dark ink used for silhouettes, not part of
+     this ramp, and happens to be unused since the skyline it was for was
+     removed. --game-deep (the UI shadow/outline ink) also stays — it used
+     to share this exact hex with --sky-core, but the two play opposite
+     roles: one IS the sky, the other is the dark tint that keeps text and
+     buttons legible AGAINST the sky. Moving it here would erase every
+     drop-shadow's contrast against the new, lighter sky. */
+  --sky-high: #1b3aa8; /* overhead, deepest */
+  --sky-core: #1e4cde; /* the identity blue */
+  --sky-low: #4a78f0; /* horizon lift */
+  --sky-ink: #0d1136; /* silhouettes (unused; kept for parity) */
+  --sky-line: #c3d2ff; /* plates + rings — raised so they still read against the lighter core */
+}
+
+.game-backdrop {
+  isolation: isolate;
+  background: var(--sky-core);
+  color: var(--foreground);
+}
+
+/* --- Plane 0: sky --------------------------------------------------- */
+/* Deep blue overhead opening to a brighter horizon, so the architecture
+   and the animated floor both read as silhouettes against light. */
+.game-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 26% at 58% 76%,
+      color-mix(in oklab, var(--sky-low) 78%, transparent),
+      transparent 74%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--sky-high) 88%, black) 0%,
+      var(--sky-high) 24%,
+      color-mix(in oklab, var(--sky-high) 45%, var(--sky-core)) 48%,
+      var(--sky-core) 68%,
+      color-mix(in oklab, var(--sky-core) 55%, var(--sky-low)) 80%,
+      color-mix(in oklab, var(--sky-core) 72%, var(--sky-high)) 100%
+    );
+}
+
+/* --- Plane 6: animated floor ---------------------------------------- */
+/*
+ * Infinite perspective floor, from two elements and one GPU transform.
+ *
+ * WHY THIS ISN'T "ALL THE SQUARES SLIDING TOGETHER": the plane is tilted
+ * by rotateX() inside a parent that owns the `perspective`. Sliding the
+ * grid along the plane's LOCAL y axis is uniform in the plane's own
+ * space, but the projection turns it into non-uniform motion on screen —
+ * rows near the viewer travel many pixels per second, rows near the
+ * horizon barely move. The perspective does the per-row speed work, so
+ * no per-row elements are needed.
+ *
+ * WHY THE LOOP IS INVISIBLE: the animation travels exactly one pattern
+ * period (--tile, the full 4x4 super-tile below). At the end of a cycle
+ * the drawing is pixel-identical to its start, so the restart can't be
+ * seen — no cut, no teleport. Three things are load-bearing here and
+ * must not be "tidied" later: the translate distance must equal --tile,
+ * the timing function must stay linear (any easing makes the speed
+ * pulse and exposes the cycle), and the animation-duration must scale
+ * together with --tile — quadrupling the distance without quadrupling
+ * the duration just quadruples the speed.
+ *
+ * The mask fades the grid out well before the product band, so the one
+ * genuinely moving thing on the page stays in the lower periphery.
+ */
+.game-floor {
+  /* Plate proportions, measured rather than derived. A square drawn in
+     the tile lands on screen at width/height = (d − sin(a)·v)/(cos(a)·d),
+     where v is depth into the plane — so the squash is NOT one constant:
+     with d=520 and a=66° it runs ~2.46 at the horizon down to ~0.9 at the
+     bottom edge. An earlier pass pre-stretched by 2.46 (the horizon
+     figure) and made the near ground — the part you actually look at —
+     nearly 3x too tall. 1.4 is what measured closest to square across the
+     visible band in a browser, sweeping the value and reading back the
+     rendered plate pitch. */
+  --tile-w: 150px;
+  --tile-h: calc(var(--tile-w) * 1.4);
+  position: absolute;
+  left: -25%;
+  right: -25%;
+  bottom: 0;
+  height: 46%;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 520px;
+  /* Centred. An off-centre origin was tried and reverted: it doesn't just
+     move the vanishing point, it SHEARS every plate into a leaning
+     parallelogram, which is what made the floor read as slanted stripes
+     rather than tiles. The reference is symmetric. */
+  perspective-origin: 50% 0%;
+  mask-image: linear-gradient(to top, black 0 26%, transparent 82%);
+  -webkit-mask-image: linear-gradient(to top, black 0 26%, transparent 82%);
+}
+.game-floor-plane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  /* Taller than the box by more than one period, so the wrap never
+     exposes the plane's own edge. */
+  height: 320%;
+  transform-origin: 50% 0%;
+  transform: rotateX(66deg) translate3d(0, 0, 0);
+  /* A 4x4 super-tile: 16 plates, each with its own slight rotation,
+     offset, size and opacity, plus a soft shadow — irregularity a plain
+     CSS grid can't produce. Repeating every 4 cells instead of every 1
+     puts the repetition well past what the eye picks up under this
+     projection. Generated by a script rather than hand-written, so the
+     coordinates and the edge handling below stay consistent.
+
+     preserveAspectRatio='none' IS LOAD-BEARING. Without it the SVG
+     defaults to xMidYMid meet, which fits the drawing inside a
+     non-square background-size and letterboxes the leftover — so a
+     taller background-size (which is exactly how --tile-h pre-stretches
+     the plates) silently adds blank bands instead of stretching
+     anything. That cost a whole round: the plates never actually got
+     taller, they just got emptier gaps.
+
+     Seamlessness: plates are NOT pushed inward from the canvas edge.
+     Anything crossing an edge is drawn a second time on the opposite
+     side, so the SVG's clip never eats it. Insetting the outer plates
+     instead (the obvious shortcut) leaves the first and last row spaced
+     differently from the inner ones, which reads as a bright line every
+     fourth row once the tile repeats.
+
+     Colours are %23-escaped hex — a literal "#" would terminate the data
+     URI and drop the whole background — and they're frozen copies, not
+     tokens: custom properties don't resolve inside a data URI, so if the
+     sky palette moves, re-run the generator and re-paste. Plates sit
+     DARKER than the ground with light gaps between them, matching the
+     reference; they used to be lighter than the ground, which read as a
+     glowing lattice rather than a tiled floor. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400' preserveAspectRatio='none'%3E%3Cfilter id='ps' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeGaussianBlur stdDeviation='1.5'/%3E%3C/filter%3E%3Cg filter='url(%23ps)' fill='%23071132' fill-opacity='.22'%3E%3Crect x='10' y='9.3' width='87.9' height='87.9' rx='2.5' transform='rotate(0.4 54 53.3)'/%3E%3Crect x='10' y='409.3' width='87.9' height='87.9' rx='2.5' transform='rotate(0.4 54 453.3)'/%3E%3Crect x='410' y='9.3' width='87.9' height='87.9' rx='2.5' transform='rotate(0.4 454 53.3)'/%3E%3Crect x='410' y='409.3' width='87.9' height='87.9' rx='2.5' transform='rotate(0.4 454 453.3)'/%3E%3Crect x='108.6' y='8.8' width='89.4' height='89.4' rx='2.5' transform='rotate(-1.3 153.3 53.5)'/%3E%3Crect x='108.6' y='408.8' width='89.4' height='89.4' rx='2.5' transform='rotate(-1.3 153.3 453.5)'/%3E%3Crect x='209.6' y='7.7' width='89.4' height='89.4' rx='2.5' transform='rotate(-4.4 254.3 52.4)'/%3E%3Crect x='209.6' y='407.7' width='89.4' height='89.4' rx='2.5' transform='rotate(-4.4 254.3 452.4)'/%3E%3Crect x='308.5' y='10.1' width='87' height='87' rx='2.5' transform='rotate(1 352 53.6)'/%3E%3Crect x='308.5' y='410.1' width='87' height='87' rx='2.5' transform='rotate(1 352 453.6)'/%3E%3Crect x='-91.5' y='10.1' width='87' height='87' rx='2.5' transform='rotate(1 -48 53.6)'/%3E%3Crect x='-91.5' y='410.1' width='87' height='87' rx='2.5' transform='rotate(1 -48 453.6)'/%3E%3Crect x='6.3' y='108.2' width='87.8' height='87.8' rx='2.5' transform='rotate(-4.1 50.2 152.1)'/%3E%3Crect x='406.3' y='108.2' width='87.8' height='87.8' rx='2.5' transform='rotate(-4.1 450.2 152.1)'/%3E%3Crect x='107.9' y='112.3' width='86.9' height='86.9' rx='2.5' transform='rotate(3.2 151.3 155.8)'/%3E%3Crect x='206' y='105.4' width='92.3' height='92.3' rx='2.5' transform='rotate(1.5 252.2 151.6)'/%3E%3Crect x='310.3' y='110.6' width='88.9' height='88.9' rx='2.5' transform='rotate(-4.2 354.8 155)'/%3E%3Crect x='-89.7' y='110.6' width='88.9' height='88.9' rx='2.5' transform='rotate(-4.2 -45.2 155)'/%3E%3Crect x='10.9' y='209' width='87.8' height='87.8' rx='2.5' transform='rotate(-0.6 54.8 252.9)'/%3E%3Crect x='410.9' y='209' width='87.8' height='87.8' rx='2.5' transform='rotate(-0.6 454.8 252.9)'/%3E%3Crect x='105.3' y='207.1' width='91.6' height='91.6' rx='2.5' transform='rotate(-2.1 151.1 252.9)'/%3E%3Crect x='207.3' y='210.8' width='86.2' height='86.2' rx='2.5' transform='rotate(4.1 250.4 253.9)'/%3E%3Crect x='306.9' y='206.7' width='91.9' height='91.9' rx='2.5' transform='rotate(-3.8 352.9 252.6)'/%3E%3Crect x='-93.1' y='206.7' width='91.9' height='91.9' rx='2.5' transform='rotate(-3.8 -47.1 252.6)'/%3E%3Crect x='6.2' y='309.8' width='89.4' height='89.4' rx='2.5' transform='rotate(-3.1 50.8 354.5)'/%3E%3Crect x='6.2' y='-90.2' width='89.4' height='89.4' rx='2.5' transform='rotate(-3.1 50.8 -45.5)'/%3E%3Crect x='406.2' y='309.8' width='89.4' height='89.4' rx='2.5' transform='rotate(-3.1 450.8 354.5)'/%3E%3Crect x='406.2' y='-90.2' width='89.4' height='89.4' rx='2.5' transform='rotate(-3.1 450.8 -45.5)'/%3E%3Crect x='108.7' y='307.7' width='87.7' height='87.7' rx='2.5' transform='rotate(3.1 152.5 351.5)'/%3E%3Crect x='108.7' y='-92.3' width='87.7' height='87.7' rx='2.5' transform='rotate(3.1 152.5 -48.5)'/%3E%3Crect x='208.8' y='308.2' width='91.3' height='91.3' rx='2.5' transform='rotate(-3.9 254.5 353.8)'/%3E%3Crect x='208.8' y='-91.8' width='91.3' height='91.3' rx='2.5' transform='rotate(-3.9 254.5 -46.2)'/%3E%3Crect x='306.7' y='307.4' width='90.2' height='90.2' rx='2.5' transform='rotate(3.6 351.8 352.5)'/%3E%3Crect x='306.7' y='-92.6' width='90.2' height='90.2' rx='2.5' transform='rotate(3.6 351.8 -47.5)'/%3E%3Crect x='-93.3' y='307.4' width='90.2' height='90.2' rx='2.5' transform='rotate(3.6 -48.2 352.5)'/%3E%3Crect x='-93.3' y='-92.6' width='90.2' height='90.2' rx='2.5' transform='rotate(3.6 -48.2 -47.5)'/%3E%3C/g%3E%3Cg fill='%230f2f9c'%3E%3Crect x='7.5' y='5.8' width='87.9' height='87.9' rx='2.5' fill-opacity='0.39' transform='rotate(0.4 51.5 49.8)'/%3E%3Crect x='7.5' y='405.8' width='87.9' height='87.9' rx='2.5' fill-opacity='0.39' transform='rotate(0.4 51.5 449.8)'/%3E%3Crect x='407.5' y='5.8' width='87.9' height='87.9' rx='2.5' fill-opacity='0.39' transform='rotate(0.4 451.5 49.8)'/%3E%3Crect x='407.5' y='405.8' width='87.9' height='87.9' rx='2.5' fill-opacity='0.39' transform='rotate(0.4 451.5 449.8)'/%3E%3Crect x='106.1' y='5.3' width='89.4' height='89.4' rx='2.5' fill-opacity='0.31' transform='rotate(-1.3 150.8 50)'/%3E%3Crect x='106.1' y='405.3' width='89.4' height='89.4' rx='2.5' fill-opacity='0.31' transform='rotate(-1.3 150.8 450)'/%3E%3Crect x='207.1' y='4.2' width='89.4' height='89.4' rx='2.5' fill-opacity='0.35' transform='rotate(-4.4 251.8 48.9)'/%3E%3Crect x='207.1' y='404.2' width='89.4' height='89.4' rx='2.5' fill-opacity='0.35' transform='rotate(-4.4 251.8 448.9)'/%3E%3Crect x='306' y='6.6' width='87' height='87' rx='2.5' fill-opacity='0.38' transform='rotate(1 349.5 50.1)'/%3E%3Crect x='306' y='406.6' width='87' height='87' rx='2.5' fill-opacity='0.38' transform='rotate(1 349.5 450.1)'/%3E%3Crect x='-94' y='6.6' width='87' height='87' rx='2.5' fill-opacity='0.38' transform='rotate(1 -50.5 50.1)'/%3E%3Crect x='-94' y='406.6' width='87' height='87' rx='2.5' fill-opacity='0.38' transform='rotate(1 -50.5 450.1)'/%3E%3Crect x='3.8' y='104.7' width='87.8' height='87.8' rx='2.5' fill-opacity='0.43' transform='rotate(-4.1 47.7 148.6)'/%3E%3Crect x='403.8' y='104.7' width='87.8' height='87.8' rx='2.5' fill-opacity='0.43' transform='rotate(-4.1 447.7 148.6)'/%3E%3Crect x='105.4' y='108.8' width='86.9' height='86.9' rx='2.5' fill-opacity='0.39' transform='rotate(3.2 148.8 152.3)'/%3E%3Crect x='203.5' y='101.9' width='92.3' height='92.3' rx='2.5' fill-opacity='0.40' transform='rotate(1.5 249.7 148.1)'/%3E%3Crect x='307.8' y='107.1' width='88.9' height='88.9' rx='2.5' fill-opacity='0.46' transform='rotate(-4.2 352.3 151.5)'/%3E%3Crect x='-92.2' y='107.1' width='88.9' height='88.9' rx='2.5' fill-opacity='0.46' transform='rotate(-4.2 -47.7 151.5)'/%3E%3Crect x='8.4' y='205.5' width='87.8' height='87.8' rx='2.5' fill-opacity='0.41' transform='rotate(-0.6 52.3 249.4)'/%3E%3Crect x='408.4' y='205.5' width='87.8' height='87.8' rx='2.5' fill-opacity='0.41' transform='rotate(-0.6 452.3 249.4)'/%3E%3Crect x='102.8' y='203.6' width='91.6' height='91.6' rx='2.5' fill-opacity='0.36' transform='rotate(-2.1 148.6 249.4)'/%3E%3Crect x='204.8' y='207.3' width='86.2' height='86.2' rx='2.5' fill-opacity='0.43' transform='rotate(4.1 247.9 250.4)'/%3E%3Crect x='304.4' y='203.2' width='91.9' height='91.9' rx='2.5' fill-opacity='0.42' transform='rotate(-3.8 350.4 249.1)'/%3E%3Crect x='-95.6' y='203.2' width='91.9' height='91.9' rx='2.5' fill-opacity='0.42' transform='rotate(-3.8 -49.6 249.1)'/%3E%3Crect x='3.7' y='306.3' width='89.4' height='89.4' rx='2.5' fill-opacity='0.33' transform='rotate(-3.1 48.3 351)'/%3E%3Crect x='3.7' y='-93.7' width='89.4' height='89.4' rx='2.5' fill-opacity='0.33' transform='rotate(-3.1 48.3 -49)'/%3E%3Crect x='403.7' y='306.3' width='89.4' height='89.4' rx='2.5' fill-opacity='0.33' transform='rotate(-3.1 448.3 351)'/%3E%3Crect x='403.7' y='-93.7' width='89.4' height='89.4' rx='2.5' fill-opacity='0.33' transform='rotate(-3.1 448.3 -49)'/%3E%3Crect x='106.2' y='304.2' width='87.7' height='87.7' rx='2.5' fill-opacity='0.36' transform='rotate(3.1 150 348)'/%3E%3Crect x='106.2' y='-95.8' width='87.7' height='87.7' rx='2.5' fill-opacity='0.36' transform='rotate(3.1 150 -52)'/%3E%3Crect x='206.3' y='304.7' width='91.3' height='91.3' rx='2.5' fill-opacity='0.37' transform='rotate(-3.9 252 350.3)'/%3E%3Crect x='206.3' y='-95.3' width='91.3' height='91.3' rx='2.5' fill-opacity='0.37' transform='rotate(-3.9 252 -49.7)'/%3E%3Crect x='304.2' y='303.9' width='90.2' height='90.2' rx='2.5' fill-opacity='0.35' transform='rotate(3.6 349.3 349)'/%3E%3Crect x='304.2' y='-96.1' width='90.2' height='90.2' rx='2.5' fill-opacity='0.35' transform='rotate(3.6 349.3 -51)'/%3E%3Crect x='-95.8' y='303.9' width='90.2' height='90.2' rx='2.5' fill-opacity='0.35' transform='rotate(3.6 -50.7 349)'/%3E%3Crect x='-95.8' y='-96.1' width='90.2' height='90.2' rx='2.5' fill-opacity='0.35' transform='rotate(3.6 -50.7 -51)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: var(--tile-w) var(--tile-h);
+  will-change: transform;
+  /* Distance per cycle is --tile-h (210px), so this is ~5.75px/s in the
+     plane's own space — the speed the floor had before --tile-h existed.
+     Change the tile size and this has to move with it, or the floor
+     silently speeds up: one cycle must always cover exactly one vertical
+     period, and the duration is what sets how fast that happens. */
+  animation: floor-flow 36s linear infinite;
+}
+@keyframes floor-flow {
+  to {
+    /* Negative: the plates travel UP the plane, which under this
+       projection reads as receding toward the horizon. Positive would
+       run them at the viewer instead — the direction this had before,
+       and the wrong one.
+
+       The distance is one full --tile-h, the pattern's vertical period,
+       so the end frame is pixel-identical to the start and the loop is
+       invisible. Any other distance shows a jump once per cycle. */
+    transform: rotateX(66deg) translate3d(0, calc(var(--tile-h) * -1), 0);
+  }
+}
+
+/* --- Rings ----------------------------------------------------------- */
+/*
+ * Big overlapping circles that drift across each other at different
+ * depths, all at the same quiet thickness and opacity. A single thick,
+ * bright dominant ring was tried here and reversed on feedback — it drew
+ * too much attention and read as clutter, so every ring below now shares
+ * one --sky-line-based tone instead of one loud ring plus four quiet
+ * ones. Only on routes that still use rings at all: the home screen and
+ * /lab render a particle field instead (see .game-particles below) and
+ * never mount this group.
+ *
+ * NOTE ON THE MOTION: these are true circles, so rotating them is
+ * literally invisible — a circle is rotationally symmetric. The movement
+ * has to be translation and scale instead. Each ring drifts on its own
+ * slow, out-of-phase cycle, so the group never repeats a recognisable
+ * arrangement.
+ *
+ * Two groups so the cursor parallax can differ by depth. The parallax
+ * lives on the GROUP and the drift on each RING: a second `transform`
+ * on the same element would replace the first rather than compose with
+ * it — a trap this codebase already hit once (see AGENTS.md on the old
+ * orbit rings).
+ *
+ * CONFINEMENT: the container's bottom edge is pinned to the horizon
+ * (bottom: 46%, matching .game-floor's own height) instead of running
+ * the full backdrop like before — that's what used to let rings show up
+ * inside the floor's plate gutters and, separately, sit visually on top
+ * of the plates entirely (the near group is stacked above the floor in
+ * z-index). Shrinking the container changes what its own height means,
+ * so every ring's `top` percentage below is recomputed against the new,
+ * shorter box — they are NOT the old values with the container just
+ * resized around them.
+ */
+.game-rings {
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  bottom: 46%;
+  left: -20%;
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform 500ms var(--ease-out-soft);
+  /* Softens the container's own hard-cut bottom edge into the horizon
+     instead of a visible straight line. */
+  mask-image: linear-gradient(to bottom, black 0 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0 86%, transparent 100%);
+}
+.game-rings span {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  will-change: transform;
+  animation: ring-drift 60s ease-in-out infinite alternate;
+}
+.game-rings-far {
+  transform: translate3d(calc(var(--parallax-x, 0) * 4px), calc(var(--parallax-y, 0) * 3px), 0);
+}
+.game-rings-near {
+  transform: translate3d(calc(var(--parallax-x, 0) * 15px), calc(var(--parallax-y, 0) * 10px), 0);
+}
+
+/* Support rings — thin, wide, faint, mostly cropped by the screen edge
+   so almost none of them read as a complete circle. */
+.game-rings-far span:nth-child(1) {
+  width: 100vw;
+  height: 100vw;
+  top: 16%;
+  left: 28%;
+  border-width: clamp(4px, 0.5vw, 9px);
+  border-color: color-mix(in oklab, var(--sky-line) 10%, transparent);
+  animation-duration: 100s;
+}
+.game-rings-far span:nth-child(2) {
+  width: 90vw;
+  height: 90vw;
+  top: 30%;
+  left: -40%;
+  border-width: clamp(4px, 0.5vw, 9px);
+  border-color: color-mix(in oklab, var(--sky-line) 10%, transparent);
+  animation-duration: 140s;
+  animation-delay: -45s;
+}
+.game-rings-far span:nth-child(3) {
+  width: 138vw;
+  height: 138vw;
+  top: -30%;
+  left: -34%;
+  border-width: clamp(4px, 0.5vw, 9px);
+  border-color: color-mix(in oklab, var(--sky-line) 8%, transparent);
+  animation-duration: 170s;
+  animation-delay: -95s;
+}
+.game-rings-near span:nth-child(2) {
+  width: 24vw;
+  height: 24vw;
+  top: 68%;
+  left: 8%;
+  border-width: clamp(4px, 0.5vw, 9px);
+  border-color: color-mix(in oklab, var(--sky-line) 9%, transparent);
+  animation-duration: 95s;
+  animation-delay: -50s;
+}
+
+/* Was the one dominant ring — thick, bright, white. Reversed on
+   feedback: it pulled focus the way the others don't, so it now matches
+   the same quiet --sky-line tone and thickness as the rest of the
+   group. */
+.game-rings-near span:nth-child(1) {
+  width: 48vw;
+  height: 48vw;
+  top: 41%;
+  left: 44%;
+  border-width: clamp(4px, 0.5vw, 9px);
+  border-color: color-mix(in oklab, var(--sky-line) 10%, transparent);
+  animation-duration: 80s;
+  animation-delay: -20s;
+}
+
+@keyframes ring-drift {
+  from {
+    transform: translate3d(-2.5%, -1.5%, 0) scale(0.96);
+  }
+  to {
+    transform: translate3d(2.5%, 1.5%, 0) scale(1.04);
+  }
+}
+
+/* --- Particles --------------------------------------------------------
+ * Home and /lab render this instead of the rings (see Backdrop's
+ * `variant` prop) — a field of small dots opening outward from the
+ * screen's center, where the start panel and the wheel both sit.
+ *
+ * Same "no render loop" rule as the rest of this file: every particle's
+ * final dx/dy is computed once in JS (src/lib/particle-field.ts, seeded —
+ * never Math.random(), or SSR and the client would disagree) and handed
+ * to ONE shared keyframe as custom properties. Nothing here recomputes
+ * anything per frame; the compositor just animates a transform.
+ */
+.game-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform 500ms var(--ease-out-soft);
+  transform: translate3d(calc(var(--parallax-x, 0) * 10px), calc(var(--parallax-y, 0) * 8px), 0);
+}
+.game-particles span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--sky-line);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: particle-out var(--dur) linear infinite;
+  animation-delay: var(--delay);
+}
+@keyframes particle-out {
+  0% {
+    transform: translate3d(-50%, -50%, 0) scale(0.4);
+    opacity: 0;
+  }
+  12%,
+  78% {
+    opacity: var(--op);
+  }
+  100% {
+    transform: translate3d(calc(-50% + var(--dx)), calc(-50% + var(--dy)), 0) scale(1);
+    opacity: 0;
+  }
+}
+
+/* --- Atmosphere overlays -------------------------------------------- */
+/* Two cool, low-intensity glows — one lifting the horizon just enough to
+   silhouette the skyline, one up top. Both neutral: the scene is lit by
+   moonlight, not by fire. */
+.game-glow {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(8px);
+}
+.game-glow-a {
+  width: 54vw;
+  height: 22vw;
+  min-width: 340px;
+  left: 58%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse,
+    color-mix(in oklab, var(--sky-low) 62%, transparent),
+    transparent 70%
+  );
+}
+.game-glow-b {
+  width: 48vw;
+  height: 48vw;
+  left: -18vw;
+  top: -22vw;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--sky-line) 14%, transparent),
+    transparent 70%
+  );
+}
+.game-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+/* Focus device: keeps the centre — where the bubbles float — the calmest
+   region, and stops the busier horizon from pulling the eye down. */
+.game-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 84% 78% at 50% 46%,
+    transparent 46%,
+    color-mix(in oklab, var(--sky-high) 62%, black) 100%
+  );
+}
+.game-menu {
+  color: var(--game-white);
+}
+.game-hud {
+  position: absolute;
+  z-index: 20;
+  left: clamp(22px, 4vw, 64px);
+  right: clamp(22px, 4vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 9px;
+}
+.game-hud-top {
+  top: clamp(24px, 4vw, 52px);
+}
+.game-hud-bottom {
+  bottom: clamp(24px, 4vw, 48px);
+  /* Overrides .game-hud's shared `left` — this HUD sits in the same
+     bottom-left corner as the robot, and would otherwise render its text
+     under his face. .game-hud-top is unaffected: same class list minus
+     this one, so it keeps the shared clamp(). */
+  left: var(--robot-clearance);
+  color: rgba(219, 221, 253, 0.68);
+}
+.game-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.game-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: var(--game-white);
+  color: var(--game-deep);
+  border: 2px solid var(--game-ink);
+  box-shadow: 3px 3px 0 var(--game-pink);
+  font-size: 14px;
+}
+.game-brand-lockup strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+}
+.game-brand-lockup small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(219, 221, 253, 0.65);
+  font-size: 7px;
+  letter-spacing: 0.22em;
+}
+.game-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(248, 250, 252, 0.86);
+}
+.game-status b {
+  color: var(--game-pink-soft);
+  font-weight: 400;
+  margin-left: 4px;
+}
+.game-status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--game-pink-soft);
+  box-shadow:
+    0 0 0 3px rgba(243, 113, 153, 0.12),
+    0 0 14px rgba(243, 113, 153, 0.7);
+  animation: game-status-pulse 1.6s steps(2, end) infinite;
+}
+@keyframes game-status-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+.game-menu-title {
+  position: absolute;
+  top: clamp(76px, 10vh, 112px);
+  left: 50%;
+  z-index: 15;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.game-menu-title span {
+  display: block;
+  color: var(--game-white);
+  font-size: clamp(12px, 1.4vw, 17px);
+  letter-spacing: 0.22em;
+  text-shadow: 3px 3px 0 rgba(36, 47, 155, 0.75);
+}
+.game-menu-title i {
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin: 9px auto 7px;
+  background: var(--game-pink);
+  box-shadow:
+    6px 0 0 var(--game-pink-soft),
+    -6px 0 0 var(--game-lilac);
+}
+.game-menu-title small {
+  color: rgba(219, 221, 253, 0.62);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+}
+.game-hud-divider {
+  width: 34px;
+  height: 1px;
+  background: rgba(219, 221, 253, 0.35);
+}
+.game-wheel-stage {
+  position: relative;
+  /* 760px não cabe mais a roda desde que o raio subiu junto com o diâmetro
+     das esferas (ver RASTER_GAIN em CategoryWheel.tsx) — e um item de grid
+     maior que a trilha para de centralizar. */
+  width: min(88vw, 840px);
+  height: min(70vh, 620px);
+  min-height: 420px;
+  display: grid;
+  place-items: center;
+}
+.game-wheel-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.game-wheel-ring-outer {
+  width: min(68vw, 610px);
+  height: min(68vw, 610px);
+  border: 1px solid rgba(219, 221, 253, 0.25);
+  box-shadow:
+    0 0 0 8px rgba(36, 47, 155, 0.08),
+    inset 0 0 70px rgba(219, 221, 253, 0.04);
+}
+.game-wheel-ring-inner {
+  width: min(42vw, 370px);
+  height: min(42vw, 370px);
+  border: 1px dashed rgba(229, 56, 136, 0.28);
+}
+.game-swipe-hint {
+  border-radius: 0 !important;
+  padding: 7px 12px !important;
+  background: rgba(17, 21, 61, 0.3) !important;
+  border: 1px solid rgba(219, 221, 253, 0.28) !important;
+  box-shadow: 3px 3px 0 rgba(229, 56, 136, 0.45) !important;
+  backdrop-filter: blur(10px);
+}
+.game-sphere {
+  isolation: isolate;
+  /* O rótulo e o "SELECTED" dimensionam pela esfera, não pela viewport: o
+     diâmetro vem de cinco faixas em CategoryWheel.tsx e um clamp() em vw não
+     acompanha nenhuma delas — a 768px o rótulo ficava em 9px dentro de uma
+     esfera de 154px. */
+  container-type: inline-size;
+  border: 2px solid rgba(219, 221, 253, 0.58);
+  background: rgba(168, 175, 190, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(17, 21, 61, 0.22),
+    inset 0 18px 30px rgba(219, 221, 253, 0.08),
+    0 16px 36px rgba(17, 21, 61, 0.28);
+  /* saturate(145%) used to pull extra colour FROM the sky behind the glass
+     — the sphere is translucent, so a saturated backdrop always read
+     through, no matter what the swatch/tint colours above say. Desaturating
+     the glass itself is what actually makes the spheres read grey. */
+  backdrop-filter: blur(18px) saturate(35%);
+  color: var(--game-white);
+  border-radius: 50%;
+  transition:
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    background 260ms ease,
+    filter 260ms ease;
+}
+.game-sphere:hover {
+  border-color: var(--game-white);
+  box-shadow:
+    inset 0 0 0 1px rgba(219, 221, 253, 0.28),
+    inset 0 18px 30px rgba(219, 221, 253, 0.12),
+    0 22px 46px rgba(17, 21, 61, 0.34);
+}
+/* The wheel's one active/selected item — was a pink box-shadow offset on
+   every sphere plus a pink "SELECTED" label. Now the only accent colour
+   left on the wheel is on hover state elsewhere; selection here is
+   value-only: a bright ring plus a touch of lift. */
+.sphere-front {
+  outline: 2px solid rgba(248, 250, 252, 0.9);
+  outline-offset: 3px;
+  filter: brightness(1.08);
+}
+.sphere-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0.64;
+  mix-blend-mode: screen;
+}
+.sphere-gloss {
+  position: absolute;
+  width: 44%;
+  height: 25%;
+  top: 9%;
+  left: 17%;
+  border-radius: 50%;
+  background: rgba(248, 250, 252, 0.36);
+  filter: blur(5px);
+}
+.sphere-rim {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  border-radius: 50%;
+}
+.sphere-pixel-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(rgba(248, 250, 252, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(248, 250, 252, 0.5) 1px, transparent 1px);
+  background-size: 11px 11px;
+  /* Anel, não disco: a grade passava por cima do ícone e do rótulo e somava
+     ruído justamente onde a leitura acontece. Agora ela fica só na borda. */
+  mask-image: radial-gradient(circle, transparent 0 34%, black 50% 62%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 34%, black 50% 62%, transparent 78%);
+}
+.sphere-icon-wrap {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40%;
+  aspect-ratio: 1;
+  color: var(--game-white);
+  /* 2px de sombra dura sobre um ícone deste tamanho engrossava o traço em vez
+     de destacá-lo. */
+  filter: drop-shadow(1px 1px 0 rgba(17, 21, 61, 0.55));
+}
+.sphere-icon {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.45;
+}
+.sphere-label {
+  position: relative;
+  z-index: 2;
+  margin-top: 6px;
+  max-width: 86%;
+  overflow: hidden;
+  font-family: var(--font-pixel);
+  color: var(--game-white);
+  /* Era clamp(7px, 0.72vw, 10px) com `text-shadow: 2px 2px` — a 10px, uma
+     sombra dura de 2px é 20% do corpo e empasta a letra. */
+  font-size: clamp(8px, 7.6cqw, 14px);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgba(17, 21, 61, 0.8);
+}
+.sphere-selected {
+  position: absolute;
+  bottom: 8%;
+  z-index: 2;
+  color: var(--game-white);
+  font-family: var(--font-pixel);
+  font-size: clamp(6px, 4.6cqw, 9px);
+  letter-spacing: 0.16em;
+  text-shadow: 1px 1px 0 rgba(17, 21, 61, 0.8);
+}
+/* Deliberately scoped to just the character art (not `.welcome-robot`,
+   which also contains `.retro-dialogue`) — a `filter` on an ancestor
+   creates a new containing block for `position: fixed` descendants, which
+   would trap the speech bubble inside this small shrink-to-fit box instead
+   of letting it size against the real viewport. See the comment in
+   Robot.tsx above this wrapper for the full story. */
+.robot-character {
+  position: relative;
+  filter: drop-shadow(0 14px 18px rgba(17, 21, 61, 0.38));
+  /* Entrada: sobe de fora do quadro com um pequeno overshoot. O atraso de
+     420ms deixa passar os 380ms da transição de saída da landing, senão ele
+     começa a subir enquanto a tela anterior ainda está sumindo.
+
+     A animação fica AQUI e não em `.welcome-robot` de propósito: `transform`
+     cria bloco de contenção para descendentes `position: fixed`, e a
+     `.retro-dialogue` é fixed no mobile — animar o contêiner de cima prenderia
+     o balão numa caixa de ~150px em vez do viewport. É a mesma armadilha que o
+     `filter` desta regra já documenta acima. */
+  animation: robot-enter 640ms cubic-bezier(0.16, 1, 0.3, 1) 420ms both;
+}
+@keyframes robot-enter {
+  0% {
+    transform: translateY(118%);
+    opacity: 0;
+  }
+  62% {
+    transform: translateY(-5%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes robot-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.welcome-robot-image {
+  image-rendering: pixelated;
+  display: block;
+}
+.robot-pixel-shadow {
+  position: absolute;
+  z-index: 0;
+  left: 8%;
+  right: 5%;
+  bottom: 2px;
+  height: 9px;
+  background: rgba(17, 21, 61, 0.5);
+  clip-path: polygon(6% 20%, 94% 20%, 100% 55%, 86% 90%, 14% 90%, 0 55%);
+}
+/* Sem moldura em volta do personagem: ele fica solto, fixado na quina inferior
+   esquerda do viewport. Já houve aqui um bisel de vidro e depois uma moldura
+   ornamentada de jogo; as duas saíram a pedido — a segunda porque, para o robô
+   caber DENTRO dela, a caixa toda inchava para 1,5× o tamanho dele e o canto da
+   tela virava propriedade da moldura. Se um dia isto voltar, o número que
+   manda é este: os sprites ocupam os 128×128 inteiros, sem margem transparente
+   (medido: a arte vai de 0,000 a 1,000 na horizontal), então qualquer contorno
+   com recuo positivo cai dentro do desenho. */
+.robot-sound-toggle {
+  position: absolute;
+  z-index: 20;
+  top: 2px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--game-white, #f8fafc);
+  background: rgba(17, 21, 61, 0.45);
+  border: 1px solid rgba(219, 221, 253, 0.35);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+.robot-sound-toggle:hover {
+  transform: scale(1.08);
+  background: rgba(17, 21, 61, 0.65);
+}
+.robot-sound-toggle:active {
+  transform: scale(0.94);
+}
+
+/* Classic 16/32-bit RPG dialogue box: the window grows out from the robot, then types. */
+.retro-dialogue {
+  position: absolute;
+  z-index: 2;
+  left: 74%;
+  bottom: 7%;
+  width: clamp(390px, 56vw, 760px);
+  height: clamp(128px, 13vw, 178px);
+  opacity: 0;
+  transform: scaleX(0.025) scaleY(0.92);
+  transform-origin: left bottom;
+  transition:
+    opacity 90ms steps(1, end),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(7px 8px 0 rgba(17, 21, 61, 0.5));
+  pointer-events: none;
+}
+.retro-dialogue.is-open {
+  opacity: 1;
+  transform: scaleX(1) scaleY(1);
+}
+.retro-dialogue-window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #11153d 0%, #171b4d 100%);
+  border: 3px solid #f8fafc;
+  box-shadow:
+    inset 0 0 0 2px #466fd4,
+    inset 0 0 0 5px #11153d,
+    5px 5px 0 #e53888;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 calc(100% - 10px),
+    6px calc(100% - 10px),
+    6px 10px,
+    0 10px
+  );
+}
+.retro-dialogue-window:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(219, 221, 253, 0.035) 0 1px,
+    transparent 1px 4px
+  );
+}
+.retro-dialogue-topbar {
+  position: absolute;
+  z-index: 2;
+  top: 9px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(155, 163, 235, 0.35);
+  font-family: var(--font-pixel);
+  text-transform: uppercase;
+}
+.retro-dialogue-name {
+  color: #f37199;
+  font-size: clamp(8px, 0.8vw, 11px);
+  letter-spacing: 0.18em;
+  text-shadow: 2px 2px 0 #11153d;
+}
+.retro-dialogue-type {
+  color: rgba(219, 221, 253, 0.5);
+  font-size: 6px;
+  letter-spacing: 0.14em;
+}
+.retro-dialogue-body {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 49px;
+  bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 8px 8px;
+}
+.retro-dialogue-copy {
+  display: block;
+  max-width: 94%;
+  color: #f8fafc;
+  font-size: clamp(13px, 1.45vw, 20px);
+  line-height: 1.28;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #242f9b;
+}
+
+.game-start-screen {
+  pointer-events: none;
+}
+.game-start-panel {
+  position: relative;
+  /* The wordmark sizes itself off the panel's own width (cqw below), not
+     the viewport (vw) — the panel caps out at 620px but a vw-based font
+     never does, so above ~720px viewport the two diverge and the word
+     overflows the clip-path in silence. Scoping to the container keeps
+     them locked together at every viewport. */
+  container-type: inline-size;
+  width: min(86vw, 620px);
+  padding: clamp(26px, 4vw, 46px);
+  text-align: center;
+  /* Raised from .26 to .4 opacity: the sky behind it got noticeably
+     lighter (see --sky-core), and the light-lilac topline/subtitle text
+     was calibrated against the old, darker glass. */
+  background: rgba(17, 21, 61, 0.4);
+  border: 1px solid rgba(219, 221, 253, 0.34);
+  box-shadow:
+    8px 8px 0 rgba(229, 56, 136, 0.22),
+    inset 0 0 70px rgba(219, 221, 253, 0.05);
+  backdrop-filter: blur(18px);
+  clip-path: polygon(
+    0 10px,
+    10px 10px,
+    10px 0,
+    calc(100% - 10px) 0,
+    calc(100% - 10px) 10px,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    10px calc(100% - 10px),
+    0 calc(100% - 10px)
+  );
+}
+.game-start-topline {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(219, 221, 253, 0.55);
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 0.2em;
+}
+/* Was the RHYTMO wordmark set in type (.game-start-logo) plus a separate
+   subtitle line (.game-start-subtitle) — replaced by the full lockup
+   image, which already carries its own subtitle line (the katakana), so
+   the two collapsed into one element. Sized in cqw against the PANEL
+   (see .game-start-panel), same reasoning as the old type size: the
+   panel caps at 620px but a vw-based size never would, so above ~720px
+   viewport the two used to diverge and the wordmark ran past the
+   clip-path in silence. */
+.game-start-logo-img {
+  filter: drop-shadow(4px 4px 0 var(--game-deep)) drop-shadow(7px 7px 0 rgba(229, 56, 136, 0.4));
+}
+/* Was 10px type in a content-hugging box — read as a caption, not a call
+   to action (feedback: "não está chamativo"). Three things do the work
+   now, none of them a colour change: it's BIG (a real target, not a
+   label), it has a surface (a specular streak, baked into the background
+   itself — see the two-layer gradient below), and it BREATHES at rest (a
+   soft pink glow pulsing on ::before) instead of sitting inert until
+   touched. The pixel-stepped press — translate + shadow collapse — is
+   untouched; that mechanic already read as intentional and arcade. */
+.game-start-button {
+  pointer-events: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6cqw, 16px);
+  width: min(64cqw, 320px);
+  margin-top: 34px;
+  padding: clamp(16px, 2.6cqw, 22px) clamp(24px, 4cqw, 36px);
+  color: var(--game-deep);
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(255, 255, 255, 0.65) 48%, transparent 66%),
+    linear-gradient(180deg, var(--game-white) 0%, var(--game-ice) 100%);
+  border: 2px solid var(--game-ink);
+  box-shadow:
+    5px 5px 0 var(--game-pink),
+    9px 9px 0 rgba(17, 21, 61, 0.35);
+  font-family: var(--font-pixel);
+  font-size: clamp(16px, 2.6cqw, 22px);
+  letter-spacing: 0.16em;
+  transition:
+    transform 180ms steps(2, end),
+    box-shadow 180ms steps(2, end),
+    background 180ms steps(2, end);
+}
+/* The idle "breathe" — a soft glow behind the button, not part of the
+   hard pixel-shadow stack above, so the press interaction (which DOES
+   animate box-shadow) never fights this. Needs to bleed past the
+   button's own box, so nothing here sets overflow:hidden. */
+.game-start-button::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  z-index: -1;
+  background: var(--game-pink);
+  filter: blur(20px);
+  opacity: 0.32;
+  animation: game-start-glow 2600ms ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes game-start-glow {
+  50% {
+    opacity: 0.62;
+    transform: scale(1.06);
+  }
+}
+.game-start-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    7px 7px 0 var(--game-pink),
+    11px 11px 0 rgba(17, 21, 61, 0.35);
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(255, 255, 255, 0.65) 48%, transparent 66%),
+    var(--game-ice);
+}
+.game-start-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--game-pink);
+}
+.game-start-button i {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background: var(--game-pink);
+  animation: game-status-pulse 900ms steps(2, end) infinite;
+}
+.game-start-note {
+  margin-top: 24px;
+  color: rgba(219, 221, 253, 0.5);
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  letter-spacing: 0.22em;
+}
+.game-landing-hud {
+  position: absolute;
+  z-index: 20;
+  /* Era `left: var(--robot-clearance)` para desviar do robô neste canto. O
+     robô saiu da landing (ver __root.tsx: só monta fora da "/"), então a
+     linha volta a alinhar com a margem direita. --robot-clearance continua
+     em uso pelo .game-hud-bottom, no /lab, onde o robô está. */
+  left: 28px;
+  right: 28px;
+  bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  color: rgba(219, 221, 253, 0.55);
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .game-hud-bottom {
+    display: none;
+  }
+  .game-menu-title {
+    top: 82px;
+  }
+  .game-wheel-stage {
+    width: 100vw;
+    height: 58vh;
+    min-height: 390px;
+  }
+  .game-wheel-ring-outer {
+    width: 92vw;
+    height: 92vw;
+  }
+  .game-wheel-ring-inner {
+    width: 55vw;
+    height: 55vw;
+  }
+  .retro-dialogue {
+    left: 62%;
+    bottom: 8%;
+    width: min(86vw, 430px);
+    height: 126px;
+  }
+  .retro-dialogue-copy {
+    font-size: clamp(10px, 3.1vw, 14px);
+    letter-spacing: 0.055em;
+  }
+  .retro-dialogue-topbar {
+    left: 11px;
+    right: 11px;
+  }
+  .retro-dialogue-body {
+    left: 10px;
+    right: 10px;
+    top: 43px;
+  }
+  .retro-dialogue-prompt {
+    right: 9px;
+    bottom: 6px;
+  }
+  .game-landing-hud {
+    left: 18px;
+    right: 18px;
+  }
+  .game-landing-hud span:nth-child(3) {
+    display: none;
+  }
+}
+/* =======================================================================
+   RHYTMO // PÁGINA DE PRODUTO — o palco
+
+   Referência de composição: skylrk.com, medida ao vivo. O que foi copiado é
+   a ESTRUTURA (uma tela só, produto flutuando sem moldura, cartão de vidro
+   ancorado embaixo à direita, barra de compra separada logo abaixo, tira de
+   miniaturas embaixo à esquerda) e a convenção de colchetes nos rótulos. O
+   que NÃO foi copiado é a paleta: lá é cinza metálico sobre preto, aqui é o
+   azul do Rhytmo, com o contorno duro e a sombra deslocada em rosa que o
+   resto do site já usa.
+
+   Duas diferenças de dado obrigaram a divergir da referência:
+   • Cada produto tem UMA variante ("Default Title"), então as linhas
+     COLOR/SIZE não têm equivalente — no lugar entram a quantidade e a
+     família da collab na tira inferior.
+   • São 9 especificações, 4 cuidados, um texto de envio e a calculadora
+     inteira. Não cabe em quatro linhas como lá, daí as abas do cartão.
+   ======================================================================= */
+:root {
+  /* Amostrados do sprite do robô (public/robot/static/idle-breathe.png):
+     o verde dominante do visor e o realce dele. A lente de zoom é o visor
+     do personagem — não a mira de arma da referência de interação. */
+  --pdp-visor: #84d157;
+  --pdp-visor-bright: #d3fdb8;
+  --pdp-gutter: clamp(16px, 2.6vw, 38px);
+  --pdp-radius: 10px;
+  /* Uma medida só para a largura do cartão E para o recuo direito do quadro
+     do produto. Como duas porcentagens independentes, o produto passava a
+     2px do cartão a 1024px (medido pela silhueta pintada, não pela caixa da
+     imagem, que inclui a moldura transparente do recorte). */
+  --pdp-console-w: clamp(300px, 30vw, 400px);
+}
+
+/* Empilhado por padrão (mobile e tablet); vira composição sobreposta a
+   partir de 1024px, onde há largura para o cartão flutuar sobre o palco. */
+.pdp-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* A folga extra embaixo é para o botão de compra conseguir rolar acima do
+     robô, que é fixo neste canto. */
+  padding: calc(var(--header-h) + 16px) 16px calc(40px + var(--robot-w) * 0.55);
+}
+.pdp-stage-empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 60svh;
+  gap: 18px;
+  text-align: center;
+}
+
+.pdp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 8px 14px;
+  border: 1px solid rgba(219, 221, 253, 0.3);
+  border-radius: 999px;
+  background: rgba(219, 221, 253, 0.12);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  color: var(--game-ice);
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    background 220ms ease,
+    border-color 220ms ease;
+}
+.pdp-back:hover {
+  background: rgba(219, 221, 253, 0.22);
+  border-color: var(--game-white);
+}
+
+.pdp-link {
+  color: var(--game-pink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(243, 113, 153, 0.45);
+}
+.pdp-link:hover {
+  color: var(--game-pink);
+}
+
+/* ---- palco ------------------------------------------------------------ */
+.pdp-stage-media {
+  position: relative;
+  height: 44svh;
+  min-height: 250px;
+  touch-action: pan-y;
+  user-select: none;
+}
+/* A lupa só se oferece sobre o produto — `data-over` vem do teste de acerto
+   contra a máscara de alfa do recorte, não do retângulo da foto. */
+.pdp-stage-media[data-over] {
+  cursor: zoom-in;
+}
+/* Com a lente aberta o ponteiro do sistema some: a lente é o cursor. */
+.pdp-stage-media[data-scanning][data-over] {
+  cursor: none;
+}
+
+.pdp-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    58% 54% at 42% 44%,
+    rgba(219, 221, 253, 0.22) 0%,
+    rgba(70, 111, 212, 0.16) 40%,
+    transparent 72%
+  );
+}
+
+/* Os recuos do quadro moram numa variável porque o trilho das setas
+   (.pdp-nav-rail) tem de ocupar exatamente a mesma caixa — é o que põe as setas
+   ao lado da PEÇA em vez de nas bordas da tela.
+
+   O recuo de TOPO é maior do que os outros de propósito: é a faixa onde mora a
+   legenda "clique para inspecionar". Ele era 2% (9% no desktop) e as modelos,
+   que ocupam o quadro inteiro em altura, subiam até encostar no texto. Baixar o
+   quadro resolve para todas as peças de uma vez e encolhe cada uma na mesma
+   proporção, em vez de mexer no tamanho-alvo de cada tipo de foto. */
+.pdp-stage-media {
+  --pdp-frame-inset: 9% 4% 12% 4%;
+}
+.pdp-photo-frame {
+  position: absolute;
+  inset: var(--pdp-frame-inset);
+  display: grid;
+  place-items: center;
+}
+.pdp-nav-rail {
+  position: absolute;
+  inset: var(--pdp-frame-inset);
+  z-index: 5;
+  /* O trilho é só um sistema de coordenadas: quem recebe ponteiro são as setas
+     dentro dele, senão ele engoliria os cliques que abrem a lente. */
+  pointer-events: none;
+}
+.pdp-nav-rail .pdp-nav {
+  pointer-events: auto;
+}
+/* Posicionada em absoluto, não como item de grid. Num item de grid cuja
+   linha é `auto`, uma altura percentual não resolve — a linha é dimensionada
+   PELO item, então o percentual é indefinido e cai para `auto`. Era isso que
+   fazia a foto sair 1136×1420 dentro de um quadro de 656 de altura, com
+   `max-height: 100%` igualmente ignorado.
+
+   Assim a CAIXA da imagem é exatamente o quadro e o desenho é encaixado
+   dentro dela — que é também a conta que ProductStage.measure() usa para
+   saber onde a lente deve amplificar. */
+.pdp-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* O recorte tira o retângulo branco da foto da Shopify; esta sombra é o
+     que devolve o apoio no chão que a moldura dava. */
+  filter: drop-shadow(0 24px 40px rgba(17, 21, 61, 0.55));
+  /* Só opacidade: o `transform` deste elemento é a escala/centralização
+     calculada a partir do bbox do recorte (ver ProductStage.measure), e um
+     keyframe que também mexesse em transform sobrescreveria essa conta. */
+  animation: pdp-photo-in 520ms ease-out both;
+}
+/* O recorte roda no navegador e leva alguns instantes na resolução grande;
+   até lá não mostramos a foto crua, que traria de volta a caixa branca. */
+.pdp-photo-placeholder {
+  width: min(52%, 240px);
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  background: rgba(219, 221, 253, 0.08);
+  animation: pdp-pulse 1400ms ease-in-out infinite;
+}
+@keyframes pdp-photo-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- troca de produto pelas setas -------------------------------------- */
+/* A peça sai para o lado do gesto e a próxima chega do lado oposto, como uma
+   vitrine girando. Fica numa camada só dela porque o `transform` da foto já
+   está ocupado com o encaixe do recorte (ver ProductStage.measure). */
+.pdp-photo-slide {
+  position: absolute;
+  inset: 0;
+}
+.pdp-photo-slide[data-slide="out-next"] {
+  animation: pdp-slide-out-left 240ms cubic-bezier(0.55, 0, 0.85, 0.35) both;
+}
+.pdp-photo-slide[data-slide="out-prev"] {
+  animation: pdp-slide-out-right 240ms cubic-bezier(0.55, 0, 0.85, 0.35) both;
+}
+/* Mais longa que a saída, e com desaceleração forte no fim: a peça nova chega
+   com peso em vez de aparecer. */
+.pdp-photo-slide[data-slide="in-next"] {
+  animation: pdp-slide-in-right 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.pdp-photo-slide[data-slide="in-prev"] {
+  animation: pdp-slide-in-left 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes pdp-slide-out-left {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(-14%, 0, 0) scale(0.84);
+  }
+}
+@keyframes pdp-slide-out-right {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(14%, 0, 0) scale(0.84);
+  }
+}
+@keyframes pdp-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(18%, 0, 0) scale(0.88);
+  }
+  55% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pdp-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-18%, 0, 0) scale(0.88);
+  }
+  55% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pdp-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.pdp-stage-hint {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  /* Acima da chapa editorial, que ocupa o quadro inteiro e passava por cima. */
+  z-index: 3;
+  transform: translateX(-50%);
+  pointer-events: none;
+  font-family: var(--font-pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(219, 221, 253, 0.62);
+  text-shadow: 0 1px 3px rgba(17, 21, 61, 0.8);
+}
+
+/* ---- setas de produto ------------------------------------------------- */
+.pdp-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: clamp(38px, 3.4vw, 50px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  border: 1px solid rgba(219, 221, 253, 0.32);
+  border-radius: 999px;
+  background: rgba(17, 21, 61, 0.42);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  color: var(--game-ice);
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease;
+}
+.pdp-nav svg {
+  width: 42%;
+  height: 42%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pdp-nav:hover {
+  background: rgba(17, 21, 61, 0.7);
+  border-color: var(--game-white);
+  color: var(--game-white);
+}
+/* Em fração do quadro, não em pixels da tela: a peça é centrada no quadro e a
+   mais larga do catálogo ocupa 66% dele, então 4% de cada lado deixa a seta
+   perto sem nunca encostar. */
+.pdp-nav-prev {
+  left: 4%;
+}
+.pdp-nav-next {
+  right: 4%;
+}
+/* Para FORA do quadro no celular, ao contrário do desktop. Aqui não há cartão
+   ocupando a direita, então a tela toda é do palco — e o quadro é tão estreito
+   (329px a 390 de viewport) que a seta a 4% para dentro dele encostava na peça:
+   medido, 2px de sobreposição na modelo mais larga. A -6% sobram ~19px de
+   folga, e a seta ainda fica a 11px da borda da tela.
+
+   Este bloco fica logo abaixo das regras que ele sobrepõe, e não junto dos
+   outros ajustes de celular lá em cima: aquele @media vem ANTES no arquivo, e
+   com a mesma especificidade quem ganha é a última declaração — as sobrepostas
+   de lá simplesmente não valiam. */
+@media (max-width: 700px) {
+  .pdp-nav-prev {
+    left: -6%;
+  }
+  .pdp-nav-next {
+    right: -6%;
+  }
+}
+.pdp-nav-prev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+.pdp-nav-next:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+/* Afunda no clique: a troca só acontece 240ms depois (a peça sai antes de a
+   rota mudar), então o botão precisa confirmar o toque na hora. */
+.pdp-nav:active {
+  transform: translateY(-50%) scale(0.9);
+  background: rgba(229, 56, 136, 0.32);
+  border-color: var(--game-white);
+}
+
+/* ---- lente (o visor do robô) ------------------------------------------ */
+.pdp-lens {
+  position: absolute;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.pdp-lens-glass,
+.pdp-lens-scanlines,
+.pdp-lens-tint,
+.pdp-lens-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+}
+.pdp-lens-glass {
+  background-repeat: no-repeat;
+  background-color: rgba(17, 21, 61, 0.92);
+  border: 2px solid var(--game-white);
+  box-shadow:
+    4px 4px 0 var(--game-pink),
+    0 20px 44px rgba(17, 21, 61, 0.55);
+}
+/* Discretos de propósito: a lente existe para o cliente VER a estampa. Uma
+   primeira versão com varredura a 0.55 e tinta em `screen` deixava o produto
+   esverdeado — o visor tem de emoldurar, não filtrar. */
+.pdp-lens-scanlines {
+  background: repeating-linear-gradient(0deg, rgba(17, 21, 61, 0.2) 0 1px, transparent 1px 4px);
+  opacity: 0.3;
+}
+.pdp-lens-tint {
+  background: radial-gradient(
+    72% 72% at 50% 44%,
+    transparent 0%,
+    rgba(132, 209, 87, 0.07) 68%,
+    rgba(132, 209, 87, 0.16) 100%
+  );
+}
+.pdp-lens-sweep {
+  overflow: hidden;
+}
+.pdp-lens-sweep::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 34%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(211, 253, 184, 0.16) 50%,
+    transparent 100%
+  );
+  animation: pdp-lens-sweep 2400ms linear infinite;
+}
+@keyframes pdp-lens-sweep {
+  from {
+    transform: translateY(-120%);
+  }
+  to {
+    transform: translateY(320%);
+  }
+}
+.pdp-lens[data-still] .pdp-lens-sweep::before {
+  animation: none;
+  opacity: 0;
+}
+
+.pdp-lens-cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  background:
+    linear-gradient(var(--pdp-visor-bright), var(--pdp-visor-bright)) center / 1px 100% no-repeat,
+    linear-gradient(var(--pdp-visor-bright), var(--pdp-visor-bright)) center / 100% 1px no-repeat;
+  opacity: 0.75;
+}
+.pdp-lens-corner {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-color: var(--pdp-visor-bright);
+  opacity: 0.9;
+}
+.pdp-lens-corner-tl {
+  top: 7px;
+  left: 7px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.pdp-lens-corner-tr {
+  top: 7px;
+  right: 7px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+.pdp-lens-corner-bl {
+  bottom: 7px;
+  left: 7px;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+.pdp-lens-corner-br {
+  bottom: 7px;
+  right: 7px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+.pdp-lens-readout {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  color: var(--pdp-visor-bright);
+  text-shadow: 1px 1px 0 rgba(17, 21, 61, 0.85);
+}
+
+/* ---- tira inferior ---------------------------------------------------- */
+.pdp-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 7px;
+  border: 1px solid rgba(219, 221, 253, 0.24);
+  border-radius: var(--pdp-radius);
+  background: rgba(219, 221, 253, 0.1);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  overflow-x: auto;
+}
+.pdp-strip-group {
+  display: flex;
+  gap: 6px;
+}
+.pdp-strip-divider {
+  flex: none;
+  width: 1px;
+  height: 26px;
+  background: rgba(219, 221, 253, 0.28);
+}
+.pdp-thumb {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(219, 221, 253, 0.3);
+  border-radius: 6px;
+  /* Ladrilho de tinta, não de papel: antes as fotos entravam cruas e a tira
+     virava cinco retângulos brancos no meio de um site azul. */
+  background:
+    radial-gradient(120% 100% at 50% 0%, rgba(70, 111, 212, 0.5) 0%, transparent 70%),
+    rgba(17, 21, 61, 0.62);
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    opacity 200ms ease;
+}
+.pdp-thumb-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pdp-thumb-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.pdp-thumb-loading {
+  width: 70%;
+  height: 70%;
+  border-radius: 4px;
+  background: rgba(219, 221, 253, 0.12);
+  animation: pdp-pulse 1400ms ease-in-out infinite;
+}
+.pdp-thumb[data-active] {
+  border-color: var(--game-white);
+  box-shadow: 2px 2px 0 var(--game-pink);
+}
+.pdp-thumb-sibling {
+  opacity: 0.72;
+}
+.pdp-thumb-sibling:hover {
+  opacity: 1;
+  border-color: var(--game-white);
+}
+
+/* ---- cartão ----------------------------------------------------------- */
+.pdp-console {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.pdp-card {
+  padding: clamp(13px, 1.1vw, 17px);
+  border: 1px solid rgba(219, 221, 253, 0.26);
+  border-radius: var(--pdp-radius);
+  background: rgba(17, 21, 61, 0.44);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 18px 40px rgba(17, 21, 61, 0.38);
+}
+.pdp-eyebrow {
+  font-family: var(--font-pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(219, 221, 253, 0.6);
+}
+.pdp-title {
+  margin-top: 7px;
+  font-family: var(--font-display);
+  font-size: clamp(19px, 1.55vw, 26px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--game-white);
+}
+.pdp-priceline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 9px;
+}
+.pdp-price {
+  font-family: "Rhytmo Extras", "Rhytmo Symbols", "Rhytmo Numeric";
+  font-size: clamp(14px, 1.1vw, 17px);
+  color: var(--game-white);
+}
+.pdp-stock {
+  font-family: var(--font-pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pdp-visor-bright);
+}
+.pdp-stock[data-out] {
+  color: var(--game-pink-soft);
+}
+
+/* Rola em vez de cortar: "Especificações" em português é longo e a 1024px a
+   quarta aba ficava fora do cartão. */
+.pdp-tabs {
+  display: flex;
+  gap: clamp(9px, 1vw, 15px);
+  margin-top: 13px;
+  border-bottom: 1px solid rgba(219, 221, 253, 0.2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pdp-tabs::-webkit-scrollbar {
+  display: none;
+}
+.pdp-tab {
+  position: relative;
+  flex: none;
+  padding-bottom: 7px;
+  font-family: var(--font-pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(219, 221, 253, 0.55);
+  transition: color 200ms ease;
+}
+.pdp-tab:hover {
+  color: rgba(219, 221, 253, 0.85);
+}
+.pdp-tab[aria-selected="true"] {
+  color: var(--game-white);
+}
+.pdp-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--game-pink);
+}
+
+.pdp-panel {
+  margin-top: 11px;
+  max-height: clamp(108px, 19vh, 190px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+}
+/* Esmaece a última linha só quando há mesmo mais conteúdo abaixo (atributo
+   posto pelo ProductConsole): sem isso o texto era cortado no meio de uma
+   palavra e lia como defeito, não como "tem mais, role" — e com ele sempre
+   ligado, a última linha de uma aba curta aparecia apagada sem motivo. */
+.pdp-panel[data-overflow] {
+  mask-image: linear-gradient(to bottom, black calc(100% - 22px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 22px), transparent 100%);
+}
+.pdp-panel::-webkit-scrollbar {
+  width: 3px;
+}
+.pdp-panel::-webkit-scrollbar-thumb {
+  background: rgba(219, 221, 253, 0.3);
+  border-radius: 2px;
+}
+.pdp-copy {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(219, 221, 253, 0.86);
+}
+.pdp-list {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(219, 221, 253, 0.86);
+}
+.pdp-list li {
+  position: relative;
+  padding-left: 12px;
+}
+.pdp-list li::before {
+  content: "";
+  position: absolute;
+  top: 0.52em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--game-pink);
+}
+/* A calculadora de frete é reaproveitada inteira; estas duas regras só
+   desfazem o espaçamento que ela carrega para a página antiga e a forçam a
+   uma coluna, já que o breakpoint `sm:` dela é da viewport, não do cartão. */
+.pdp-panel section {
+  margin-top: 12px;
+  padding-top: 0;
+  border-top: 0;
+}
+.pdp-panel form {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pdp-variants {
+  margin-top: 12px;
+}
+.pdp-variant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.pdp-variant-chip {
+  min-width: 34px;
+  padding: 5px 9px;
+  border: 1px solid rgba(219, 221, 253, 0.3);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--game-ice);
+}
+.pdp-variant-chip[data-active] {
+  border-color: var(--game-white);
+  background: rgba(219, 221, 253, 0.16);
+  color: var(--game-white);
+}
+.pdp-variant-chip:disabled {
+  opacity: 0.35;
+}
+
+.pdp-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(219, 221, 253, 0.2);
+}
+.pdp-field {
+  font-family: var(--font-pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(219, 221, 253, 0.62);
+}
+.pdp-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(219, 221, 253, 0.28);
+  border-radius: 7px;
+  background: rgba(17, 21, 61, 0.4);
+}
+.pdp-qty button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 27px;
+  color: var(--game-ice);
+  font-size: 13px;
+  transition: background 180ms ease;
+}
+.pdp-qty button:hover {
+  background: rgba(219, 221, 253, 0.14);
+}
+.pdp-qty span {
+  min-width: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--game-white);
+}
+
+.pdp-buy {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(219, 221, 253, 0.4);
+  border-radius: 7px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--game-white);
+  transition: background 200ms ease;
+}
+.pdp-buy:hover:not(:disabled) {
+  background: rgba(219, 221, 253, 0.14);
+}
+.pdp-buy:disabled {
+  opacity: 0.45;
+}
+
+/* Separada do cartão, como na referência: é a última coisa antes do clique,
+   com o preço voltando à direita. */
+.pdp-atc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 2px solid var(--game-ink);
+  border-radius: var(--pdp-radius);
+  background: var(--game-white);
+  color: var(--game-ink);
+  font-family: var(--font-pixel);
+  font-size: clamp(8px, 0.62vw, 9.5px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--game-pink);
+  transition:
+    transform 140ms steps(2, end),
+    box-shadow 140ms steps(2, end);
+}
+.pdp-atc:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--game-pink);
+}
+.pdp-atc:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--game-pink);
+}
+.pdp-atc:disabled {
+  opacity: 0.5;
+}
+.pdp-atc-price {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* ---- composição sobreposta ------------------------------------------- */
+@media (min-width: 1024px) {
+  .pdp-stage {
+    display: block;
+    height: 100svh;
+    min-height: 620px;
+    padding: 0;
+    overflow: hidden;
+  }
+  /* O cabeçalho é fixo e o bloco de contenção destes filhos é a caixa de
+     padding do palco, então o recuo do topo tem de ser explícito aqui. */
+  .pdp-stage-media {
+    position: absolute;
+    inset: var(--header-h) 0 0 0;
+    height: auto;
+    min-height: 0;
+  }
+  /* Recuado à direita pela largura real do cartão, mais a calha e uma folga
+     para a sombra projetada do produto (~40px de desfoque). O trilho das setas
+     lê a mesma variável. */
+  .pdp-stage-media {
+    --pdp-frame-inset: 9% calc(var(--pdp-console-w) + var(--pdp-gutter) + 48px) 15% 5%;
+  }
+  /* Acima do produto, não abaixo: embaixo ele disputava espaço com a tira,
+     que cresce com o número de fotos e de gorros da collab. Quem sai da frente
+     é a peça — ver o recuo de topo do quadro logo acima. */
+  .pdp-stage-hint {
+    top: clamp(12px, 2.4vh, 26px);
+    left: 40%;
+  }
+  .pdp-back {
+    position: absolute;
+    z-index: 5;
+    top: calc(var(--header-h) + var(--pdp-gutter));
+    left: var(--pdp-gutter);
+  }
+  /* Centro vertical no meio do quadro da foto, que dentro do trilho já é o
+     meio dele — os 44% compensavam o fato de o trilho não existir e as setas
+     serem posicionadas contra o palco inteiro. */
+  .pdp-nav {
+    top: 50%;
+  }
+  /* O robô fica fixo neste mesmo canto — a tira usa a folga que o resto do
+     HUD do site já usa, senão ele cobre as primeiras miniaturas. */
+  .pdp-strip {
+    position: absolute;
+    z-index: 4;
+    bottom: var(--pdp-gutter);
+    left: var(--robot-clearance);
+    max-width: min(26vw, 330px);
+  }
+  /* Piso de 300px: a 1024 o `min(28vw, …)` dava 287px e as abas em português
+     não cabiam. */
+  .pdp-console {
+    position: absolute;
+    z-index: 4;
+    right: var(--pdp-gutter);
+    bottom: var(--pdp-gutter);
+    width: var(--pdp-console-w);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-floor-plane,
+  .game-rings span,
+  .game-status-dot,
+  .game-start-button i,
+  .retro-dialogue-arrow {
+    animation: none;
+  }
+  /* The grid stays visible, just parked — the depth cue survives even
+     when the motion doesn't. */
+  .game-floor-plane {
+    will-change: auto;
+  }
+  .retro-dialogue {
+    transition: none;
+  }
+  /* O robô ainda precisa aparecer, só que sem o deslocamento. */
+  .robot-character {
+    animation: robot-fade-in 320ms ease-out 300ms both;
+  }
+  .pdp-photo,
+  .pdp-photo-placeholder,
+  .pdp-photo-slide {
+    animation: none;
+  }
+  /* Unlike the rings, a particle frozen mid-flight doesn't read as a
+     coherent still image — it reads as scattered debris. The whole field
+     is decorative, so it's hidden outright instead of parked. */
+  .game-particles {
+    display: none;
+  }
+}
+
+/* Starfield lives inside the sky plane — the farthest thing there is, so
+   it barely drifts at all. */
+/* Stacking order, back to front. Explicit because the rings overlap the
+   floor and DOM order alone shouldn't decide what occludes what. */
+.game-rings-far {
+  z-index: 2;
+}
+.game-floor {
+  z-index: 4;
+}
+.game-rings-near {
+  z-index: 6;
+}
+.game-particles {
+  z-index: 6;
+}
+.game-glow-a {
+  z-index: 5;
+}
+.game-glow-b {
+  z-index: 1;
+}
+.game-noise {
+  z-index: 11;
+}
+.game-vignette {
+  z-index: 12;
+}
+.game-menu-title,
+.game-hud,
+.game-wheel-stage,
+.game-swipe-hint {
+  z-index: 10;
+}
+
+/* Dialogue is anchored beside the robot, never on top of it. */
+.retro-dialogue {
+  left: calc(100% + clamp(22px, 2.5vw, 42px));
+  bottom: 10%;
+  /* Sized against the longest phrase the robot actually says (55
+     characters — see robot/phrases.ts), not a short one like "Opa?!":
+     a short phrase fits any box and proves nothing. Verified live with
+     that phrase forced on screen, not estimated from character counts. */
+  width: clamp(300px, 34vw, 480px);
+  height: clamp(108px, 10vw, 145px);
+  transform-origin: left bottom;
+}
+.retro-dialogue-window {
+  box-shadow:
+    inset 0 0 0 2px #466fd4,
+    inset 0 0 0 5px #11153d,
+    6px 6px 0 #e53888,
+    10px 10px 0 rgba(17, 21, 61, 0.32);
+}
+.retro-dialogue-body {
+  padding: 10px 9px;
+}
+.retro-dialogue-copy {
+  font-size: clamp(11.5px, 1.15vw, 15px);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 700px) {
+  /* Mobile: the scene compresses instead of scaling down uniformly —
+     the cathedral moves off the centre so it never sits behind the
+     product, and the near planes shrink so the horizon band doesn't
+     eat half a phone screen. */
+  /* Floor stays animated on phones — just cheaper: a bigger tile means
+     far fewer plates to rasterise, and a slower cycle costs less too.
+     --tile-w and animation-duration scale by the same 1.35x, so the
+     apparent speed matches desktop (--tile-h follows --tile-w on its
+     own). See .game-floor-plane above for why the two can't move
+     independently. */
+  .game-floor {
+    --tile-w: 202px;
+    height: 44%;
+  }
+  .game-floor-plane {
+    height: 260%;
+    animation-duration: 48s;
+  }
+  /* One less ring group to composite on phones. */
+  .game-rings-far span:nth-child(3) {
+    display: none;
+  }
+  /* Below ~700px the "beside the robot" layout can't fit — the robot alone
+     eats ~165px (its own left offset + clamped width), leaving too little
+     room for any bubble at 320-390px viewports. Anchor to the viewport
+     instead (fixed + left/right insets) so the width is always
+     `100vw - 28px`, never a function of the robot's position, and it can
+     never cause horizontal overflow regardless of screen size. */
+  .retro-dialogue {
+    position: fixed;
+    left: 14px;
+    right: 14px;
+    /* Tuned for the robot's mobile height (a square sprite, flush to the
+       corner, floored by --robot-w's 112px clamp minimum) plus the same
+       ~28px gap the desktop layout uses above the character. Re-tune
+       together if --robot-w's mobile floor changes. */
+    bottom: 140px;
+    width: auto;
+    height: 126px;
+  }
+  .retro-dialogue-copy {
+    font-size: clamp(10px, 3vw, 14px);
   }
 }
