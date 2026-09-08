@@ -32,8 +32,17 @@ export default defineConfig(async ({ mode, command }) => {
 
   if (command === "build") {
     const { nitro } = await import("nitro/vite");
-    plugins.push(nitro({ defaultPreset: "cloudflare-module" }));
+    plugins.push(
+      nitro({
+        preset: "cloudflare-module",
+        // A hospedagem espera o build em dist/ (client + server); o padrão do
+        // Nitro é .output/, e a verificação de artefato falha sem isto.
+        output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" },
+        cloudflare: { nodeCompat: true, deployConfig: true },
+      }),
+    );
   }
+
 
   return {
     define: envDefine,
