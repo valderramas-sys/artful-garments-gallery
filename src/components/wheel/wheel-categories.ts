@@ -19,7 +19,7 @@ export const WHEEL_CATEGORIES: WheelCategory[] = [
   { id: "shop", label: "Shop", to: "/shop", Icon: BagIcon },
   { id: "home", label: "Home", to: "/", Icon: HomeIcon },
   { id: "info", label: "Info", to: "/info", Icon: InfoIcon },
-  
+
   {
     id: "instagram",
     label: "Instagram",

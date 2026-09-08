@@ -9,25 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ShopRouteImport } from './routes/shop'
-import { Route as LabRouteImport } from './routes/lab'
-import { Route as InfoRouteImport } from './routes/info'
-import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as InfoRouteImport } from './routes/info'
+import { Route as LabRouteImport } from './routes/lab'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as ShopHandleRouteImport } from './routes/shop_.$handle'
 
-const ShopRoute = ShopRouteImport.update({
-  id: '/shop',
-  path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LabRoute = LabRouteImport.update({
-  id: '/lab',
-  path: '/lab',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InfoRoute = InfoRouteImport.update({
-  id: '/info',
-  path: '/info',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -35,9 +26,24 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const InfoRoute = InfoRouteImport.update({
+  id: '/info',
+  path: '/info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabRoute = LabRouteImport.update({
+  id: '/lab',
+  path: '/lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopHandleRoute = ShopHandleRouteImport.update({
+  id: '/shop_/$handle',
+  path: '/shop/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop/$handle': typeof ShopHandleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop/$handle': typeof ShopHandleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,21 @@ export interface FileRoutesById {
   '/info': typeof InfoRoute
   '/lab': typeof LabRoute
   '/shop': typeof ShopRoute
+  '/shop_/$handle': typeof ShopHandleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/shop'
+  fullPaths: '/' | '/checkout' | '/info' | '/lab' | '/shop' | '/shop/$handle'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/info' | '/lab' | '/shop'
-  id: '__root__' | '/' | '/checkout' | '/info' | '/lab' | '/shop'
+  to: '/' | '/checkout' | '/info' | '/lab' | '/shop' | '/shop/$handle'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/info'
+    | '/lab'
+    | '/shop'
+    | '/shop_/$handle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,29 +93,16 @@ export interface RootRouteChildren {
   InfoRoute: typeof InfoRoute
   LabRoute: typeof LabRoute
   ShopRoute: typeof ShopRoute
+  ShopHandleRoute: typeof ShopHandleRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/shop': {
-      id: '/shop'
-      path: '/shop'
-      fullPath: '/shop'
-      preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lab': {
-      id: '/lab'
-      path: '/lab'
-      fullPath: '/lab'
-      preLoaderRoute: typeof LabRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/info': {
-      id: '/info'
-      path: '/info'
-      fullPath: '/info'
-      preLoaderRoute: typeof InfoRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -109,11 +112,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/info': {
+      id: '/info'
+      path: '/info'
+      fullPath: '/info'
+      preLoaderRoute: typeof InfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab': {
+      id: '/lab'
+      path: '/lab'
+      fullPath: '/lab'
+      preLoaderRoute: typeof LabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop_/$handle': {
+      id: '/shop_/$handle'
+      path: '/shop/$handle'
+      fullPath: '/shop/$handle'
+      preLoaderRoute: typeof ShopHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -125,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   InfoRoute: InfoRoute,
   LabRoute: LabRoute,
   ShopRoute: ShopRoute,
+  ShopHandleRoute: ShopHandleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

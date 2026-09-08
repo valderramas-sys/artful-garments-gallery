@@ -1,9 +1,9 @@
-export const SHOPIFY_API_VERSION = "2025-07";
-export const SHOPIFY_STORE_PERMANENT_DOMAIN = "ywbqs6-gd.myshopify.com";
-export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-export const SHOPIFY_STOREFRONT_TOKEN = "a751ce3fa983e0d857ebaa82e1a4c0de";
+const SHOPIFY_API_VERSION = "2025-07";
+const SHOPIFY_STORE_PERMANENT_DOMAIN = "ywbqs6-gd.myshopify.com";
+const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+const SHOPIFY_STOREFRONT_TOKEN = "a751ce3fa983e0d857ebaa82e1a4c0de";
 
-export type Money = { amount: string; currencyCode: string };
+type Money = { amount: string; currencyCode: string };
 
 export type ShopifyVariant = {
   id: string;
@@ -27,7 +27,7 @@ export type ShopifyProduct = {
   };
 };
 
-export const PRODUCT_FIELDS = `
+const PRODUCT_FIELDS = `
   id
   title
   description
@@ -48,7 +48,7 @@ export const PRODUCT_FIELDS = `
   options { name values }
 `;
 
-export const STOREFRONT_QUERY = `
+const STOREFRONT_QUERY = `
   query GetProducts($first: Int!, $query: String) {
     products(first: $first, query: $query) {
       edges { node { ${PRODUCT_FIELDS} } }
@@ -56,7 +56,7 @@ export const STOREFRONT_QUERY = `
   }
 `;
 
-export const PRODUCT_BY_HANDLE_QUERY = `
+const PRODUCT_BY_HANDLE_QUERY = `
   query GetProduct($handle: String!) {
     product(handle: $handle) { ${PRODUCT_FIELDS} }
   }
@@ -113,12 +113,7 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
 export const productImage = (product: ShopifyProduct) =>
   product.node.images.edges[0]?.node.url ?? null;
 
-export const firstAvailableVariant = (product: ShopifyProduct) =>
-  product.node.variants.edges.find((v) => v.node.availableForSale)?.node ??
-  product.node.variants.edges[0]?.node ??
-  null;
-
-export const PAYMENT_SETTINGS_QUERY = `
+const PAYMENT_SETTINGS_QUERY = `
   query PaymentSettings {
     shop {
       paymentSettings {
@@ -129,7 +124,7 @@ export const PAYMENT_SETTINGS_QUERY = `
   }
 `;
 
-export type PaymentSettings = {
+type PaymentSettings = {
   acceptedCardBrands: string[];
   supportedDigitalWallets: string[];
 };

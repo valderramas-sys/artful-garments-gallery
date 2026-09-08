@@ -112,9 +112,8 @@ export async function estimateShipping(params: {
     },
   });
 
-  const cartId = (
-    created?.data as { cartCreate?: { cart?: { id?: string } } } | undefined
-  )?.cartCreate?.cart?.id;
+  const cartId = (created?.data as { cartCreate?: { cart?: { id?: string } } } | undefined)
+    ?.cartCreate?.cart?.id;
   if (!cartId) return [];
 
   const res = await storefrontApiRequest(DELIVERY_GROUPS, { id: cartId });
@@ -132,7 +131,8 @@ export async function estimateShipping(params: {
   const options: ShippingOption[] = [];
   for (const group of groups) {
     for (const option of group.deliveryOptions ?? []) {
-      const delivery = parseWindow(option.description) ?? parseWindow(option.title) ?? destination.delivery;
+      const delivery =
+        parseWindow(option.description) ?? parseWindow(option.title) ?? destination.delivery;
       options.push({
         handle: option.handle,
         title: option.title?.trim() || option.code || "Shipping",

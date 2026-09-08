@@ -170,7 +170,8 @@ export const useCartStore = create<CartState>()(
               }`,
               { cartId, lines: [{ merchandiseId: line.variantId, quantity: line.quantity }] },
             );
-            const cart = (res?.data as { cartLinesAdd?: { cart?: RemoteCart } })?.cartLinesAdd?.cart;
+            const cart = (res?.data as { cartLinesAdd?: { cart?: RemoteCart } })?.cartLinesAdd
+              ?.cart;
             if (cart) set(fromCart(cart));
           }
         } catch (error) {

@@ -1,10 +1,12 @@
-import windSwoosh from "@/assets/wind-swoosh.mp3.asset.json";
-import arcadeClick from "@/assets/arcade-click.mp3.asset.json";
-import beepPloc from "@/assets/beep-ploc.mp3.asset.json";
-import popupOpen from "@/assets/popup-open.mp3.asset.json";
-import popupClose from "@/assets/popup-close.mp3.asset.json";
-import confirmTap from "@/assets/confirm-tap.mp3.asset.json";
-import modalClose from "@/assets/modal-close.mp3.asset.json";
+import { useRobotStore } from "@/stores/robotStore";
+
+const windSwoosh = { url: "/sounds/wind-swoosh.mp3" };
+const arcadeClick = { url: "/sounds/arcade-click.mp3" };
+const beepPloc = { url: "/sounds/beep-ploc.mp3" };
+const popupOpen = { url: "/sounds/popup-open.mp3" };
+const popupClose = { url: "/sounds/popup-close.mp3" };
+const confirmTap = { url: "/sounds/confirm-tap.mp3" };
+const modalClose = { url: "/sounds/modal-close.mp3" };
 
 /* -------------------------------------------------------------------------- */
 /* Debug audit logging (opt-in)                                               */
@@ -59,7 +61,6 @@ function audit(entry: SfxLogEntry) {
   if (!debugEnabled) return;
   auditLog.push(entry);
   if (auditLog.length > LOG_LIMIT) auditLog.shift();
-  // eslint-disable-next-line no-console
   console.debug(
     `[sfx] ${entry.key} via ${entry.engine} +${entry.latencyMs.toFixed(1)}ms` +
       (entry.error ? ` — ${entry.error}` : ""),
@@ -246,6 +247,7 @@ if (typeof window !== "undefined") {
 
 function play(key: keyof typeof slots) {
   if (typeof window === "undefined") return;
+  if (!useRobotStore.getState().soundEnabled) return;
   const slot = slots[key];
   const now = Date.now();
   if (now - slot.last < 90) return;
@@ -261,9 +263,7 @@ function play(key: keyof typeof slots) {
   const at = performance.now();
   audio
     .play()
-    .then(() =>
-      audit({ key, engine: "element", latencyMs: at - lastGestureAt, at }),
-    )
+    .then(() => audit({ key, engine: "element", latencyMs: at - lastGestureAt, at }))
     .catch((err: unknown) =>
       audit({
         key,
@@ -300,11 +300,6 @@ export function playModalClose() {
   play("modalClose");
 }
 
-/** Plays the pop-up close SFX. */
-export function playPopupClose() {
-  play("popupClose");
-}
-
 /**
  * Plays the confirm tap SFX instantly — no debounce, no delay. Uses a decoded
  * WebAudio buffer when available (synchronous start, best on iOS Safari) and
@@ -312,6 +307,7 @@ export function playPopupClose() {
  */
 export function playTap() {
   if (typeof window === "undefined") return;
+  if (!useRobotStore.getState().soundEnabled) return;
   const at = performance.now();
   const ctx = getContext();
 

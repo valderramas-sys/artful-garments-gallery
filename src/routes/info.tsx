@@ -34,7 +34,7 @@ function MailLink() {
   return (
     <a
       href={`mailto:${INFO_EMAIL}`}
-      className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+      className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-pink"
     >
       {INFO_EMAIL}
     </a>
@@ -72,7 +72,7 @@ function InfoPage() {
   const c = INFO_CONTENT[lang];
 
   return (
-    <main className="animate-fade-in min-h-svh w-full px-5 pt-28 pb-24 sm:px-10 lg:px-16">
+    <main className="animate-fade-in min-h-svh w-full px-5 pt-[calc(var(--header-h)+2.5rem)] pb-24 sm:px-10 lg:px-16">
       <div className="mx-auto w-full max-w-[1100px]">
         <header className="pb-10 sm:pb-14">
           <h1 className="font-display text-4xl leading-[0.9] tracking-tight uppercase sm:text-6xl lg:text-7xl">
@@ -137,7 +137,7 @@ function InfoPage() {
                     href={INFO_INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-pink"
                   >
                     {INFO_INSTAGRAM}
                   </a>
@@ -150,7 +150,7 @@ function InfoPage() {
                     href={INFO_SITE_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-brand-indigo"
+                    className="text-ink underline decoration-ink/40 underline-offset-4 transition-colors duration-250 hover:text-pink"
                   >
                     {INFO_SITE}
                   </a>

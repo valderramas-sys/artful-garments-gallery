@@ -3,17 +3,60 @@ import { GlassSphere } from "./GlassSphere";
 import { WHEEL_CATEGORIES } from "./wheel-categories";
 import { playSwipe } from "@/lib/sound";
 
+/**
+ * A esfera selecionada ficava 0,8·raio À FRENTE do plano de perspectiva
+ * (anel em translateZ(-0,2·r), item em +1·r), com perspective = 3,2·r. Isso
+ * dá uma ampliação de 3,2/(3,2−0,8) = 4/3: o navegador rasterizava a camada
+ * no tamanho CSS (130px) e a transformação 3D esticava o raster para 176px na
+ * tela. Ícone, rótulo e grade saíam todos borrados — medido comparando com um
+ * clone da mesma marcação fora de contexto 3D, no mesmo tamanho de tela.
+ *
+ * Agora o anel recua para translateZ(-1·r), o item selecionado cai
+ * exatamente sobre o plano (z = 0, ampliação 1,000) e o raster é 1:1. Raio e
+ * diâmetro sobem na mesma proporção de 4/3 para a composição continuar do
+ * mesmo tamanho aos olhos. Efeito colateral bem-vindo: as esferas de trás
+ * agora encolhem de verdade com a distância, em vez de por um scale fixo.
+ */
+const RASTER_GAIN = 4 / 3;
 
-/** Responsive geometry: [ring radius, sphere diameter]. */
+/** Responsive geometry: [ring radius, sphere diameter], antes do ganho. */
+const BREAKPOINTS = [
+  { under: 380, radius: 108, sphere: 76 },
+  { under: 480, radius: 128, sphere: 84 },
+  { under: 768, radius: 176, sphere: 98 },
+  { under: 1200, radius: 236, sphere: 114 },
+  { under: Infinity, radius: 296, sphere: 130 },
+];
+
 function geometry(width: number): { radius: number; sphere: number } {
-  if (width < 380) return { radius: 108, sphere: 76 };
-  if (width < 480) return { radius: 128, sphere: 84 };
-  if (width < 768) return { radius: 176, sphere: 98 };
-  if (width < 1200) return { radius: 236, sphere: 114 };
-  return { radius: 296, sphere: 130 };
+  const b = BREAKPOINTS.find((x) => width < x.under) ?? BREAKPOINTS[BREAKPOINTS.length - 1];
+  return {
+    radius: Math.round(b.radius * RASTER_GAIN),
+    sphere: Math.round(b.sphere * RASTER_GAIN),
+  };
 }
 
-const norm = (deg: number) => (((deg + 180) % 360) + 360) % 360 - 180;
+const norm = (deg: number) => ((((deg + 180) % 360) + 360) % 360) - 180;
+
+/**
+ * Metade da largura que a roda realmente ocupa na tela.
+ *
+ * Com o anel em z = −raio, um item a θ graus fica em z = raio(cos θ − 1) e
+ * projeta em x = raio·sin θ · d/(d − z), com d = 3,2·raio. Reservar `raio` de
+ * meia-largura, como antes, virou superestimativa: a caixa passou a 963px
+ * contra os 760px do .game-wheel-stage, estourou o grid e a roda inteira
+ * alinhou à esquerda em vez de centralizar.
+ */
+function projectedHalfWidth(radius: number, count: number): number {
+  const d = radius * 3.2;
+  let max = 0;
+  for (let i = 0; i < count; i++) {
+    const theta = ((360 / count) * i * Math.PI) / 180;
+    const z = radius * (Math.cos(theta) - 1);
+    max = Math.max(max, Math.abs(radius * Math.sin(theta)) * (d / (d - z)));
+  }
+  return max;
+}
 
 export function CategoryWheel() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,8 +68,6 @@ export function CategoryWheel() {
   const setHovered = useCallback((id: string | null) => {
     setHoveredState(id);
   }, []);
-
-
 
   const count = WHEEL_CATEGORIES.length;
   const slice = 360 / count;
@@ -47,12 +88,15 @@ export function CategoryWheel() {
     });
   }, []);
 
-  const step = useCallback((dir: number) => {
-    setIndex((i) => {
-      playSwipe();
-      return (i + dir + count) % count;
-    });
-  }, [count]);
+  const step = useCallback(
+    (dir: number) => {
+      setIndex((i) => {
+        playSwipe();
+        return (i + dir + count) % count;
+      });
+    },
+    [count],
+  );
 
   const stepRef = useRef(step);
   stepRef.current = step;
@@ -115,64 +159,68 @@ export function CategoryWheel() {
   const angle = -slice * index;
 
   return (
-    <div
-      ref={containerRef}
-      tabIndex={0}
-      role="listbox"
-      aria-label="RHYTMO navigation wheel"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endSwipe}
-      onPointerCancel={endSwipe}
-      className="relative touch-none select-none outline-none"
-      style={{
-        width: radius * 2 + sphere,
-        maxWidth: "100vw",
-        height: radius * 1.15 + sphere,
-        perspective: radius * 3.2,
-        perspectiveOrigin: "50% 45%",
-        opacity: ready ? 1 : 0,
-        transition: "opacity 900ms ease-out",
-      }}
-    >
+    <div className="game-wheel-stage">
+      <div className="game-wheel-ring game-wheel-ring-outer" aria-hidden />
+      <div className="game-wheel-ring game-wheel-ring-inner" aria-hidden />
       <div
-        className="absolute inset-0"
+        ref={containerRef}
+        tabIndex={0}
+        role="listbox"
+        aria-label="RHYTMO navigation wheel"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endSwipe}
+        onPointerCancel={endSwipe}
+        className="relative touch-none select-none outline-none"
         style={{
-          transformStyle: "preserve-3d",
-          transform: `translateZ(${-radius * 0.2}px) rotateX(9deg) rotateY(${angle}deg) scale(${ready ? 1 : 0.92})`,
-          transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
-          willChange: "transform",
+          width: Math.round(projectedHalfWidth(radius, count) * 2 + sphere),
+          maxWidth: "100vw",
+          height: Math.round(radius * 0.86 + sphere),
+          perspective: radius * 3.2,
+          perspectiveOrigin: "50% 45%",
+          opacity: ready ? 1 : 0,
+          transition: "opacity 900ms ease-out",
         }}
       >
-        {WHEEL_CATEGORIES.map((category, i) => {
-          const theta = slice * i;
-          const delta = norm(theta + angle);
-          const depth = Math.cos((delta * Math.PI) / 180);
-          const isFront = i === index;
-          return (
-            <div
-              key={category.id}
-              className="absolute top-1/2 left-1/2"
-              style={{
-                transformStyle: "preserve-3d",
-                transform: `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${-theta - angle}deg) rotateX(-9deg)`,
-                transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-            >
-              <GlassSphere
-                category={category}
-                size={sphere}
-                index={i}
-                depth={depth}
-                isFront={isFront}
-                hovered={hovered === category.id}
-                onHoverChange={setHovered}
-                onSelect={() => goTo(i)}
-                suppressClick={suppressClick}
-              />
-            </div>
-          );
-        })}
+        <div
+          className="absolute inset-0"
+          style={{
+            transformStyle: "preserve-3d",
+            transform: `translateZ(${-radius}px) rotateX(9deg) rotateY(${angle}deg) scale(${ready ? 1 : 0.92})`,
+            transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
+            willChange: "transform",
+          }}
+        >
+          {WHEEL_CATEGORIES.map((category, i) => {
+            const theta = slice * i;
+            const delta = norm(theta + angle);
+            const depth = Math.cos((delta * Math.PI) / 180);
+            const isFront = i === index;
+            return (
+              <div
+                key={category.id}
+                className="absolute top-1/2 left-1/2"
+                style={{
+                  transformStyle: "preserve-3d",
+                  transform: `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${-theta - angle}deg) rotateX(-9deg)`,
+                  transition: "transform 720ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                <GlassSphere
+                  category={category}
+                  size={sphere}
+                  index={i}
+                  depth={depth}
+                  isFront={isFront}
+                  hovered={hovered === category.id}
+                  onHoverChange={setHovered}
+                  onSelect={() => goTo(i)}
+                  suppressClick={suppressClick}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

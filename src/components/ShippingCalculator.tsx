@@ -113,19 +113,15 @@ export function ShippingCalculator({
         <button
           type="submit"
           disabled={status === "loading" || !variantId}
-          className="glass-btn-primary label-xs min-h-10 rounded-xl px-4 disabled:opacity-50"
+          className="btn-primary label-xs min-h-10 rounded-xl px-4 disabled:opacity-50"
         >
           {status === "loading" ? t("ship.calculating") : t("ship.calc")}
         </button>
       </form>
 
       <div aria-live="polite" className="mt-3">
-        {status === "invalid" && (
-          <p className="text-[0.75rem] text-ink">{t("ship.invalid")}</p>
-        )}
-        {status === "error" && (
-          <p className="text-[0.75rem] text-ink">{t("ship.error")}</p>
-        )}
+        {status === "invalid" && <p className="text-[0.75rem] text-ink">{t("ship.invalid")}</p>}
+        {status === "error" && <p className="text-[0.75rem] text-ink">{t("ship.error")}</p>}
         {status === "done" && options.length === 0 && (
           <p className="text-[0.75rem] text-ink">{t("ship.none")}</p>
         )}
@@ -135,7 +131,7 @@ export function ShippingCalculator({
             {options.map((option) => (
               <li
                 key={option.handle}
-                className="glass-soft animate-fade-in rounded-2xl px-3.5 py-3 transition-all duration-250 ease-[var(--ease-out-soft)]"
+                className="glass-soft rounded-2xl px-3.5 py-3 transition-all duration-250 ease-[var(--ease-out-soft)]"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="text-[0.8125rem] leading-snug font-bold tracking-tight text-ink">
@@ -166,9 +162,7 @@ export function ShippingCalculator({
           </ul>
         )}
 
-        <p className="mt-2.5 text-[0.6875rem] leading-relaxed text-ink">
-          {t("ship.note")}
-        </p>
+        <p className="mt-2.5 text-[0.6875rem] leading-relaxed text-ink">{t("ship.note")}</p>
       </div>
     </section>
   );

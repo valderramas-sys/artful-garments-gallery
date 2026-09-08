@@ -4,6 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { useCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { cartSubtotal, useCartStore } from "@/stores/cartStore";
+import { reactRobot } from "@/stores/robotStore";
 import { buildCheckoutUrl } from "@/lib/commerce";
 
 export const Route = createFileRoute("/checkout")({
@@ -44,12 +45,12 @@ function Checkout() {
   const subtotal = cartSubtotal(lines);
 
   return (
-    <main className="mx-auto max-w-[1600px] px-5 pt-32 pb-24 sm:px-8">
+    <main className="mx-auto max-w-[1600px] px-5 pt-[calc(var(--header-h)+3.5rem)] pb-24 sm:px-8">
       <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
         <h1 className="display text-[14vw] leading-[0.84] sm:text-[6vw]">{t("checkout.title")}</h1>
         <div className="flex flex-wrap items-center gap-3 sm:pb-2">
           <CurrencySelector />
-          <Link to="/shop" className="glass-btn label-xs rounded-full px-4 py-2">
+          <Link to="/shop" className="btn-secondary label-xs rounded-full px-4 py-2">
             {t("checkout.back")}
           </Link>
         </div>
@@ -85,7 +86,7 @@ function Checkout() {
                       <p className="text-sm leading-snug font-bold tracking-tight">
                         {localize(line.title)}
                       </p>
-                      <p className="font-num text-sm text-brand-magenta sm:hidden">
+                      <p className="font-num text-sm text-pink sm:hidden">
                         {formatFrom(line.price * line.quantity, line.currencyCode)}
                       </p>
                     </div>
@@ -98,7 +99,7 @@ function Checkout() {
                           type="button"
                           aria-label={`- ${line.title}`}
                           onClick={() => updateQuantity(line.lineId, line.quantity - 1)}
-                          className="text-sm text-brand-blue transition-opacity duration-250 hover:opacity-70"
+                          className="text-sm text-ink transition-opacity duration-250 hover:opacity-70"
                         >
                           −
                         </button>
@@ -107,7 +108,7 @@ function Checkout() {
                           type="button"
                           aria-label={`+ ${line.title}`}
                           onClick={() => updateQuantity(line.lineId, line.quantity + 1)}
-                          className="text-sm text-brand-blue transition-opacity duration-250 hover:opacity-70"
+                          className="text-sm text-ink transition-opacity duration-250 hover:opacity-70"
                         >
                           +
                         </button>
@@ -115,13 +116,13 @@ function Checkout() {
                       <button
                         type="button"
                         onClick={() => removeItem(line.lineId)}
-                        className="glass-btn label-xs rounded-full px-3 py-1.5"
+                        className="btn-secondary label-xs rounded-full px-3 py-1.5"
                       >
                         {t("cart.remove")}
                       </button>
                     </div>
                   </div>
-                  <p className="font-num hidden text-sm text-brand-magenta sm:block">
+                  <p className="font-num hidden text-sm text-pink sm:block">
                     {formatFrom(line.price * line.quantity, line.currencyCode)}
                   </p>
                 </li>
@@ -148,13 +149,13 @@ function Checkout() {
             <button
               type="submit"
               disabled={loading || !code.trim()}
-              className="glass-btn label-xs min-h-11 rounded-full px-5 disabled:opacity-50"
+              className="btn-secondary label-xs min-h-11 rounded-full px-5 disabled:opacity-50"
             >
               {t("checkout.apply")}
             </button>
           </form>
           {appliedCode && (
-            <p className="label-xs mb-5 text-brand-magenta">
+            <p className="label-xs mb-5 text-pink">
               {t("checkout.discountapplied")}: {appliedCode.code}
             </p>
           )}
@@ -180,10 +181,7 @@ function Checkout() {
               <dt className="label-xs text-muted-foreground">{t("checkout.tax")}</dt>
               <dd className={cost?.totalTaxAmount ? "font-num" : "text-muted-foreground"}>
                 {cost?.totalTaxAmount
-                  ? formatFrom(
-                      Number(cost.totalTaxAmount.amount),
-                      cost.totalTaxAmount.currencyCode,
-                    )
+                  ? formatFrom(Number(cost.totalTaxAmount.amount), cost.totalTaxAmount.currencyCode)
                   : "—"}
               </dd>
             </div>
@@ -205,19 +203,24 @@ function Checkout() {
           <a
             href={shopifyCheckoutUrl ?? "#"}
             aria-disabled={lines.length === 0 || !shopifyCheckoutUrl}
+            onClick={() => {
+              // "processing" é mudo por padrão (dispara em toda navegação);
+              // aqui a fala é pedida na mão, porque ir ao checkout é raro e
+              // vale um balão.
+              reactRobot("processing", "checkoutStarted", "always");
+            }}
             className={`label-xs mt-8 flex w-full items-center justify-center rounded-full px-4 py-5 text-center leading-tight break-words whitespace-normal transition-colors duration-250 ${
               lines.length === 0 || !shopifyCheckoutUrl
                 ? "pointer-events-none bg-surface-2 text-muted-foreground"
-                : "glass-btn-go"
+                : "btn-primary"
             }`}
           >
             {t("checkout.place")}
           </a>
 
-
           <Link
             to="/shop"
-            className="glass-btn label-xs mt-4 flex w-full items-center justify-center rounded-full py-3"
+            className="btn-secondary label-xs mt-4 flex w-full items-center justify-center rounded-full py-3"
           >
             {t("checkout.backshop")}
           </Link>

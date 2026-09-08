@@ -12,8 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Backdrop } from "../components/Backdrop";
-import { StaticBackdrop } from "../components/StaticBackdrop";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Robot } from "../components/robot/Robot";
 import { CartProvider } from "../lib/cart";
 import { CurrencyProvider } from "../lib/currency";
 import { Header } from "../components/Header";
@@ -47,9 +46,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -92,6 +88,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      // As três fontes que TODA página usa. Sem isto o navegador só descobre
+      // que precisa delas depois de baixar e interpretar a folha de estilo —
+      // duas viagens em série antes do primeiro caractere aparecer. A HSJandari
+      // (coreano) fica de fora de propósito: só entra sob html[lang="ko"].
+      ...["Medium", "RhytmoExtras", "NotoSans-Symbols"].map((name) => ({
+        rel: "preload",
+        as: "font" as const,
+        type: "font/woff2",
+        href: `/fonts/${name}.woff2`,
+        // Obrigatório mesmo sendo mesma origem: a busca de fonte é sempre
+        // anônima, e um preload sem isto vira um segundo download.
+        crossOrigin: "anonymous" as const,
+      })),
     ],
   }),
 
@@ -128,14 +137,29 @@ function RootComponent() {
         <CurrencyProvider>
           <CartProvider>
             {!isLanding && (
-              <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-                {isLab ? <Backdrop /> : <StaticBackdrop />}
+              <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+                <Backdrop variant={isLab ? "particles" : "rings"} />
               </div>
             )}
-            {!isLanding && !isLab && <Header />}
+            {/* Fora da landing apenas: a tela de abertura fica só com o logo,
+                o PRESS START e o rodapé. O robô entra a partir do /lab, com a
+                animação definida em `.robot-character` (styles.css) — como o
+                componente só monta aqui, montar é o próprio gatilho. */}
+            {!isLanding && <Robot />}
+            {!isLanding && !isLab && (
+              <div className="relative z-50">
+                <Header />
+              </div>
+            )}
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-            {!isLanding && !isLab && <Footer />}
+            <div className="relative z-10">
+              <Outlet />
+            </div>
+            {!isLanding && !isLab && (
+              <div className="relative z-10">
+                <Footer />
+              </div>
+            )}
             {!isLanding && <CartDrawer />}
           </CartProvider>
         </CurrencyProvider>
@@ -143,5 +167,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-
-
