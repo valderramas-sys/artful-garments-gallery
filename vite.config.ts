@@ -75,7 +75,14 @@ export default defineConfig(async ({ mode, command }) => {
     server: {
       host: "::",
       port: 8080,
+      // A janela de pré-visualização serve o site por um domínio externo; sem
+      // isto o Vite responde 403 "This host is not allowed".
+      allowedHosts: [".lovable.app", "rhytmo.com.br", ".rhytmo.com.br", "localhost"],
+      // O proxy da pré-visualização é HTTPS na 443; sem isto o socket de
+      // atualização automática tentaria ws://host:8080 e nunca conectaria.
+      hmr: { clientPort: 443, protocol: "wss" },
     },
+
     plugins,
   };
 });
